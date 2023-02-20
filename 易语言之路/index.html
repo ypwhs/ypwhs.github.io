@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xlk.png">
+  <link rel="mask-icon" href="/images/xkl.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="入坑之前,我只会玩游戏开挂,当时还是小学的时候,玩冒险岛,那时候我就会用CE(Cheat Engine)这样的软件来修改游戏数据,冒险岛这个游戏是靠打怪升级为乐趣的,如果有一款外挂能帮你把怪物定在一个点(吸怪),那么这个外挂就十分有价值.如下图:  (图片来自网络) 其实原理很简单,获取到屏幕的左右上下之后,修改为一个点就可以让怪物集中在一个点.当时除了CE这样的工具之外,还出现了用易语言写的一键">
+<meta property="og:type" content="article">
+<meta property="og:title" content="易语言之路">
+<meta property="og:url" content="https://ypw.io/%E6%98%93%E8%AF%AD%E8%A8%80%E4%B9%8B%E8%B7%AF/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="入坑之前,我只会玩游戏开挂,当时还是小学的时候,玩冒险岛,那时候我就会用CE(Cheat Engine)这样的软件来修改游戏数据,冒险岛这个游戏是靠打怪升级为乐趣的,如果有一款外挂能帮你把怪物定在一个点(吸怪),那么这个外挂就十分有价值.如下图:  (图片来自网络) 其实原理很简单,获取到屏幕的左右上下之后,修改为一个点就可以让怪物集中在一个点.当时除了CE这样的工具之外,还出现了用易语言写的一键">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ypw.io/images/psu.jpg">
+<meta property="og:image" content="https://ypw.io/images/psu-1.jpg">
+<meta property="og:image" content="https://ypw.io/images/psu-2.jpg">
+<meta property="og:image" content="https://ypw.io/images/1.jpg">
+<meta property="article:published_time" content="2015-02-17T10:16:23.000Z">
+<meta property="article:modified_time" content="2019-08-06T15:59:15.000Z">
+<meta property="article:author" content="杨培文">
+<meta property="article:tag" content="未分类">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ypw.io/images/psu.jpg">
+
+
+<link rel="canonical" href="https://ypw.io/%E6%98%93%E8%AF%AD%E8%A8%80%E4%B9%8B%E8%B7%AF/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/%E6%98%93%E8%AF%AD%E8%A8%80%E4%B9%8B%E8%B7%AF/","path":"易语言之路/","title":"易语言之路"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>易语言之路 | 杨培文</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111276663-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-111276663-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨培文"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ypwhs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/ypwhs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/yangpw" title="知乎 → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;yangpw" rel="noopener me" target="_blank"><i class="fa fa-book fa-fw"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/ypwhs" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fa-brands fa-linkedin fa-fw"></i>Linkedin</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/%E6%98%93%E8%AF%AD%E8%A8%80%E4%B9%8B%E8%B7%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="易语言之路 | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          易语言之路
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-02-17 18:16:23" itemprop="dateCreated datePublished" datetime="2015-02-17T18:16:23+08:00">2015-02-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>入坑之前,我只会玩游戏开挂,当时还是<span
+style="color: #ff0000;">小学的时候</span>,玩冒险岛,那时候我就会用CE(Cheat
+Engine)这样的软件来修改游戏数据,冒险岛这个游戏是靠打怪升级为乐趣的,如果有一款外挂能帮你把怪物定在一个点(吸怪),那么这个外挂就十分有价值.如下图:</p>
+<p><a href="/images/148_3691624_3a1508b15d00b72.jpg"><img
+src="/images/148_3691624_3a1508b15d00b72.jpg" /></a></p>
+<p>(图片来自网络)</p>
+<p>其实原理很简单,获取到屏幕的左右上下之后,修改为一个点就可以让怪物集中在一个点.当时除了CE这样的工具之外,还出现了用易语言写的一键傻瓜型外挂.这种程序通常写得很简陋,里面通常是一些按钮,偶尔还带一点编辑框.当时我就下了这样的外挂尝试,效果还不错.有一次出现了一个非常厉害的外挂,好像是类似于无敌之类的.就是怪物碰你你不会损失生命值.这样的挂给我们带来了巨大的诱惑力.但是我在网上下载了一个程序之后,提示了类似于这样的信息:</p>
+<p><a href="/images/dywt.com.cn"><img
+src="/images/dywt.com.cn" /></a>,然后下载了易语言...</p>
+<p>下下来之后,我发现,哈,我可以创建窗口!我可以放按钮在上面!我还可以balabala......那个外挂后来发现只是少了一个文件,下下来就好了.不过编程之路就从这里开始踏下了第一步.为什么不学C!小学根本不会英文啊..</p>
+<p><a href="/images/QQ截图20150217163521.png"><img
+src="/images/QQ截图20150217163521.png" /></a></p>
+<p>从初中开始,就陆陆续续地做过了一些奇葩玩意.比如为了刷<a
+target="_blank" rel="noopener" href="http://ypw.ys168.com">某网页</a>访问量做的自动刷新(当时既不会HTTP操作也不会线程,就用时钟周期事件和超文本浏览框来刷),当时还在网吧里的地下一层开了所有的机器打开我的程序来刷,想想也挺牛的.软件大致结构就象这样:</p>
+<p><a href="/images/QQ截图20150217170945.png"><img
+src="/images/QQ截图20150217170945.png" /></a></p>
+<p>这里面真的有16个浏览器...</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">.版本 <span class="number">2</span></span><br><span class="line">.支持库 HtmlView</span><br><span class="line"></span><br><span class="line">.子程序 _时钟<span class="number">1</span>_周期事件</span><br><span class="line">.局部变量 地址, 文本型</span><br><span class="line"></span><br><span class="line">地址 ＝ “http:<span class="comment">//ypw.ys168.com”</span></span><br><span class="line">超文本浏览框<span class="number">1.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">2.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">3.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">4.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">5.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">6.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">7.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">8.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">9.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">10.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">11.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">12.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">13.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">14.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">15.</span>地址 ＝ 地址</span><br><span class="line">超文本浏览框<span class="number">16.</span>地址 ＝ 地址</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>之后我的第二次启蒙来源于一个效率非常高的刷QQ空间人气的软件.那软件一秒居然可以访问50次.我的天当时那个单核的时代他一秒50次简直颠覆了我的世界观.后来我看了他的源码之后知道了线程这么个概念,知道了HTTP这个概念(原来以为必须要浏览器啊).同时还学会了POST.学会了利用WPE截包(现在才发现chrome截包方便太多).</p>
+<p>下面是我做的一些小工具:
+QQ空间数据查看----查看你的空间访客量多少,有多少阳光指数,爱心指数,balabala....(数据挖掘啊)(2009年7月15日)
+空格点鼠标----当时估计是觉得鼠标不好用,然后用空格键代替点鼠标(键盘热键和<span
+style="color: #ff0000;">鼠标模拟</span>)(2009年7月19日)
+柯南音乐播放器----当时在某站找到一个<span
+style="color: #ff0000;">网盘</span>,然后把我搜刮的柯南音乐全部上传上去了,做了一个小播放器(2009年8月3日)</p>
+<p><a href="/images/QQ截图20150217173636.png"><img
+src="/images/QQ截图20150217173636.png" /></a></p>
+<p>SOSO刷搜索次数----刷到了<span
+style="color: #ff0000;">世界第一</span>的神器(2009年10月18日)</p>
+<p><a href="/images/psu.jpg"><img src="/images/psu.jpg" /></a></p>
+<p>4399刷签到----为了无聊的分数,弄了一个每天自动签到的<span
+style="color: #ff0000;">后台</span>程序(插入启动项,杀毒白名单,可怕)(2009年8月4日)</p>
+<p>全能(ALL)----一款可以登录QQ,测试GET和POST的软件,可以连续发送(多线程),可以转码,内置浏览器方便登录,支持代理IP.(2010年1月2日)<span
+style="color: #ff0000;">快速测试HTTP神器</span>啊...现在还在用它</p>
+<p><a href="/images/QQ截图20150218101108.png"><img
+src="/images/QQ截图20150218101108.png" /></a></p>
+<p>QQ牧场激活器----当时QQ农场和QQ牧场是两个东西,牧场不是所有人都能玩,但是我们发现了一个<span
+style="color: #ff0000;">漏洞</span>,所以就做了这么个玩意(2010年1月24日)</p>
+<p><span
+style="color: #ff0000;">密保卡</span>安全浏览器----这是玩腾讯游戏的时候避免别人拍照而做的软件..没什么特别的,大家应该看明白了.</p>
+<p><a href="/images/QQ截图20150218101529.png"><img
+src="/images/QQ截图20150218101529.png" /></a></p>
+<p>QQ炸弹----正如这个神奇的名字,它就是用来炸QQ好友的,自动生成英文/数字/甚至是中文,<span
+style="color: #ff0000;">自动输入</span>并发送,可调时间间隔(可怕的科技)(2010年4月19日)</p>
+<p><a href="/images/QQ截图20150217173954.png"><img
+src="/images/QQ截图20150217173954.png" /></a></p>
+<p>占用内存程序----正如这个名字...它没有任何用处,就是为了<span
+style="color: #ff0000;">占内存</span>.(2010年6月10日)</p>
+<p><a href="/images/QQ截图20150217174444.png"><img
+src="/images/QQ截图20150217174444.png" /></a></p>
+<p><a href="/images/QQ截图20150217174501.png"><img
+src="/images/QQ截图20150217174501.png" /></a></p>
+<p>QQ拼音刷打字记录程序----没错拉,<span
+style="color: #ff0000;">键盘模拟</span>打字而已,可以把每日打字量刷非常高(2010年7月1日)</p>
+<p>刷化肥----这个软件应该是当时QQ农场牧场第一个外挂吧..(2014年7月31日),利用腾讯服务器时间不同步的<span
+style="color: #ff0000;">漏洞</span>,可以在0点领翻倍数量的化肥,并且有黄钻用户领到了<span
+style="color: #ff0000;">几万袋化肥(人民币价值几十万)</span>,成功成为当时排行榜前几名.也是一个传奇了.</p>
+<p><a href="/images/QQ截图20150218102406.png"><img
+src="/images/QQ截图20150218102406.png" /></a></p>
+<p>自动种植----QQ农场自动利用刷来的化肥种植农作物,收割,铲除,多线程异步刷等级,曾经一天刷了<span
+style="color: #ff0000;">将近一百级</span>(2010年8月3日)下图为8月5日,下下图为10月31日</p>
+<p><a href="/images/psu-1.jpg"><img src="/images/psu-1.jpg" /></a></p>
+<p><a href="/images/psu-2.jpg"><img src="/images/psu-2.jpg" /></a></p>
+<p>犇牛病毒专杀工具----当时不知道为什么中毒了,电脑各个地方都是<span
+style="color: #ff0000;">usp10.dll</span>和<span
+style="color: #ff0000;">lpk.dll</span>,于是写了一个工具全盘搜索该文件删除.(2010年8月17日)</p>
+<p>抢黄钻----这玩意简直是<span
+style="color: #ff0000;">抢火车票</span>的祖先..自带帐号记录,北京时间,多线程刷分,当时搞活动可以领黄钻,但是只有特定时候开放,于是我就写了个这个软件,到点了马上<span
+style="color: #ff0000;">开线程刷</span>,一定能领到,没有人比<span
+style="color: #ff0000;">一秒50次</span>的加特林还快了.(2010年9月5日)</p>
+<p><a href="/images/QQ截图20150217181413.png"><img
+src="/images/QQ截图20150217181413.png" /></a>
+(注:程序的北京时间经过修改,原来使用的授时中心的时间源已经404了)
+附上时间校对的程序(甚至考虑了东八区UTC+8):</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">.版本 <span class="number">2</span></span><br><span class="line"></span><br><span class="line">.子程序 校对</span><br><span class="line">.局部变量 second, 整数型</span><br><span class="line">.局部变量 a, 文本型</span><br><span class="line"></span><br><span class="line">a ＝ 彗星HTTP读文本 (“http:<span class="comment">//open.baidu.com/special/time/”)</span></span><br><span class="line">输出调试文本 (a)</span><br><span class="line">second ＝ 到长整数 (取文本中间内容 (a, “baidu_time(”, “)”)) ÷ <span class="number">1000</span></span><br><span class="line">SJ ＝ 增减时间 (到时间 (“<span class="number">1970.01</span><span class="number">.01</span> <span class="number">08</span>:<span class="number">00</span>:<span class="number">00</span>”), #秒, second)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>强制关机程序----这个有点厉害,调用系统API提权强制黑屏关机(2010年10月17日)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">RtlAdjustPrivilege (#SE_SHUTDOWN_PRIVILEGE, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">NtShutdownSystem (#SHUTDOWN)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>bilibili视频地址获取器----没想到吧!当时我居然做出来了这么神奇的玩意,用来下视频的(2010年11月1日)当时的视频地址长这样:http://bilibili.us/video/av34026/,现在已经失效.</p>
+<p>Q宠大乐斗辅助----这个功能就十分强大了,几乎把一个游戏的每日操作做得半自动化了,比如自动刷牧场(这是个<span
+style="color: #ff0000;">漏洞</span>,牧场有个<span
+style="color: #ff0000;">拍蚊子</span>功能,我直接把POST数据改为<span
+style="color: #ff0000;">num=100</span>了,这样一天得到的<span
+style="color: #ff0000;">经验值就满了</span>),然后还有自动浇花(花藤),好友列表双击PK,领取各种每日奖励.(2010年11月22日)</p>
+<p><a href="/images/QQ截图20150218103230.png"><img
+src="/images/QQ截图20150218103230.png" /></a></p>
+<p>QQ农场牧场辅助工具----依然是一系列的全自动操作,免除各种烦恼.(2010年11月25日)原理都一样,不再细说.</p>
+<p><a href="/images/QQ截图20150218104121.png"><img
+src="/images/QQ截图20150218104121.png" /></a></p>
+<p>独立钻石棋----没错!我做过游戏!非常简单的一个棋类游戏,规则可以自行百度.(2010年11月30日)</p>
+<p><a href="/images/QQ截图20150218104437.png"><img
+src="/images/QQ截图20150218104437.png" /></a></p>
+<p>百度一系列工具----百度登录,百度注册,百度<span
+style="color: #ff0000;">扫号</span>,<span
+style="color: #ff0000;">刷粉</span>器,掌上百度发帖<span
+style="color: #ff0000;">爆吧</span>器.还带有权限验证功能.恐怖到<span
+style="color: #ff0000;">自动获取代理IP</span>.(这时候我就会正则表达式了)(2011年2月19日)</p>
+<p><a href="/images/QQ截图20150218104922.png"><img
+src="/images/QQ截图20150218104922.png" /></a></p>
+<p>批量创建QQ群----可以创建出连号QQ群来卖!可以批量登录QQ,带有<span
+style="color: #ff0000;">cookies管理</span>!(意味着你可以同时有一百个QQ号在一个软件上登录)(2011年4月17日)</p>
+<p><a href="/images/QQ截图20150218105536.png"><img
+src="/images/QQ截图20150218105536.png" /></a></p>
+<p>键盘记录器----而且还写了配套回放软件...记录了键值,按下还是弹起,距离上次操作的间隔时间,可以完全回放出来.(2011年8月28日)</p>
+<p><a href="/images/QQ截图20150218105816.png"><img
+src="/images/QQ截图20150218105816.png" /></a></p>
+<p>远程手机攻击器----是<span
+style="color: #ff0000;">短信轰炸</span>的那种攻击,远程就是放在服务器上面的那种.可以<span
+style="color: #ff0000;">远程下指令给服务器</span>让服务器短信轰炸手机.发短信的方式是利用某网站搞活动,验证手机号码会发送短信,但是没有限制次数.(2012年1月9日)</p>
+<p>高考倒计时----哈哈哈
+就是高考倒计时拉,我后来居然还用单片机做了一个真正的高考倒计时装置,然后被班主任没收了.(2012年6月17日)中间时间跨度好大,因为我犯事了,所以好像半年没有碰电脑.</p>
+<p><a href="/images/QQ截图20150218110420.png"><img
+src="/images/QQ截图20150218110420.png" /></a></p>
+<p>这里有一个大事----不能说(2013年10月)</p>
+<p>BTBU上网登录----给学生们上网登录的软件(2013年10月14日)</p>
+<p><a href="/images/1.jpg"><img src="/images/1.jpg" /></a></p>
+<p>BTBU免流量软件----顾名思义,SSL-VPN不多解释(2013年11月14日)</p>
+<p>素数螺旋图的绘制----具体定义请维基百科,这只是个人兴趣,<span
+style="color: #ff0000;">GEEK向</span>(2013年11月14日)</p>
+<p><a href="/images/QQ截图20150218111220.png"><img
+src="/images/QQ截图20150218111220.png" /></a></p>
+<p>眨眼识别----这个碉堡了,这是<span
+style="color: #ff0000;">脑电波识别</span>,但是我水平不够,就做了个眨眼识别(2014年1月29日)</p>
+<p><a href="/images/2014年1月29日.jpg"><img
+src="/images/2014年1月29日.jpg" /></a></p>
+<p><a href="/images/2014年1月14日2.jpg"><img
+src="/images/2014年1月14日2.jpg" /></a></p>
+<p>透传----这是给我的<span
+style="color: #ff0000;">wifi插座</span>做的<span
+style="color: #ff0000;">服务器端</span>,透明传输(2014年3月24日)</p>
+<p>BTBU录入----懂的人懂,这个不能说(2014年3月30日)</p>
+<p>机器鱼代码更新工具----自动替换api的文本处理工具,临时性工具(2014年5月21日)</p>
+<p>DHT11远程温湿度监控系统----某爱德课设作品,远程监控温湿度,温度条显示(2014年6月18日)</p>
+<p><a href="/images/QQ截图20150218111839.png"><img
+src="/images/QQ截图20150218111839.png" /></a></p>
+<p>雾霾查看器----这个就是利用了气象局的信息做的临时小创意(2014年7月31日)现在他们自己<a
+target="_blank" rel="noopener" href="http://wap.weather.gov.cn/haze.html">服务器</a>好慢.</p>
+<p><a href="/images/QQ截图20150218112149.png"><img
+src="/images/QQ截图20150218112149.png" /></a></p>
+<p>mini3----这又是一个不能说的程序(2014年12月2日)</p>
+<p>BTBU
+VPN连接器----这是连接学校VPN的小工具,由于有些学生电脑本身是WIN8的系统,又升级了IE,导致VPN连不上,所以做了这么个工具(发出来没几天学校就改版了VPN,把域名换了)(2015年1月17日)</p>
+<p><a href="/images/QQ截图20150218112429.png"><img
+src="/images/QQ截图20150218112429.png" /></a></p>
+<p>未完待续...</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%AA%E5%88%86%E7%B1%BB/" rel="tag"># 未分类</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/python%E5%88%B6%E4%BD%9C%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB/" rel="prev" title="python制作的第一个爬虫">
+                  <i class="fa fa-chevron-left"></i> python制作的第一个爬虫
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/python%E7%88%AC%E8%99%AB%E7%AC%AC%E4%BA%8C%E5%BC%B9-%E8%87%AA%E5%8A%A8%E4%B8%8B%E8%BD%BD%E5%B0%8F%E8%AF%B4/" rel="next" title="python爬虫第二弹-自动下载小说">
+                  python爬虫第二弹-自动下载小说 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨培文</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

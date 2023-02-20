@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xlk.png">
+  <link rel="mask-icon" href="/images/xkl.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="WRTnode2r_STM32_bootloader.hex rtthread.bin 首先放上来的这两个文件，是WRTnode群共享放出的bootloader和我自己编译的rtthread程序。大家可以先拿编译好的固件使用。 STM32固件的烧写 接线 我这里使用的烧写工具是ST-Link，接线方式参考pinMap：  只需要接GND，SWCLK和SWDIO即可调试。 烧写 接好之后，我们打开S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WRTnode 2R STM32固件的烧写和spi-bridge的使用">
+<meta property="og:url" content="https://ypw.io/WRTnode%202R%20STM32%E5%9B%BA%E4%BB%B6%E7%9A%84%E7%83%A7%E5%86%99%E5%92%8Cspi-bridge%E7%9A%84%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="WRTnode2r_STM32_bootloader.hex rtthread.bin 首先放上来的这两个文件，是WRTnode群共享放出的bootloader和我自己编译的rtthread程序。大家可以先拿编译好的固件使用。 STM32固件的烧写 接线 我这里使用的烧写工具是ST-Link，接线方式参考pinMap：  只需要接GND，SWCLK和SWDIO即可调试。 烧写 接好之后，我们打开S">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-11-23T13:56:11.000Z">
+<meta property="article:modified_time" content="2019-08-06T15:59:15.000Z">
+<meta property="article:author" content="杨培文">
+<meta property="article:tag" content="WRTnode">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ypw.io/WRTnode%202R%20STM32%E5%9B%BA%E4%BB%B6%E7%9A%84%E7%83%A7%E5%86%99%E5%92%8Cspi-bridge%E7%9A%84%E4%BD%BF%E7%94%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/WRTnode%202R%20STM32%E5%9B%BA%E4%BB%B6%E7%9A%84%E7%83%A7%E5%86%99%E5%92%8Cspi-bridge%E7%9A%84%E4%BD%BF%E7%94%A8/","path":"WRTnode 2R STM32固件的烧写和spi-bridge的使用/","title":"WRTnode 2R STM32固件的烧写和spi-bridge的使用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>WRTnode 2R STM32固件的烧写和spi-bridge的使用 | 杨培文</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111276663-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-111276663-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#stm32%E5%9B%BA%E4%BB%B6%E7%9A%84%E7%83%A7%E5%86%99"><span class="nav-number">1.</span> <span class="nav-text">STM32固件的烧写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E7%BA%BF"><span class="nav-number">1.1.</span> <span class="nav-text">接线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%83%A7%E5%86%99"><span class="nav-number">1.2.</span> <span class="nav-text">烧写</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spi-bridge"><span class="nav-number">2.</span> <span class="nav-text">spi-bridge</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E7%BC%96%E8%AF%91"><span class="nav-number">2.1.</span> <span class="nav-text">更新&amp;编译</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨培文"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ypwhs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/ypwhs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/yangpw" title="知乎 → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;yangpw" rel="noopener me" target="_blank"><i class="fa fa-book fa-fw"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/ypwhs" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fa-brands fa-linkedin fa-fw"></i>Linkedin</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/WRTnode%202R%20STM32%E5%9B%BA%E4%BB%B6%E7%9A%84%E7%83%A7%E5%86%99%E5%92%8Cspi-bridge%E7%9A%84%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="WRTnode 2R STM32固件的烧写和spi-bridge的使用 | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          WRTnode 2R STM32固件的烧写和spi-bridge的使用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-11-23 21:56:11" itemprop="dateCreated datePublished" datetime="2015-11-23T21:56:11+08:00">2015-11-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><a
+href="/images/WRTnode2r_STM32_bootloader.hex">WRTnode2r_STM32_bootloader.hex</a></p>
+<p><a href="/images/rtthread.bin">rtthread.bin</a></p>
+<p>首先放上来的这两个文件，是WRTnode群共享放出的bootloader和我自己编译的rtthread程序。大家可以先拿编译好的固件使用。</p>
+<h2 id="stm32固件的烧写">STM32固件的烧写</h2>
+<h3 id="接线">接线</h3>
+<p>我这里使用的烧写工具是ST-Link，接线方式参考pinMap：</p>
+<p><a href="/images/2R-pin-map.jpg"><img
+src="/images/2R-pin-map.jpg" /></a></p>
+<p>只需要接GND，SWCLK和SWDIO即可调试。</p>
+<h3 id="烧写">烧写</h3>
+<p>接好之后，我们打开<a
+target="_blank" rel="noopener" href="http://www.st.com/web/cn/catalog/tools/PF258168">STM32 ST-LINK
+Utility</a>软件开始烧写固件。</p>
+<p>首先点击Connect to the
+target连接STM32，连接成功之后应该可以在右上角看到STM32F10xx
+Medium-density，64KBytes等信息，这是STM32F103T8U6芯片的信息。</p>
+<p><a href="/images/Snip20151123_33.png"><img
+src="/images/Snip20151123_33.png" alt="Snip20151123_33" /></a></p>
+<p>然后我们点击Program
+verify，选WRTnode2r_STM32_bootloader.hex开始烧写。</p>
+<p><a href="/images/Snip20151123_32.png"><img
+src="/images/Snip20151123_33.png" alt="Snip20151123_33" /></a></p>
+<p>然后烧写rtthread.bin，这里一定要记得地址必须填0x08001000，不然bootloader就没了。</p>
+<p><a href="/images/Snip20151123_31.png"><img
+src="/images/Snip20151123_31.png" /></a> 烧好以后，就可以在终端中使用spi-bridge与STM32进行交互了。</p>
+<h2 id="spi-bridge">spi-bridge</h2>
+<h3 id="更新编译">更新&amp;编译</h3>
+<p>在内测版WRTnode
+2R的SDK中是没有WRTndoe2r-stm32这个package的，所以我们首先得更新feeds，进入wrtnode文件夹，然后输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./scripts/feeds update wrtnode</span><br><span class="line">./scripts/feeds install -a</span><br><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+<p>在WRTnode中选择WRTndoe2r-stm32，你将得到spi-bridge命令和flash-stm32命令。</p>
+<p><a href="/images/Snip20151124_47.png"><img
+src="/images/Snip20151124_47.png" /></a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spi-bridge</span><br></pre></td></tr></table></figure>
+<p>下图就是spi-bridge的效果：</p>
+<p><a href="/images/Snip20151123_35.png"><img
+src="/images/Snip20151123_35.png" /></a></p>
+<p>输入tab，回车，就可以看到所有的命令和命令的解释说明。个人认为最大的亮点在于，它加入了Arduino的语法，可以使用pinMode，digitalWrite，digitalRead等命令，由于是测试版，还未加入所有的功能，以后肯定会加入诸如analogWrite(PWM)，analogRead(ADC)等功能，大大降低单片机开发难度，让更多人能够跨入这个门槛中。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spi-bridge             <span class="comment"># 进入交互模式</span></span><br><span class="line">spi-bridge write ps    <span class="comment"># 执行命令</span></span><br><span class="line">spi-bridge <span class="built_in">read</span>        <span class="comment"># 读取命令结果</span></span><br><span class="line">spi-bridge status      <span class="comment"># 获取当前状态，通常返回OK</span></span><br></pre></td></tr></table></figure>
+<p>通过输入下面的命令，我们可以控制PB5输出高电平：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spi-bridge write <span class="string">&quot;pinMode 5 0&quot;</span>         <span class="comment"># 0表示输出</span></span><br><span class="line">spi-bridge write <span class="string">&quot;digitalWrite 5 1&quot;</span>    <span class="comment"># 1表示高电平</span></span><br></pre></td></tr></table></figure>
+<p>至于各个引脚的定义，在官方的PIN_MAP中可以找到：<a
+target="_blank" rel="noopener" href="https://github.com/WRTnode/wrtnode2r_stm32/blob/master/maple/wirish/boards/wrtnode2/board.cpp#L67">https://github.com/WRTnode/wrtnode2r_stm32/blob/master/maple/wirish/boards/wrtnode2/board.cpp#L67</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">const</span> stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = &#123;</span><br><span class="line">    PMAP_ROW(GPIOB,   <span class="number">0</span>, TIMER3,  <span class="number">3</span>, ADC1,    <span class="number">8</span>), <span class="comment">/* D0/PB0 */</span></span><br><span class="line">    PMAP_ROW(GPIOB,   <span class="number">1</span>, TIMER3,  <span class="number">4</span>, ADC1,    <span class="number">9</span>), <span class="comment">/* D1/PB1 */</span></span><br><span class="line">    PMAP_ROW(GPIOB,   <span class="number">2</span>,   <span class="literal">NULL</span>,  <span class="number">0</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D2/PB2 */</span></span><br><span class="line">    PMAP_ROW(GPIOB,   <span class="number">3</span>,   <span class="literal">NULL</span>,  <span class="number">0</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D3/PB3 */</span></span><br><span class="line">    PMAP_ROW(GPIOB,   <span class="number">4</span>,   <span class="literal">NULL</span>,  <span class="number">0</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D4/PB4 */</span></span><br><span class="line">    PMAP_ROW(GPIOB,   <span class="number">5</span>,   <span class="literal">NULL</span>,  <span class="number">0</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D5/PB5 */</span></span><br><span class="line">    PMAP_ROW(GPIOB,   <span class="number">6</span>, TIMER4,  <span class="number">1</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D6/PB6 */</span></span><br><span class="line">    PMAP_ROW(GPIOB,   <span class="number">7</span>, TIMER4,  <span class="number">2</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D7/PB7 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,   <span class="number">0</span>, TIMER2,  <span class="number">1</span>, ADC1,    <span class="number">0</span>), <span class="comment">/* D8/PA0 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,   <span class="number">1</span>, TIMER2,  <span class="number">2</span>, ADC1,    <span class="number">1</span>), <span class="comment">/* D9/PA1 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,   <span class="number">2</span>, TIMER2,  <span class="number">3</span>, ADC1,    <span class="number">2</span>), <span class="comment">/* D10/PA2 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,   <span class="number">3</span>, TIMER2,  <span class="number">4</span>, ADC1,    <span class="number">3</span>), <span class="comment">/* D11/PA3 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,   <span class="number">8</span>, TIMER1,  <span class="number">1</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D12/PA8 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,   <span class="number">9</span>, TIMER1,  <span class="number">2</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D13/PA9 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,  <span class="number">10</span>, TIMER1,  <span class="number">3</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D14/PA10 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,  <span class="number">11</span>, TIMER1,  <span class="number">4</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D15/PA11 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,  <span class="number">12</span>,   <span class="literal">NULL</span>,  <span class="number">0</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D16/PA12 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,  <span class="number">13</span>,   <span class="literal">NULL</span>,  <span class="number">0</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D17/PA13 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,  <span class="number">14</span>,   <span class="literal">NULL</span>,  <span class="number">0</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D18/PA14 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,  <span class="number">15</span>,   <span class="literal">NULL</span>,  <span class="number">0</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D19/PA15 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,   <span class="number">4</span>,   <span class="literal">NULL</span>,  <span class="number">0</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D20/PA4 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,   <span class="number">5</span>,   <span class="literal">NULL</span>,  <span class="number">0</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D21/PA5 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,   <span class="number">6</span>,   <span class="literal">NULL</span>,  <span class="number">0</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D22/PA6 */</span></span><br><span class="line">    PMAP_ROW(GPIOA,   <span class="number">7</span>,   <span class="literal">NULL</span>,  <span class="number">0</span>, <span class="literal">NULL</span>, ADCx), <span class="comment">/* D23/PA7 */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>下面的链接是spi-bridge的源码，有兴趣的同学可以自行研究：</p>
+<p><a
+target="_blank" rel="noopener" href="https://github.com/WRTnode/openwrt-packages/blob/master/wrtnode/spi-bridge/src/main.c">https://github.com/WRTnode/openwrt-packages/blob/master/wrtnode/spi-bridge/src/main.c</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/WRTnode/" rel="tag"># WRTnode</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="prev" title="docker常用命令">
+                  <i class="fa fa-chevron-left"></i> docker常用命令
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/WRTnode%202R%20STM32%20RT-Thread%E5%9B%BA%E4%BB%B6%E7%BC%96%E8%AF%91/" rel="next" title="WRTnode 2R STM32 RT-Thread固件编译">
+                  WRTnode 2R STM32 RT-Thread固件编译 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨培文</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xlk.png">
+  <link rel="mask-icon" href="/images/xkl.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="为什么做这个 其实很简单，我本科学自动化的，毕业设计选题的时候正好看到了这个题目，觉得很简单，对于生活在帝都的我也很实用，于是就想做个这个室内空气质量检测仪。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何自制室内空气质量检测仪">
+<meta property="og:url" content="https://ypw.io/pm/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="为什么做这个 其实很简单，我本科学自动化的，毕业设计选题的时候正好看到了这个题目，觉得很简单，对于生活在帝都的我也很实用，于是就想做个这个室内空气质量检测仪。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ypw.io/pm/demo.jpg">
+<meta property="og:image" content="https://ypw.io/pm/tb.jpg">
+<meta property="og:image" content="https://ypw.io/pm/nanopi2.jpg">
+<meta property="og:image" content="https://ypw.io/pm/pm_sensor.jpg">
+<meta property="og:image" content="https://ypw.io/pm/co2_sensor.jpg">
+<meta property="og:image" content="https://ypw.io/pm/screen.jpg">
+<meta property="og:image" content="https://ypw.io/pm/co2_data.jpg">
+<meta property="og:image" content="https://ypw.io/pm/sensors.png">
+<meta property="og:image" content="https://ypw.io/pm/qt.png">
+<meta property="og:image" content="https://ypw.io/pm/db.png">
+<meta property="og:image" content="https://ypw.io/pm/pm.png">
+<meta property="og:image" content="https://ypw.io/pm/co2.png">
+<meta property="og:image" content="https://ypw.io/pm/pm2.5.png">
+<meta property="article:published_time" content="2017-02-11T14:50:51.000Z">
+<meta property="article:modified_time" content="2019-08-06T15:59:15.000Z">
+<meta property="article:author" content="杨培文">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="NanoPi2">
+<meta property="article:tag" content="电子制作">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ypw.io/pm/demo.jpg">
+
+
+<link rel="canonical" href="https://ypw.io/pm/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/pm/","path":"pm/","title":"如何自制室内空气质量检测仪"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何自制室内空气质量检测仪 | 杨培文</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111276663-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-111276663-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%81%9A%E8%BF%99%E4%B8%AA"><span class="nav-number">1.</span> <span class="nav-text">为什么做这个</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%89%88%E6%80%9D%E8%B7%AF"><span class="nav-number">2.1.</span> <span class="nav-text">第一版思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%89%88%E6%80%9D%E8%B7%AF"><span class="nav-number">2.2.</span> <span class="nav-text">第二版思路</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">硬件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%85%E5%8D%95"><span class="nav-number">3.1.</span> <span class="nav-text">清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BA%E5%AE%9A"><span class="nav-number">3.2.</span> <span class="nav-text">固定</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">软件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8"><span class="nav-number">4.1.</span> <span class="nav-text">设备驱动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90"><span class="nav-number">4.1.1.</span> <span class="nav-text">数据解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ui%E7%95%8C%E9%9D%A2"><span class="nav-number">4.2.</span> <span class="nav-text">UI界面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E6%84%9F%E5%99%A8%E8%AE%B0%E5%BD%95%E7%A8%8B%E5%BA%8F"><span class="nav-number">4.3.</span> <span class="nav-text">传感器记录程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E5%90%8E%E7%AB%AF"><span class="nav-number">4.4.</span> <span class="nav-text">前后端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8E%E7%AB%AF"><span class="nav-number">4.4.1.</span> <span class="nav-text">后端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF"><span class="nav-number">4.4.2.</span> <span class="nav-text">前端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A2%AB%E5%BF%BD%E8%A7%86%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">被忽视的问题</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨培文"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ypwhs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/ypwhs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/yangpw" title="知乎 → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;yangpw" rel="noopener me" target="_blank"><i class="fa fa-book fa-fw"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/ypwhs" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fa-brands fa-linkedin fa-fw"></i>Linkedin</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/pm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何自制室内空气质量检测仪 | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何自制室内空气质量检测仪
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-02-11 22:50:51" itemprop="dateCreated datePublished" datetime="2017-02-11T22:50:51+08:00">2017-02-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <img src="/pm/demo.jpg" class="">
+<h1 id="为什么做这个">为什么做这个</h1>
+<p>其实很简单，我本科学自动化的，毕业设计选题的时候正好看到了这个题目，觉得很简单，对于生活在帝都的我也很实用，于是就想做个这个<strong>室内空气质量检测仪</strong>。</p>
+<span id="more"></span>
+<h1 id="思路">思路</h1>
+<h2 id="第一版思路">第一版思路</h2>
+<p>最初的想法是用 STM32 通过串口采集传感器的值，然后通过 SPI 驱动 OLED
+显示屏显示当前的空气状况。如图所示：</p>
+<img src="/pm/tb.jpg" class="">
+<p>（图片来自某宝）</p>
+<p>等做得差不多的时候发现，如果想记录历史值，十分麻烦，需要 WiFi
+模块才能通讯。不然的话就需要采用 SD
+卡的方案，但是查看历史记录又不方便，需要把 SD
+卡抽出来用电脑读取，于是就换成带 WiFi 的 NanoPi2 了。</p>
+<p>其实这里也有值得参考的地方，比如利用 STM32CubeMX
+来搭建工程，节省配置寄存器的时间。<a
+target="_blank" rel="noopener" href="https://github.com/ypwhs/PM2.5/tree/master/PM2.5">[code]</a></p>
+<h2 id="第二版思路">第二版思路</h2>
+<p>第二版直接采用可以运行 Debian 操作系统（Linux）的 NanoPi2，自带
+WiFi，并且 IO
+口也引出来了，做一个小型物联网设备十分方便，正好他们厂家送了我一块7寸液晶彩屏，可以直接拿来显示当前的空气状况。</p>
+<h1 id="硬件">硬件</h1>
+<h2 id="清单">清单</h2>
+<p>我选择了攀藤科技的空气质量传感器，基本是我能买到的最好的厂商了。</p>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 7%" />
+<col style="width: 6%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>名称</th>
+<th>型号</th>
+<th>价格（元）</th>
+<th>通讯</th>
+<th>图片</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NanoPi2</td>
+<td>NanoPi2</td>
+<td>199</td>
+<td>ssh</td>
+<td><a
+target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?id=524842034015"><img src="/pm/nanopi2.jpg" class=""></a></td>
+</tr>
+<tr class="even">
+<td>PM2.5传感器</td>
+<td>PMS5003</td>
+<td>110</td>
+<td>串口</td>
+<td><a
+target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?id=524354539294"><img src="/pm/pm_sensor.jpg" class=""></a></td>
+</tr>
+<tr class="odd">
+<td>CO2传感器</td>
+<td>DS-CO2-20</td>
+<td>198</td>
+<td>串口</td>
+<td><a
+target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?id=540405255399"><img src="/pm/co2_sensor.jpg" class=""></a></td>
+</tr>
+<tr class="even">
+<td>7寸屏</td>
+<td>X710</td>
+<td>160</td>
+<td>排线</td>
+<td><a
+target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?id=526058309474"><img src="/pm/screen.jpg" class=""></a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="固定">固定</h2>
+<p>由于现在的传感器和板子还只是用杜邦线简单连接，并不方便挂在墙上。因此有一个计划是画一个
+PCB，将 NanoPi2，传感器都固定在上面。然后 PCB
+也画好通孔，与各个模块还有屏幕之间，用铜柱固定，这样稳定性会更好。</p>
+<p>不过，它很争气地运行了一个月都没出错，所以我一直懒得做。</p>
+<h1 id="软件">软件</h1>
+<h2 id="设备驱动">设备驱动</h2>
+<p>传感器买到了，但是厂家只提供<a
+target="_blank" rel="noopener" href="https://github.com/ypwhs/PM2.5/tree/master/documents/Sensors">技术文档</a>，并没有
+NanoPi2 的驱动，所以需要自己写驱动程序读取传感器的数据。</p>
+<p>首先按照 NanoPi2 的<a
+target="_blank" rel="noopener" href="http://wiki.friendlyarm.com/wiki/index.php/NanoPi_2/zh#.E6.8E.A5.E5.8F.A3.E5.B8.83.E5.B1.80">接口定义</a>连接传感器，CO2传感器
+接串口3，PM2.5传感器接串口4，记得 TX 对 RX 以及接通电源。</p>
+<p>然后根据文档中的描述，PM2.5传感器是主动发送数据，CO2传感器需要询问，所以我需要三个线程：</p>
+<ul>
+<li>发送 CO2传感器数据请求 <a
+target="_blank" rel="noopener" href="https://github.com/ypwhs/PM2.5/blob/master/sensors_server/sensors.c#L25">[code]</a></li>
+<li>接收 CO2传感器数据并解析数据 <a
+target="_blank" rel="noopener" href="https://github.com/ypwhs/PM2.5/blob/master/sensors_server/sensors.c#L43">[code]</a></li>
+<li>接收 PM2.5传感器数据并解析数据 <a
+target="_blank" rel="noopener" href="https://github.com/ypwhs/PM2.5/blob/master/sensors_server/sensors.c#L62">[code]</a></li>
+</ul>
+<p>主线程只需要将它们解析出来的数据通过 UDP 传输到 UI
+界面和远程服务器。通过 UDP 传输是因为刚好 Qt 和 python 都很容易写 UDP
+服务器。</p>
+<h3 id="数据解析">数据解析</h3>
+<p>这里解析数据用到了一种类似于状态图的东西。</p>
+<img src="/pm/co2_data.jpg" class="">
+<p>我通过做实验发现，它们的数据格式前四个字节都是 42 4D 00
+08，然后紧接着的两个字节就是我们需要的数据，并且数据长度一定是12字节，因此我写了这样的程序：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> co2 = <span class="number">0</span>, lastco2 = <span class="number">0</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> co2s[<span class="number">12</span>] = &#123;<span class="number">0</span>&#125;, co2state = <span class="number">0</span>, update = <span class="number">0</span>;</span><br><span class="line"><span class="type">void</span> *<span class="title function_">readco2</span><span class="params">(<span class="type">void</span> * pvoid)</span>&#123;</span><br><span class="line">    <span class="comment">//42 4D 00 08 0A 4D 3C 7F 0A EA 02 9D</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        co2s[co2state++] = read_one(UART_CO2);</span><br><span class="line">        <span class="keyword">if</span>( (co2state == <span class="number">1</span>) &amp;&amp; (co2s[<span class="number">0</span>] != <span class="number">0x42</span>) ) co2state = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>( (co2state == <span class="number">2</span>) &amp;&amp; (co2s[<span class="number">1</span>] != <span class="number">0x4d</span>) ) co2state = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(co2state &gt;= <span class="number">12</span>)&#123;</span><br><span class="line">            co2 = (co2s[<span class="number">4</span>]&lt;&lt;<span class="number">8</span>) + co2s[<span class="number">5</span>];</span><br><span class="line">            co2state = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span>(co2 != lastco2)&#123;</span><br><span class="line">                lastco2 = co2;</span><br><span class="line">                update = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code>0. 接收数据
+1. 如果收到的数据不是 0x42 就跳回步骤0，否则跳到步骤2
+2. 如果收到的数据不是 0x4D 就跳回步骤0，否则跳到步骤3
+3~11. 持续接收数据
+12. 取出第五个数据和第六个数据，拼成16位整数，并跳回步骤0</code></pre>
+<img src="/pm/sensors.png" class="">
+<p>最后效果如图。</p>
+<h2 id="ui界面">UI界面</h2>
+<p>UI 界面直接用 Qt 搭出来的，Label 可以直接拖出来，窗口设置 1024*600
+全屏，鼠标直接隐藏，<a
+target="_blank" rel="noopener" href="https://github.com/ypwhs/PM2.5/blob/master/pm/mainwindow.cpp#L46-L52">使用线程</a>刷新时间，并用
+<a
+target="_blank" rel="noopener" href="https://github.com/ypwhs/PM2.5/blob/master/pm/mainwindow.cpp#L112-L122">UDP事件</a>
+<a
+target="_blank" rel="noopener" href="https://github.com/ypwhs/PM2.5/blob/master/pm/mainwindow.cpp#L54-L110">更新</a>
+传感器数据。背景颜色按照<a
+target="_blank" rel="noopener" href="http://kjs.mep.gov.cn/hjbhbz/bzwb/dqhjbh/jcgfffbz/201203/W020120410332725219541.pdf">国家标准</a>设置。至于学校的
+Logo 是应导师要求加上去的。 <a
+target="_blank" rel="noopener" href="https://github.com/ypwhs/PM2.5/blob/master/pm/mainwindow.cpp">[code]</a></p>
+<img src="/pm/qt.png" class="">
+<h2 id="传感器记录程序">传感器记录程序</h2>
+<p>这部分主要工作是接收来自传感器的数据，然后存入数据库（SQLite）中。</p>
+<p>代码只有27行，没有防注入和防恶意写入，所以请不要欺负我啊。 <a
+target="_blank" rel="noopener" href="https://github.com/ypwhs/PM2.5/blob/master/log_server/server.py">[code]</a></p>
+<img src="/pm/db.png" class="">
+<p>上图是使用 <a target="_blank" rel="noopener" href="http://sqlitebrowser.org/">DB Browser for
+SQLite</a> 查看数据库的效果。</p>
+<h2 id="前后端">前后端</h2>
+<p>这部分主要功能是显示历史室内空气质量曲线，提供了1小时，8小时，24小时这几个选项，也可以手动改成更长的时间。</p>
+<h3 id="后端">后端</h3>
+<p>具体实现是用 Flask 写的，代码在这里： <a
+target="_blank" rel="noopener" href="https://github.com/ypwhs/PM2.5/tree/master/flask">[code]</a>。</p>
+<p>为了使浏览器查看24小时数据甚至更长时间的数据的时候不卡，我限制了数据返回的个数，当数据量非常大的时候，会限制在10000条以内。<a
+target="_blank" rel="noopener" href="https://github.com/ypwhs/PM2.5/blob/master/flask/Flask.py#L57-L58">[code]</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&lt;float:hour&gt;hour&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index_hour</span>(<span class="params">hour</span>):</span><br><span class="line">    before = <span class="built_in">int</span>(time.time()*<span class="number">1000</span>) - hour*<span class="number">3600</span>*<span class="number">1000</span></span><br><span class="line">    data = query_db(<span class="string">&#x27;select * from pm where timestamp&gt;%d&#x27;</span> % before)</span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">len</span>(data) &gt; <span class="number">10000</span>:</span><br><span class="line">        data = data[::<span class="number">2</span>]</span><br><span class="line">    times = [x[<span class="string">&#x27;timestamp&#x27;</span>] <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line">    pm1_0 = [x[<span class="string">&#x27;pm1_0&#x27;</span>] <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line">    pm2_5 = [x[<span class="string">&#x27;pm2_5&#x27;</span>] <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line">    pm10 = [x[<span class="string">&#x27;pm10&#x27;</span>] <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line">    co2 = [x[<span class="string">&#x27;co2&#x27;</span>] <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;chart.html&#x27;</span>, date=times, pm1_0=pm1_0, pm2_5=pm2_5, pm10=pm10, co2=co2)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="前端">前端</h3>
+<p>前端采用了 <a
+target="_blank" rel="noopener" href="http://v3.bootcss.com/getting-started/">bootstrap</a> 和 <a
+target="_blank" rel="noopener" href="http://echarts.baidu.com/tutorial.html">echarts</a>
+，一个用于添加好看的按钮，一个用于显示图表。</p>
+<img src="/pm/pm.png" class="">
+<h1 id="被忽视的问题">被忽视的问题</h1>
+<p>当我买了小米空气净化器以后，房间的 PM2.5 基本上不会过百，但是一觉醒来
+CO2 会涨到 2000ppm
+以上，会让人犯困，学习工作效率低。因此经常通风是非常有必要的！但是开窗又会造成
+PM2.5 的飙升，所以是时候考虑一下新风系统了。</p>
+<p>下图是中午起床以后，开门换气，PM2.5 和 CO2的曲线。</p>
+<img src="/pm/co2.png" class="">
+<img src="/pm/pm2.5.png" class="">
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/NanoPi2/" rel="tag"># NanoPi2</a>
+              <a href="/tags/%E7%94%B5%E5%AD%90%E5%88%B6%E4%BD%9C/" rel="tag"># 电子制作</a>
+              <a href="/tags/python/" rel="tag"># python</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/aws_p2/" rel="prev" title="在AWS上配置深度学习主机">
+                  <i class="fa fa-chevron-left"></i> 在AWS上配置深度学习主机
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/GridSearchCV/" rel="next" title="网格搜索算法与K折交叉验证">
+                  网格搜索算法与K折交叉验证 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨培文</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xlk.png">
+  <link rel="mask-icon" href="/images/xkl.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="让我们来了解一下instabtbu的教务管理功能开发历史 首先我们为了用户体验,决定采用识别验证码技术来解决验证码难认,验证码小等问题.  这是最初我们识别的时候,matlab输出的数据,此时我们的验证码准确率已经达到100%(样本超过50张),之后我们把识别验证码的代码从matlab语言翻译到C语言.(matlab源码也是原创) 123456789101112131415161718192021">
+<meta property="og:type" content="article">
+<meta property="og:title" content="instabtbu-教务管理">
+<meta property="og:url" content="https://ypw.io/instabtbu-%E6%95%99%E5%8A%A1%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="让我们来了解一下instabtbu的教务管理功能开发历史 首先我们为了用户体验,决定采用识别验证码技术来解决验证码难认,验证码小等问题.  这是最初我们识别的时候,matlab输出的数据,此时我们的验证码准确率已经达到100%(样本超过50张),之后我们把识别验证码的代码从matlab语言翻译到C语言.(matlab源码也是原创) 123456789101112131415161718192021">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-02-15T02:37:58.000Z">
+<meta property="article:modified_time" content="2019-08-06T15:59:15.000Z">
+<meta property="article:author" content="杨培文">
+<meta property="article:tag" content="instabtbu">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ypw.io/instabtbu-%E6%95%99%E5%8A%A1%E7%AE%A1%E7%90%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/instabtbu-%E6%95%99%E5%8A%A1%E7%AE%A1%E7%90%86/","path":"instabtbu-教务管理/","title":"instabtbu-教务管理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>instabtbu-教务管理 | 杨培文</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111276663-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-111276663-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%BE%E8%A1%A8"><span class="nav-number">1.</span> <span class="nav-text">查课表</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨培文"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ypwhs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/ypwhs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/yangpw" title="知乎 → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;yangpw" rel="noopener me" target="_blank"><i class="fa fa-book fa-fw"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/ypwhs" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fa-brands fa-linkedin fa-fw"></i>Linkedin</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/instabtbu-%E6%95%99%E5%8A%A1%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="instabtbu-教务管理 | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          instabtbu-教务管理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-02-15 10:37:58" itemprop="dateCreated datePublished" datetime="2015-02-15T10:37:58+08:00">2015-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>让我们来了解一下instabtbu的教务管理功能开发历史</p>
+<p>首先我们为了用户体验,决定采用识别验证码技术来解决<span
+style="color: #ff0000;">验证码难认</span>,<span
+style="color: #ff0000;">验证码小</span>等问题.</p>
+<p><a href="/images/QQ截图20140825095252.png"><img
+src="/images/QQ截图20140825095252.png" /></a></p>
+<p>这是最初我们识别的时候,matlab输出的数据,此时我们的验证码准确率已经达到100%(样本超过50张),之后我们把识别验证码的代码从matlab语言翻译到C语言.(matlab源码也是原创)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">shibie</span><span class="params">(Bitmap myBitmap)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">String</span> <span class="variable">yzm</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">	String[] myyzm = &#123;<span class="string">&quot;1&quot;</span>,<span class="string">&quot;2&quot;</span>,<span class="string">&quot;3&quot;</span>,<span class="string">&quot;b&quot;</span>,<span class="string">&quot;c&quot;</span>,<span class="string">&quot;m&quot;</span>,<span class="string">&quot;n&quot;</span>,<span class="string">&quot;v&quot;</span>,<span class="string">&quot;x&quot;</span>,<span class="string">&quot;z&quot;</span>&#125;;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line"> 	<span class="type">int</span> qietu,duibi;</span><br><span class="line"> 	<span class="type">int</span> x,y;</span><br><span class="line"> 	<span class="keyword">for</span>(qietu=<span class="number">0</span>;qietu&lt;<span class="number">4</span>;qietu++)</span><br><span class="line"> 	&#123;</span><br><span class="line">			<span class="type">int</span> errnum[]=&#123;<span class="number">100</span>,<span class="number">100</span>,<span class="number">100</span>,<span class="number">100</span>,<span class="number">100</span>,<span class="number">100</span>,<span class="number">100</span>,<span class="number">100</span>,<span class="number">100</span>,<span class="number">100</span>&#125;;</span><br><span class="line"> 		<span class="keyword">for</span>(duibi=<span class="number">0</span>;duibi&lt;<span class="number">10</span>;duibi++)</span><br><span class="line"> 		&#123;</span><br><span class="line"> 			<span class="type">int</span> errpixel=<span class="number">0</span>;</span><br><span class="line"> 	        <span class="type">InputStream</span> <span class="variable">is</span> <span class="operator">=</span> getResources().getAssets().open(myyzm[duibi]+<span class="string">&quot;.bmp&quot;</span>);</span><br><span class="line"> 			<span class="type">Bitmap</span> <span class="variable">rawBitmap</span> <span class="operator">=</span> BitmapFactory.decodeStream(is);</span><br><span class="line"> 			<span class="keyword">for</span>(y=<span class="number">0</span>;y&lt;<span class="number">12</span>;y++)</span><br><span class="line"> 			&#123;</span><br><span class="line"> 				<span class="keyword">for</span>(x=<span class="number">0</span>;x&lt;<span class="number">9</span>;x++)</span><br><span class="line"> 	    		&#123;</span><br><span class="line"> 					<span class="type">int</span> <span class="variable">col</span> <span class="operator">=</span> myBitmap.getPixel(x+<span class="number">3</span>+<span class="number">10</span>*qietu, y+<span class="number">4</span>);</span><br><span class="line"> 					<span class="type">int</span> <span class="variable">col2</span> <span class="operator">=</span> rawBitmap.getPixel(x,y);</span><br><span class="line"> 					<span class="keyword">if</span>((col2&amp;<span class="number">0xFF</span>)&gt;(col&amp;<span class="number">0xFF</span>))errpixel++;</span><br><span class="line"> 				&#125;</span><br><span class="line"> 				System.out.print(<span class="string">&quot;nn&quot;</span>);</span><br><span class="line"> 			&#125;</span><br><span class="line"> 			errnum[duibi]=errpixel;</span><br><span class="line"> 		&#125;</span><br><span class="line"> 		<span class="type">int</span> wz=<span class="number">0</span>,min=<span class="number">100</span>,i;</span><br><span class="line"> 		<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)<span class="keyword">if</span>(errnum[i]&lt;min)&#123;min=errnum[i];wz=i;&#125;</span><br><span class="line">yzm+=myyzm[wz];</span><br><span class="line"> 	&#125;</span><br><span class="line">	&#125;<span class="keyword">catch</span>(Exception e)</span><br><span class="line">	&#123;&#125;</span><br><span class="line">	System.out.println(yzm);</span><br><span class="line">	<span class="keyword">return</span> yzm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>识别验证码其实并不难,上面的源码已经给出来了,实际上就是一张张图去比较,谁的错误点最少那么就是谁拉.由于识别并不难这里我不详细讲了.验证码组成元素只有十个,分别是<span
+style="color: #ff0000;">123bcmnvxz</span>.</p>
+<p><a href="/images/Screenshot_2014-08-28-19-53-14.png"><img
+src="/images/Screenshot_2014-08-28-19-53-14.png" /></a></p>
+<p>这个就是在安卓上面识别的效果.识别好验证码之后,我们就开始做登录.本来是想做得跟上网一样,后来一想,反正同学们每次进教务仅仅只是查成绩或者查课表,干脆就一键查吧,于是<span
+style="color: #ff0000;">登录按钮被砍掉了</span>.</p>
+<p><a href="/images/Screenshot_2014-08-29-15-46-12.png"><img
+src="/images/Screenshot_2014-08-29-15-46-12.png" /></a></p>
+<p>好了,让我们看登录怎么做吧! 嘛,假设你已经会了POST,如果不会请看<a
+target="_blank" rel="noopener" href="http://ypw1.sinaapp.com/?p=167">上网登录是怎么写出来的</a>.
+会了POST之后呢,我们就可以通过Chrome的F12开发者工具截包,找到登录的数据包的结构,是这样的:</p>
+<p>http://jwgl.btbu.edu.cn/Logon.do method=logon&amp;USERNAME=<span
+style="color: #ff0000;">学号</span>&amp;PASSWORD=<span
+style="color: #ff0000;">密码</span>&amp;RANDOMCODE=<span
+style="color: #ff0000;">验证码</span></p>
+<p>OK,我们按照这个格式发送过去,得到的返回数据如果包含"http://jwgl.btbu.edu.cn/framework/main.jsp"这一串数据,意味着登录成功了.<span
+style="color: #ff0000;">登录成功之后首先必须进入这个页面</span>(<span
+style="color: #ff0000;">http://jwgl.btbu.edu.cn/Logon.do?method=logonBySSO</span>),才能进行其他操作,不然提示未登陆.我们把这个叫获取权限.获取到权限之后我们就可以开始查课表或者查成绩了.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   <span class="type">Runnable</span> <span class="variable">kebiaoRunnable</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Runnable</span>() &#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">    	yzmBitmap = GET(<span class="string">&quot;http://jwgl.btbu.edu.cn/verifycode.servlet&quot;</span>);</span><br><span class="line">    	gengxin(<span class="string">&quot;获取验证码完毕&quot;</span>);</span><br><span class="line">        <span class="type">EditText</span> <span class="variable">numEditText</span> <span class="operator">=</span> (EditText)findViewById(R.id.changpao_num2);</span><br><span class="line">        <span class="type">EditText</span> <span class="variable">pswEditText</span> <span class="operator">=</span> (EditText)findViewById(R.id.changpao_psw2);</span><br><span class="line">    	yzmBitmap=im2bw(yzmBitmap);</span><br><span class="line">    	<span class="type">String</span> <span class="variable">yzm</span> <span class="operator">=</span> shibie(yzmBitmap);</span><br><span class="line">    	gengxin(yzm);</span><br><span class="line">    	<span class="type">String</span> <span class="variable">resultString</span> <span class="operator">=</span> POST(<span class="string">&quot;http://jwgl.btbu.edu.cn/Logon.do&quot;</span>,<span class="string">&quot;method=logon&amp;USERNAME=&quot;</span>+numEditText.getText()+<span class="string">&quot;&amp;PASSWORD=&quot;</span>+pswEditText.getText()+</span><br><span class="line">    			<span class="string">&quot;&amp;RANDOMCODE=&quot;</span>+yzm);</span><br><span class="line">    	<span class="comment">//System.out.println(resultString);</span></span><br><span class="line">    	<span class="keyword">if</span>(dialog2.isShowing())dialog2.dismiss();</span><br><span class="line">    	<span class="keyword">if</span>(find(resultString, <span class="string">&quot;http://jwgl.btbu.edu.cn/framework/main.jsp&quot;</span>))</span><br><span class="line">    	&#123;</span><br><span class="line">    		gengxin(<span class="string">&quot;登录成功，获取权限……&quot;</span>);</span><br><span class="line">    		POST(<span class="string">&quot;http://jwgl.btbu.edu.cn/Logon.do?method=logonBySSO&quot;</span>,<span class="string">&quot;&quot;</span>);</span><br><span class="line">    		<span class="comment">//登录成功</span></span><br><span class="line">    		loadkebiao();</span><br><span class="line">    	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(find(resultString,<span class="string">&quot;验证码错误&quot;</span>))</span><br><span class="line">    	&#123;</span><br><span class="line">    		gengxin(<span class="string">&quot;验证码错误，重新登录……&quot;</span>);</span><br><span class="line">    		run();</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">else</span> <span class="keyword">if</span>(find(resultString, <span class="string">&quot;errorinfo&quot;</span>))</span><br><span class="line">    	&#123;</span><br><span class="line">    		<span class="keyword">if</span>(dialog2.isShowing())dialog2.dismiss();</span><br><span class="line">    		show(zhongjian(resultString, <span class="string">&quot;errorinfo&quot;</span>&gt;<span class="string">&quot;,&quot;</span>&lt;/span&gt;<span class="string">&quot;)+&quot;</span>n默认密码为学号或身份证后六位。<span class="string">&quot;);</span></span><br><span class="line"><span class="string">    	&#125;else show(&quot;</span>登录失败<span class="string">&quot;);</span></span><br><span class="line"><span class="string">		&#125;catch(Exception e)</span></span><br><span class="line"><span class="string">		&#123;</span></span><br><span class="line"><span class="string">			if(dialog2.isShowing())dialog2.dismiss();</span></span><br><span class="line"><span class="string">		&#125;</span></span><br><span class="line"><span class="string">		if(dialog2.isShowing())dialog2.dismiss();</span></span><br><span class="line"><span class="string">	&#125;</span></span><br><span class="line"><span class="string">&#125;;</span></span><br><span class="line"><span class="string"></span></span><br></pre></td></tr></table></figure>
+<p>上面是查课表之前做的操作.</p>
+<h2 id="查课表">查课表</h2>
+<p>终于到查课表了,首先我们需要获取的是学期,学期格式大致是2014-2015-1.
+有了学期之后,我们POST这样的数据就可以查到课表:
+http://jwgl.btbu.edu.cn/tkglAction.do?method=goListKbByXs&amp;sql=&amp;xnxqh=<span
+style="color: #ff0000;">你要查的学期</span> 就象这样</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">result = POST(<span class="string">&quot;http://jwgl.btbu.edu.cn/tkglAction.do?method=goListKbByXs&amp;sql=&amp;xnxqh=&quot;</span>+xueqi, <span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>你得到的数据通常是十分复杂的,所以我们就要引入一个十分有用的东西,它叫<a
+target="_blank" rel="noopener" href="http://baike.baidu.com/view/94238.htm">正则表达式</a>(Regex),<a
+target="_blank" rel="noopener" href="http://deerchao.net/tutorials/regex/regex.htm">教程参考这个链接</a>,之后我们的数据处理都要使用其中的<a
+target="_blank" rel="noopener" href="http://deerchao.net/tools/regex_tester/regextester.zip">工具</a>.</p>
+<p>这里我先贴一张图,感受一下正则表达式的威力.</p>
+<p><a href="/images/QQ截图201502130853531.png"><img
+src="/images/QQ截图201502130853531.png" /></a></p>
+我们可以看到,正则表达式威力巨大,上图是提取课程名称,上课老师和教师在哪的.有人问,时间呢?这里面没有时间..时间是这个正则表达式提取的:<span style="color: #ff0000;">&lt;div
+id="(.+?)-2".*?&gt;(.+?)
+</div>
+<p></span></p>
+<p>让我们再上一张图:</p>
+<p><a href="/images/QQ截图20150215190056.png"><img
+src="/images/QQ截图20150215190056.png" /></a></p>
+<p>我们看到了1-1,1-2,1-3这样的id,这个就是表示第几周的第几节课.我们取出来上课时间之后,再把右边的数据用刚才的正则表达式取一遍,就可以取出来课程名称,上课地点等数据了.然后就可以用程序画一个课程表了.</p>
+<p><a href="/images/Screenshot_2014-08-31-16-49-31.png"><img
+src="/images/Screenshot_2014-08-31-16-49-31.png" /></a></p>
+<p>这是我们第一个课表,十分简陋,经过各方面考虑和调整,我们取消了左边的时间,然后将有<span
+style="color: #ff0000;">单双周</span>这样的特殊课程用<span
+style="color: #ff0000;">颜色</span>标出来,然后针对课程名称短的方格进行<span
+style="color: #ff0000;">扩大</span>处理,保证了整齐性,下面就是经过多方面调整的课程表:</p>
+<p><a href="/images/Screenshot_2014-09-14-15-29-03.png"><img
+src="/images/Screenshot_2014-09-14-15-29-03.png" /></a></p>
+像这样的课表,我们从一个网页,获得它中间有用的数据,到显示出来,虽然是一瞬间,但是非常的复杂,下面是<span
+style="color: #ff0000;">从数据源到数组</span>的程序(只有变成数组才能显得好看,没有人愿意看
+<div>
+<p>这样的东西).</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">		p=Pattern.compile(<span class="string">&quot;&lt;div id=&quot;</span>(.+?)-<span class="number">2</span><span class="string">&quot;.*?&gt;(.+?)&lt;/div&gt;&quot;</span>);</span><br><span class="line">		m=p.matcher(result);</span><br><span class="line">		String temp;</span><br><span class="line">    	  <span class="keyword">while</span>(m.find())&#123;</span><br><span class="line">			  shijian.add(m.group(<span class="number">1</span>));</span><br><span class="line">			  temp=m.group(<span class="number">2</span>);</span><br><span class="line">			  Pattern p2=Pattern.compile(<span class="string">&quot; (.*?)&lt;br&gt;(.+?)&lt;br&gt;(.*?)&lt;br&gt;&lt;nobr&gt; *(.*?)&lt;nobr&gt;&lt;br&gt;(.*?)&lt;br&gt;(.*?)&lt;br&gt;&quot;</span>);</span><br><span class="line">			  Matcher m2=p2.matcher(temp);</span><br><span class="line">			  <span class="keyword">if</span>(m2.find())</span><br><span class="line">				  &#123;</span><br><span class="line">					  mingcheng.add(m2.group(<span class="number">1</span>));</span><br><span class="line"><span class="comment">//					  int i;String myString=&quot;&quot;;</span></span><br><span class="line"><span class="comment">//					  for(i=1;i&lt;6;i++)if(m2.group(i).length()!=0)myString+=m2.group(i)+&quot;n&quot;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//					  xiangxi.add(myString.substring(0,myString.length()-1));</span></span><br><span class="line">					  temp=temp.replace(<span class="string">&quot; &quot;</span>,<span class="string">&quot;&quot;</span>);</span><br><span class="line">					  System.out.println(temp);</span><br><span class="line">					  Pattern p3=Pattern.compile(<span class="string">&quot;&lt;.+?&gt; *&quot;</span>);</span><br><span class="line">					  Matcher m3=p3.matcher(temp);</span><br><span class="line">					  temp=m3.replaceAll(<span class="string">&quot;n&quot;</span>);</span><br><span class="line">					  <span class="keyword">while</span>(temp.indexOf(<span class="string">&quot;nn&quot;</span>)!=-<span class="number">1</span>)</span><br><span class="line">					  &#123;</span><br><span class="line">						  temp=temp.replace(<span class="string">&quot;nn&quot;</span>,<span class="string">&quot;n&quot;</span>);</span><br><span class="line">					  &#125;</span><br><span class="line">					  temp=temp.substring(<span class="number">0</span>,temp.length()-<span class="number">1</span>);</span><br><span class="line">					  xiangxi.add(temp);</span><br><span class="line"></span><br><span class="line">					  String[] tempStrings = temp.split(<span class="string">&quot;n&quot;</span>);</span><br><span class="line"></span><br><span class="line">					  <span class="keyword">if</span>(tempStrings.length==<span class="number">5</span>)</span><br><span class="line">						  &#123;</span><br><span class="line">						  <span class="type">String</span> <span class="variable">myString</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">						  <span class="keyword">if</span>(tempStrings[<span class="number">3</span>].indexOf(<span class="string">&quot;单周&quot;</span>)!=-<span class="number">1</span>)myString+=<span class="string">&quot;单周n&quot;</span>;</span><br><span class="line">						  <span class="keyword">else</span> <span class="keyword">if</span>(tempStrings[<span class="number">3</span>].indexOf(<span class="string">&quot;双周&quot;</span>)!=-<span class="number">1</span>)myString+=<span class="string">&quot;双周n&quot;</span>;</span><br><span class="line">						  myString+=tempStrings[<span class="number">4</span>];</span><br><span class="line">						  didian.add(myString);</span><br><span class="line">						  &#125;</span><br><span class="line">					  <span class="keyword">else</span> <span class="keyword">if</span>(tempStrings.length==<span class="number">6</span>)</span><br><span class="line">						  &#123;</span><br><span class="line">						  <span class="keyword">if</span>(tempStrings[<span class="number">4</span>].indexOf(<span class="string">&quot;暂无&quot;</span>)==-<span class="number">1</span>)didian.add(tempStrings[<span class="number">4</span>]+<span class="string">&quot;n&quot;</span>+tempStrings[<span class="number">5</span>]);</span><br><span class="line">						  <span class="keyword">else</span> didian.add(tempStrings[<span class="number">5</span>]);</span><br><span class="line">						  &#125;</span><br><span class="line">					  <span class="keyword">else</span> <span class="keyword">if</span>(tempStrings.length==<span class="number">10</span>)</span><br><span class="line">						  &#123;</span><br><span class="line">						  <span class="type">String</span> <span class="variable">myString</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">						  <span class="keyword">if</span>(tempStrings[<span class="number">3</span>].indexOf(<span class="string">&quot;单周&quot;</span>)!=-<span class="number">1</span>)myString+=<span class="string">&quot;单周n&quot;</span>;</span><br><span class="line">						  <span class="keyword">else</span> <span class="keyword">if</span>(tempStrings[<span class="number">3</span>].indexOf(<span class="string">&quot;双周&quot;</span>)!=-<span class="number">1</span>)myString+=<span class="string">&quot;双周n&quot;</span>;</span><br><span class="line">						  <span class="keyword">else</span> myString+=tempStrings[<span class="number">3</span>]+<span class="string">&quot;n&quot;</span>;</span><br><span class="line">						  myString+=tempStrings[<span class="number">4</span>]+<span class="string">&quot;n&quot;</span>;</span><br><span class="line"></span><br><span class="line">						  <span class="keyword">if</span>(tempStrings[<span class="number">8</span>].indexOf(<span class="string">&quot;单周&quot;</span>)!=-<span class="number">1</span>)myString+=<span class="string">&quot;单周n&quot;</span>;</span><br><span class="line">						  <span class="keyword">else</span> <span class="keyword">if</span>(tempStrings[<span class="number">8</span>].indexOf(<span class="string">&quot;双周&quot;</span>)!=-<span class="number">1</span>)myString+=<span class="string">&quot;双周n&quot;</span>;</span><br><span class="line">						  <span class="keyword">else</span> myString+=tempStrings[<span class="number">8</span>]+<span class="string">&quot;n&quot;</span>;</span><br><span class="line">						  myString+=tempStrings[<span class="number">9</span>];</span><br><span class="line"></span><br><span class="line">						  didian.add(myString);</span><br><span class="line">						  &#125;</span><br><span class="line">					  <span class="keyword">else</span> <span class="keyword">if</span>(tempStrings.length==<span class="number">12</span>)</span><br><span class="line">						  &#123;</span><br><span class="line">						  <span class="type">String</span> <span class="variable">myString</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">						  <span class="keyword">if</span>(tempStrings[<span class="number">3</span>].indexOf(<span class="string">&quot;单周&quot;</span>)!=-<span class="number">1</span>)myString+=<span class="string">&quot;单周n&quot;</span>;</span><br><span class="line">						  <span class="keyword">else</span> <span class="keyword">if</span>(tempStrings[<span class="number">3</span>].indexOf(<span class="string">&quot;双周&quot;</span>)!=-<span class="number">1</span>)myString+=<span class="string">&quot;双周n&quot;</span>;</span><br><span class="line">						  <span class="keyword">else</span> myString+=tempStrings[<span class="number">3</span>];</span><br><span class="line">						  myString+=tempStrings[<span class="number">4</span>]+tempStrings[<span class="number">5</span>]+<span class="string">&quot;n&quot;</span>;</span><br><span class="line"></span><br><span class="line">						  <span class="keyword">if</span>(tempStrings[<span class="number">9</span>].indexOf(<span class="string">&quot;单周&quot;</span>)!=-<span class="number">1</span>)myString+=<span class="string">&quot;单周n&quot;</span>;</span><br><span class="line">						  <span class="keyword">else</span> <span class="keyword">if</span>(tempStrings[<span class="number">9</span>].indexOf(<span class="string">&quot;双周&quot;</span>)!=-<span class="number">1</span>)myString+=<span class="string">&quot;双周n&quot;</span>;</span><br><span class="line">						  <span class="keyword">else</span> myString+=tempStrings[<span class="number">9</span>];</span><br><span class="line">						  myString+=tempStrings[<span class="number">10</span>]+tempStrings[<span class="number">11</span>];</span><br><span class="line">						  didian.add(myString);</span><br><span class="line">						  &#125;</span><br><span class="line"></span><br><span class="line">					  <span class="keyword">else</span> &#123;</span><br><span class="line">						  didian.add(tempStrings[<span class="number">4</span>]);</span><br><span class="line">					  		&#125;</span><br><span class="line">				  &#125;<span class="keyword">else</span></span><br><span class="line">				  &#123;</span><br><span class="line">					  mingcheng.add(<span class="string">&quot;&quot;</span>);</span><br><span class="line">					  xiangxi.add(<span class="string">&quot;&quot;</span>);</span><br><span class="line">					  didian.add(<span class="string">&quot;&quot;</span>);</span><br><span class="line">				  &#125;</span><br><span class="line">		  &#125;</span><br><span class="line">		&#125;<span class="keyword">catch</span>(Exception e)</span><br><span class="line">		&#123;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>做完了这个之后,我们觉得这个功能的应用场景应该是早上快迟到了,在文二楼找教室又忘记了在哪上课,掏出手机查课表的情况,于是乎我们想到,那时候肯定没网啊,于是<span
+style="color: #ff0000;">离线课表</span>做出来了.</p>
+<p><a href="/images/Screenshot_2014-09-30-21-17-49.png"><img
+src="/images/Screenshot_2014-09-30-21-17-49.png" /></a></p>
+<p>其实说了这么久,你还不知道怎么<span
+style="color: #ff0000;">选学期</span>对不对?选学期呢,我们是通过这个方式来取出学期的(其实就是教务管理系统选学期的页面)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;开始选学期&quot;</span>);</span><br><span class="line">result = POST(<span class="string">&quot;http://jwgl.btbu.edu.cn/tkglAction.do?method=kbxxXs&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">p=Pattern.compile(<span class="string">&quot;&lt;option value=&quot;</span>.*?<span class="string">&quot;.*?&gt;(.*?)&lt;/option&gt;&quot;</span>);</span><br><span class="line">m=p.matcher(result);m.find();</span><br><span class="line"><span class="keyword">while</span>(m.find())&#123;xueqiList.add(m.group(<span class="number">1</span>));&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这里我们再一次发挥正则表达式的威力,很显然用正则表达式是十分方便的.
+我们取出来了学期之后发现,<span
+style="color: #ff0000;">十年都有了</span>...可是大学才四年对不对!!
+下面就是教务管理里面的选学期部分.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">name</span>=<span class="string">&quot;xnxqh&quot;</span> <span class="attr">id</span>=<span class="string">&quot;xnxqh&quot;</span>  <span class="attr">style</span>=<span class="string">&quot;width:100px&quot;</span> <span class="attr">size</span>=<span class="string">1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;&quot;</span>&gt;</span>---请选择---<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2014-2015-1&quot;</span> <span class="attr">selected</span>&gt;</span>2014-2015-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2013-2014-2&quot;</span>&gt;</span>2013-2014-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2013-2014-1&quot;</span>&gt;</span>2013-2014-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2012-2013-2&quot;</span>&gt;</span>2012-2013-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2012-2013-1&quot;</span>&gt;</span>2012-2013-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2011-2012-2&quot;</span>&gt;</span>2011-2012-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2011-2012-1&quot;</span>&gt;</span>2011-2012-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2010-2011-2&quot;</span>&gt;</span>2010-2011-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2010-2011-1&quot;</span>&gt;</span>2010-2011-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2009-2010-2&quot;</span>&gt;</span>2009-2010-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2009-2010-1&quot;</span>&gt;</span>2009-2010-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2008-2009-2&quot;</span>&gt;</span>2008-2009-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2008-2009-1&quot;</span>&gt;</span>2008-2009-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2007-2008-2&quot;</span>&gt;</span>2007-2008-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2007-2008-1&quot;</span>&gt;</span>2007-2008-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2006-2007-2&quot;</span>&gt;</span>2006-2007-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2006-2007-1&quot;</span>&gt;</span>2006-2007-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2005-2006-2&quot;</span>&gt;</span>2005-2006-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2005-2006-1&quot;</span>&gt;</span>2005-2006-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2004-2005-2&quot;</span>&gt;</span>2004-2005-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2004-2005-1&quot;</span>&gt;</span>2004-2005-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2003-2004-2&quot;</span>&gt;</span>2003-2004-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2003-2004-1&quot;</span>&gt;</span>2003-2004-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2002-2003-2&quot;</span>&gt;</span>2002-2003-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2002-2003-1&quot;</span>&gt;</span>2002-2003-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2001-2002-2&quot;</span>&gt;</span>2001-2002-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2001-2002-1&quot;</span>&gt;</span>2001-2002-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2000-2001-2&quot;</span>&gt;</span>2000-2001-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2000-2001-1&quot;</span>&gt;</span>2000-2001-1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;1999-2000-2&quot;</span>&gt;</span>1999-2000-2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>于是乎我们从学号的前两位入手,你最多只能上到你入学那个年份的学期啊!(比如<span
+style="color: #ff0000;">13</span>XXXXXXXX第一个学期是<span
+style="color: #ff0000;">2013-2014-1</span>)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">List&lt;String&gt; xueqiList2 = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line"><span class="type">SharedPreferences</span> <span class="variable">sp</span> <span class="operator">=</span> getSharedPreferences(<span class="string">&quot;data&quot;</span>, <span class="number">0</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">num</span> <span class="operator">=</span> sp.getString(<span class="string">&quot;num_jiaowu&quot;</span>, <span class="literal">null</span>);</span><br><span class="line">num=num.substring(<span class="number">0</span>,<span class="number">2</span>);</span><br><span class="line"><span class="type">int</span> i;</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;xueqiList.size();i++)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">String</span> <span class="variable">temp</span> <span class="operator">=</span> xueqiList.get(i).toString();</span><br><span class="line">	xueqiList2.add(temp);</span><br><span class="line">	<span class="keyword">if</span>(temp.indexOf(num)!=-<span class="number">1</span>&amp;(Integer.valueOf(temp.substring(temp.length()-<span class="number">1</span>,temp.length()))==<span class="number">1</span>))<span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line">String[] xueqiStrings = <span class="keyword">new</span> <span class="title class_">String</span>[xueqiList2.size()];</span><br><span class="line">xueqiList2.toArray(xueqiStrings);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这里我们取出来了num的前两位,然后xueqiList循环取学期,出现了13且最后一位是1的话我们就<span
+style="color: #ff0000;">break</span>了(其实就是在找2013-2014-1)
+这样我们的学期问题就给彻底解决了<sub>而且在学期末还可以查下个学期的课表</sub></p>
+<p><a href="/images/Screenshot_2015-01-07-10-38-03.png"><img
+src="/images/Screenshot_2015-01-07-10-38-03.png" /></a></p>
+<p>比如上图...就是我下个学期的课表.</p>
+<p>然后原始课表这个不起眼的小按钮是打开了教务管理那个丑的原始页面.为什么要留这个功能呢?因为有<span
+style="color: #ff0000;">周末要上课的同学</span>反馈查不到周末的课表,但是我这里排版已经这样了,再压缩就显示不出来了,于是留下了原始课表这个功能.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/instabtbu/" rel="tag"># instabtbu</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E4%B8%8A%E7%BD%91%E7%99%BB%E5%BD%95%E6%98%AF%E6%80%8E%E4%B9%88%E5%86%99%E5%87%BA%E6%9D%A5%E7%9A%84/" rel="prev" title="上网登录是怎么写出来的">
+                  <i class="fa fa-chevron-left"></i> 上网登录是怎么写出来的
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/python%E5%88%B6%E4%BD%9C%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB/" rel="next" title="python制作的第一个爬虫">
+                  python制作的第一个爬虫 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨培文</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

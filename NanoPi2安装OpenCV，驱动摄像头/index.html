@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xlk.png">
+  <link rel="mask-icon" href="/images/xkl.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="首先你需要配置好WiFi，能上网，然后： 12apt-get updateapt-get install libcv-dev libopencv-dev  有一点比较特别的是NanoPi2的摄像头插上以后，设备是&#x2F;dev&#x2F;video9而不是通常情况下的&#x2F;dev&#x2F;video0。 测试代码如下（参考自VideoCapture）： 12345678910111213141516#include &lt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NanoPi2安装OpenCV，驱动摄像头">
+<meta property="og:url" content="https://ypw.io/NanoPi2%E5%AE%89%E8%A3%85OpenCV%EF%BC%8C%E9%A9%B1%E5%8A%A8%E6%91%84%E5%83%8F%E5%A4%B4/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="首先你需要配置好WiFi，能上网，然后： 12apt-get updateapt-get install libcv-dev libopencv-dev  有一点比较特别的是NanoPi2的摄像头插上以后，设备是&#x2F;dev&#x2F;video9而不是通常情况下的&#x2F;dev&#x2F;video0。 测试代码如下（参考自VideoCapture）： 12345678910111213141516#include &lt;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-12-21T08:32:16.000Z">
+<meta property="article:modified_time" content="2019-08-06T15:59:15.000Z">
+<meta property="article:author" content="杨培文">
+<meta property="article:tag" content="NanoPi2">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ypw.io/NanoPi2%E5%AE%89%E8%A3%85OpenCV%EF%BC%8C%E9%A9%B1%E5%8A%A8%E6%91%84%E5%83%8F%E5%A4%B4/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/NanoPi2%E5%AE%89%E8%A3%85OpenCV%EF%BC%8C%E9%A9%B1%E5%8A%A8%E6%91%84%E5%83%8F%E5%A4%B4/","path":"NanoPi2安装OpenCV，驱动摄像头/","title":"NanoPi2安装OpenCV，驱动摄像头"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>NanoPi2安装OpenCV，驱动摄像头 | 杨培文</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111276663-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-111276663-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨培文"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ypwhs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/ypwhs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/yangpw" title="知乎 → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;yangpw" rel="noopener me" target="_blank"><i class="fa fa-book fa-fw"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/ypwhs" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fa-brands fa-linkedin fa-fw"></i>Linkedin</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/NanoPi2%E5%AE%89%E8%A3%85OpenCV%EF%BC%8C%E9%A9%B1%E5%8A%A8%E6%91%84%E5%83%8F%E5%A4%B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="NanoPi2安装OpenCV，驱动摄像头 | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          NanoPi2安装OpenCV，驱动摄像头
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-12-21 16:32:16" itemprop="dateCreated datePublished" datetime="2015-12-21T16:32:16+08:00">2015-12-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>首先你需要配置好WiFi，能上网，然后：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install libcv-dev libopencv-dev</span><br></pre></td></tr></table></figure>
+<p><a href="/images/Snip20151218_20.png"><img
+src="/images/Snip20151218_20.png" /></a></p>
+<p>有一点比较特别的是NanoPi2的摄像头插上以后，设备是/dev/video9而不是通常情况下的/dev/video0。</p>
+<p>测试代码如下（参考自<a
+target="_blank" rel="noopener" href="http://docs.opencv.org/2.4/modules/highgui/doc/reading_and_writing_images_and_video.html#videocapture">VideoCapture</a>）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/core/core.hpp&gt;</span></span></span><br><span class="line">using namespace cv;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    VideoCapture <span class="title function_">cap</span><span class="params">(<span class="number">9</span>)</span>;</span><br><span class="line">    Mat frame;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        cap.read(frame);</span><br><span class="line">        imshow(<span class="string">&quot;test&quot;</span>,frame);</span><br><span class="line">        waitKey(<span class="number">30</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g++ opencv.cpp -o testcv -lopencv_core -lopencv_highgui -lopencv_imgproc</span><br><span class="line">./testcv</span><br></pre></td></tr></table></figure>
+<p><a href="/images/Snip20151221_1.png"><img
+src="/images/Snip20151221_1.png" /></a></p>
+<p>这里出现了
+<code>HIGHGUI ERROR: V4L: index 9 is not correct!</code> 这样的错误提示，具体原因不明，不过我们想到了一个好的解决方法，那就是直接使用v4l2获取摄像头的数据，然后再转为OpenCV的cv::Mat。</p>
+<p>下面的代码就是OpenCV结合V4L2的程序：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/ioctl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;libv4l1.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;libv4l2.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;linux/videodev2.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;opencv2/imgproc/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;opencv2/core/core.hpp&gt;</span></span></span><br><span class="line">using namespace cv;</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> videodevice[] = <span class="string">&quot;/dev/video9&quot;</span>;</span><br><span class="line"><span class="type">int</span> imageWidth = <span class="number">320</span>;</span><br><span class="line"><span class="type">int</span> imageHeight = <span class="number">240</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CLEAR(x) memset(&amp;(x), 0, sizeof(x))</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">buffer</span> &#123;</span></span><br><span class="line">	<span class="type">void</span>   *start;</span><br><span class="line">	<span class="type">size_t</span> length;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">xioctl</span><span class="params">(<span class="type">int</span> fh, <span class="type">int</span> request, <span class="type">void</span> *arg)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> r;</span><br><span class="line">	<span class="keyword">do</span> &#123;</span><br><span class="line">		r = v4l2_ioctl(fh, request, arg);</span><br><span class="line">	&#125; <span class="keyword">while</span> (r == <span class="number">-1</span> &amp;&amp; ((errno == EINTR) || (errno == EAGAIN)));</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (r == <span class="number">-1</span>) &#123;</span><br><span class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;error %d, %s\n&quot;</span>, errno, strerror(errno));</span><br><span class="line">		<span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//打开摄像头设备</span></span><br><span class="line">	<span class="type">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">	<span class="comment">//fd = open (videodevice, O_RDWR | O_NONBLOCK, 0);</span></span><br><span class="line">	fd = open (videodevice, O_RDWR, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span>(fd &lt; <span class="number">0</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;failed to open\n&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;打开摄像头设备成功，%s\n&quot;</span>, videodevice);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//查询摄像头信息，VIDIOC_QUERYCAP</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;------------\n&quot;</span>);</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">v4l2_capability</span> <span class="title">cap</span>;</span></span><br><span class="line">	xioctl (fd, VIDIOC_QUERYCAP, &amp;cap);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Driver Name:%s\nCard Name:%s\nBus info:%s\nDriver Version:%u.%u.%u\n\n&quot;</span>,cap.driver,cap.card,cap.bus_info,(cap.version&gt;&gt;<span class="number">16</span>)&amp;<span class="number">0XFF</span>, (cap.version&gt;&gt;<span class="number">8</span>)&amp;<span class="number">0XFF</span>,cap.version&amp;<span class="number">0XFF</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//查询摄像头视频格式，VIDIOC_ENUM_FMT</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;------------\n&quot;</span>);</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">v4l2_fmtdesc</span> <span class="title">fmtdesc</span>;</span></span><br><span class="line">	fmtdesc.index=<span class="number">0</span>;</span><br><span class="line">	fmtdesc.type=V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Supportformat:\n&quot;</span>);</span><br><span class="line">	<span class="keyword">while</span>(ioctl(fd,VIDIOC_ENUM_FMT,&amp;fmtdesc)!=<span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;\t%d.%c%c%c%c\t%s\n&quot;</span>,fmtdesc.index+<span class="number">1</span>,fmtdesc.pixelformat &amp; <span class="number">0xFF</span>, (fmtdesc.pixelformat &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>,(fmtdesc.pixelformat &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>, (fmtdesc.pixelformat &gt;&gt; <span class="number">24</span>) &amp; <span class="number">0xFF</span>,fmtdesc.description);</span><br><span class="line">		fmtdesc.index++;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">v4l2_format</span>			<span class="title">fmt</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">v4l2_buffer</span>			<span class="title">buf</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">v4l2_requestbuffers</span>	<span class="title">req</span>;</span></span><br><span class="line"></span><br><span class="line">	CLEAR(fmt);</span><br><span class="line">	CLEAR(buf);</span><br><span class="line">	CLEAR(req);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;------------\n&quot;</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;设置摄像头视频数据格式\n&quot;</span>);</span><br><span class="line">	<span class="comment">//设置摄像头视频数据格式，VIDIOC_S_FMT</span></span><br><span class="line">	fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">	fmt.fmt.pix.width = imageWidth;</span><br><span class="line">	fmt.fmt.pix.height = imageHeight;</span><br><span class="line">	fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;</span><br><span class="line">	fmt.fmt.pix.field = V4L2_FIELD_INTERLACED;</span><br><span class="line">	<span class="comment">//fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;</span></span><br><span class="line">	<span class="comment">//fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_YVU420;</span></span><br><span class="line">	<span class="comment">//fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_JPEG;</span></span><br><span class="line">	xioctl(fd, VIDIOC_S_FMT, &amp;fmt);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ((fmt.fmt.pix.width != imageWidth) || (fmt.fmt.pix.height != imageHeight))</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Warning: driver is sending image at %dx%d\n&quot;</span>, fmt.fmt.pix.width, fmt.fmt.pix.height);</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;fmt.type is %d\n&quot;</span>,fmt.type);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Width = %d\n&quot;</span>,fmt.fmt.pix.width);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Height= %d\n&quot;</span>,fmt.fmt.pix.height);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Sizeimage = %d\n&quot;</span>,fmt.fmt.pix.sizeimage);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;------------\n&quot;</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;请求分配视频缓冲区\n&quot;</span>);</span><br><span class="line">	<span class="comment">//请求分配视频缓冲区，VIDIOC_REQBUFS</span></span><br><span class="line">	req.count = <span class="number">4</span>;</span><br><span class="line">	req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">	req.memory = V4L2_MEMORY_MMAP;</span><br><span class="line">	xioctl(fd, VIDIOC_REQBUFS, &amp;req);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;------------\n&quot;</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;查询缓冲信息，将内核空间映射到用户空间\n&quot;</span>);</span><br><span class="line">	<span class="comment">//查询缓冲信息，将内核空间映射到用户空间，VIDIOC_QUERYBUF</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">buffer</span> *<span class="title">buffers</span>;</span></span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> i, n_buffers;</span><br><span class="line"></span><br><span class="line">	buffers = (<span class="keyword">struct</span> buffer*)<span class="built_in">calloc</span>(req.count, <span class="keyword">sizeof</span>(*buffers));</span><br><span class="line">	<span class="keyword">for</span> (n_buffers = <span class="number">0</span>; n_buffers &lt; req.count; ++n_buffers) &#123;</span><br><span class="line">		CLEAR(buf);</span><br><span class="line"></span><br><span class="line">		buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">		buf.memory      = V4L2_MEMORY_MMAP;</span><br><span class="line">		buf.index       = n_buffers;</span><br><span class="line">		<span class="comment">//把VIDIOC_REQBUFS中分配的数据缓存转换成物理地址</span></span><br><span class="line">		xioctl(fd, VIDIOC_QUERYBUF, &amp;buf);</span><br><span class="line"></span><br><span class="line">		buffers[n_buffers].length = buf.length;</span><br><span class="line">		buffers[n_buffers].start = v4l2_mmap(<span class="literal">NULL</span>, buf.length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (MAP_FAILED == buffers[n_buffers].start) &#123;</span><br><span class="line">			perror(<span class="string">&quot;mmap&quot;</span>);</span><br><span class="line">			<span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//投放一个空的视频缓冲区到视频缓冲区输入队列中，VIDIOC_QBUF</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;------------\n&quot;</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;投放一个空的视频缓冲区到视频缓冲区输入队列中\n&quot;</span>);</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n_buffers; ++i) &#123;</span><br><span class="line">		CLEAR(buf);</span><br><span class="line">		buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">		buf.memory = V4L2_MEMORY_MMAP;</span><br><span class="line">		buf.index = i;</span><br><span class="line">		xioctl(fd, VIDIOC_QBUF, &amp;buf);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//启动视频采集命令，VIDIOC_STREAMON</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;------------\n&quot;</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;启动视频采集\n&quot;</span>);</span><br><span class="line">	<span class="class"><span class="keyword">enum</span> <span class="title">v4l2_buf_type</span> <span class="title">type</span> =</span> V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">	xioctl(fd, VIDIOC_STREAMON, &amp;type);</span><br><span class="line"></span><br><span class="line">	fd_set fds;</span><br><span class="line">	<span class="type">int</span> r;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> <span class="title">tv</span>;</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">do</span> &#123;</span><br><span class="line">		FD_ZERO(&amp;fds);</span><br><span class="line">		FD_SET(fd, &amp;fds);</span><br><span class="line"></span><br><span class="line">		<span class="comment">/* Timeout. */</span></span><br><span class="line">		tv.tv_sec = <span class="number">2</span>;</span><br><span class="line">		tv.tv_usec = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">		r = select(fd + <span class="number">1</span>, &amp;fds, <span class="literal">NULL</span>, <span class="literal">NULL</span>, &amp;tv);</span><br><span class="line">	&#125; <span class="keyword">while</span> ((r == <span class="number">-1</span> &amp;&amp; (errno = EINTR)));</span><br><span class="line">	<span class="keyword">if</span> (r == <span class="number">-1</span>) &#123;</span><br><span class="line">		perror(<span class="string">&quot;select&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> errno;</span><br><span class="line">	&#125;</span><br><span class="line">	Mat frame;</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		CLEAR(buf);</span><br><span class="line">		buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">		buf.memory = V4L2_MEMORY_MMAP;</span><br><span class="line">		<span class="comment">//从视频缓冲区的输出队列中取得一个已经保存有一帧视频数据的视频缓冲区，VIDIOC_DQBUF</span></span><br><span class="line">		xioctl(fd, VIDIOC_DQBUF, &amp;buf);</span><br><span class="line">		<span class="type">char</span> * p = (<span class="type">char</span> *)(buffers[buf.index].start);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;------------\n&quot;</span>);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;取得一帧，%fkb\n&quot;</span>, buf.bytesused/<span class="number">1024.0</span>);</span><br><span class="line"></span><br><span class="line">		<span class="built_in">vector</span>&lt;<span class="type">char</span>&gt; <span class="title function_">data</span><span class="params">(p, p + buf.bytesused)</span>;</span><br><span class="line">        frame = imdecode(Mat(data), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_COLOR);</span><br><span class="line">        imshow(<span class="string">&quot;test&quot;</span>, frame);</span><br><span class="line">        <span class="type">int</span> c = waitKey(<span class="number">10</span>)&amp;<span class="number">0xFF</span>;</span><br><span class="line">        <span class="keyword">if</span>(c == <span class="number">27</span>)&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">		xioctl(fd, VIDIOC_QBUF, &amp;buf);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//停止视频采集命令，VIDIOC_STREAMOFF</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;------------\n&quot;</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;停止视频采集\n&quot;</span>);</span><br><span class="line">	type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">	xioctl(fd, VIDIOC_STREAMOFF, &amp;type);</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n_buffers; ++i) &#123;</span><br><span class="line">		v4l2_munmap(buffers[i].start, buffers[i].length);</span><br><span class="line">	&#125;</span><br><span class="line">	v4l2_close(fd);</span><br><span class="line">	<span class="built_in">exit</span> (EXIT_SUCCESS);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ test.cpp -o <span class="built_in">test</span> -lopencv_core -lopencv_highgui -lopencv_imgproc -lv4l2</span><br></pre></td></tr></table></figure>
+<p>注意，凡是带imshow的程序都必须到触摸屏上操作，不然就会出现错误，比如
+ssh中的：<code>(test:1500): Gtk-WARNING **: cannot open display:</code> ，或者vnc中的：<code>(test:1521): GdkGLExt-WARNING **: Window system doesn't support OpenGL.</code>。</p>
+<p><a href="/images/WeChat_1450686824.jpeg"><img
+src="/images/WeChat_1450686824.jpeg" /></a></p>
+<p>最后的视频（591KB）：</p>
+<video src=/images/19.mp4 controls />
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/NanoPi2/" rel="tag"># NanoPi2</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/NanoPi2%E6%B7%BB%E5%8A%A0%E4%B8%AD%E6%96%87%E6%94%AF%E6%8C%81/" rel="prev" title="NanoPi2添加中文支持">
+                  <i class="fa fa-chevron-left"></i> NanoPi2添加中文支持
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%E8%AE%A9NanoPi2%E6%94%AF%E6%8C%81USB%E5%A3%B0%E5%8D%A1/" rel="next" title="让NanoPi2支持USB声卡">
+                  让NanoPi2支持USB声卡 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨培文</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

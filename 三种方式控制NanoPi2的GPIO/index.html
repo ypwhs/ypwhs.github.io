@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xlk.png">
+  <link rel="mask-icon" href="/images/xkl.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="首先奉上PDF资料，万变不离其宗，掌握核心科技才是最重要的： SEC_Users_Manual_S5P4418_Users_Manual_Preliminary_Ver.0.10.pdf 我目前找到了三种方式控制NanoPi2的IO口：  通过sysfs(&#x2F;sys&#x2F;class&#x2F;gpio)来操作； 通过内核的gpio_set_value函数来操作； 通过配置寄存器(0xC001X000)来操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="三种方式控制NanoPi2的GPIO">
+<meta property="og:url" content="https://ypw.io/%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%E6%8E%A7%E5%88%B6NanoPi2%E7%9A%84GPIO/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="首先奉上PDF资料，万变不离其宗，掌握核心科技才是最重要的： SEC_Users_Manual_S5P4418_Users_Manual_Preliminary_Ver.0.10.pdf 我目前找到了三种方式控制NanoPi2的IO口：  通过sysfs(&#x2F;sys&#x2F;class&#x2F;gpio)来操作； 通过内核的gpio_set_value函数来操作； 通过配置寄存器(0xC001X000)来操作。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-01-12T14:54:46.000Z">
+<meta property="article:modified_time" content="2019-08-06T15:59:15.000Z">
+<meta property="article:author" content="杨培文">
+<meta property="article:tag" content="NanoPi2">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ypw.io/%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%E6%8E%A7%E5%88%B6NanoPi2%E7%9A%84GPIO/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%E6%8E%A7%E5%88%B6NanoPi2%E7%9A%84GPIO/","path":"三种方式控制NanoPi2的GPIO/","title":"三种方式控制NanoPi2的GPIO"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>三种方式控制NanoPi2的GPIO | 杨培文</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111276663-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-111276663-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%86%85%E6%A0%B8%E5%87%BD%E6%95%B0%E6%9D%A5%E6%93%8D%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">2. 通过内核函数来操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Eioctl%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.</span> <span class="nav-text">2.1 基于ioctl操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">2.1.1 内核模块</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%93%8D%E4%BD%9Cdemo"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">2.1.2 操作demo</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.1.</span> <span class="nav-text">2.2 基于文件操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E9%85%8D%E7%BD%AE%E5%AF%84%E5%AD%98%E5%99%A8%E6%9D%A5%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">3. 通过配置寄存器来操作</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨培文"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ypwhs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/ypwhs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/yangpw" title="知乎 → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;yangpw" rel="noopener me" target="_blank"><i class="fa fa-book fa-fw"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/ypwhs" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fa-brands fa-linkedin fa-fw"></i>Linkedin</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%E6%8E%A7%E5%88%B6NanoPi2%E7%9A%84GPIO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="三种方式控制NanoPi2的GPIO | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          三种方式控制NanoPi2的GPIO
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-01-12 22:54:46" itemprop="dateCreated datePublished" datetime="2016-01-12T22:54:46+08:00">2016-01-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>首先奉上PDF资料，万变不离其宗，掌握核心科技才是最重要的：</p>
+<p><a
+target="_blank" rel="noopener" href="http://wiki.friendlyarm.com/wiki/images/3/3d/SEC_Users_Manual_S5P4418_Users_Manual_Preliminary_Ver.0.10.pdf">SEC_Users_Manual_S5P4418_Users_Manual_Preliminary_Ver.0.10.pdf</a></p>
+<p>我目前找到了三种方式控制NanoPi2的IO口：</p>
+<ol type="1">
+<li>通过sysfs(/sys/class/gpio)来操作；</li>
+<li>通过内核的gpio_set_value函数来操作；</li>
+<li>通过配置寄存器(0xC001X000)来操作。 <span id="more"></span> ## 1.
+通过sysfs来操作</li>
+</ol>
+<p>这种方法是官方教程给出的办法，这里只给出链接，不再详细解释。</p>
+<p><a
+target="_blank" rel="noopener" href="http://bbs.elecfans.com/jishu_527063_1_1.html">http://bbs.elecfans.com/jishu_527063_1_1.html</a></p>
+<h2 id="通过内核函数来操作">2. 通过内核函数来操作</h2>
+<p>首先，用户层需要和驱动层交流，目前我知道的是两种方式，一种是通过ioctl操作，另一种是基于文件操作。注意，不管是基于ioctl还是文件操作，速度都是在200us这个数量级上，也就是0.2ms。</p>
+<h3 id="基于ioctl操作">2.1 基于ioctl操作</h3>
+<p>下面是一段我自己写的内核代码，以及操作这个内核模块的demo。</p>
+<h5 id="内核模块">2.1.1 内核模块</h5>
+<p>这个内核模块控制的是GPIOC11引脚，通过ioctl发送SET_VALUE命令可以设置引脚输出电平的高低，也就是LED的亮灭。使用的函数是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gpio_request(GPIOC11, <span class="string">&quot;test&quot;</span>);</span><br><span class="line">gpio_direction_output(GPIOC11, <span class="number">1</span>);</span><br><span class="line">gpio_set_value(GPIOC11, HIGH);</span><br></pre></td></tr></table></figure>
+<p>下面是全部代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/kernel.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/gpio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/miscdevice.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/fs.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/moduleparam.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/slab.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/cdev.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/delay.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/compat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/spi/spi.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/spi/spidev.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mach/platform.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mach/devices.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> OUTPUT  1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INPUT   0</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> HIGH    1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> LOW     0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SET_VALUE 123</span></span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span> GPIOC11 = PAD_GPIO_C + <span class="number">11</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DEVICE_NAME <span class="string">&quot;gpio&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">gpio_open</span><span class="params">(<span class="keyword">struct</span> inode *inode, <span class="keyword">struct</span> file *file)</span></span><br><span class="line">&#123;</span><br><span class="line">    gpio_request(GPIOC11, <span class="string">&quot;test&quot;</span>);</span><br><span class="line">    gpio_direction_output(GPIOC11, <span class="number">1</span>);</span><br><span class="line">    printk(<span class="string">&quot;request GPIOC11\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">gpio_close</span><span class="params">(<span class="keyword">struct</span> inode *inode, <span class="keyword">struct</span> file *file)</span>&#123;</span><br><span class="line">    printk(<span class="string">&quot;gpio_set_value LOW\n&quot;</span>);</span><br><span class="line">    gpio_set_value(GPIOC11, LOW);</span><br><span class="line">    gpio_free(GPIOC11);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">long</span> </span><br><span class="line"><span class="title function_">gpio_ioctl</span><span class="params">(<span class="keyword">struct</span> file *file, <span class="type">unsigned</span> <span class="type">int</span> cmd, <span class="type">unsigned</span> <span class="type">long</span> arg)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(cmd == SET_VALUE)&#123;</span><br><span class="line">        <span class="keyword">if</span>(arg == HIGH)&#123;</span><br><span class="line">            gpio_set_value(GPIOC11, HIGH);</span><br><span class="line">            printk(<span class="string">&quot;gpio_set_value HIGH\n&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(arg == LOW)&#123;</span><br><span class="line">            gpio_set_value(GPIOC11, LOW);</span><br><span class="line">            printk(<span class="string">&quot;gpio_set_value LOW\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -EMSGSIZE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">gpio_fops</span> =</span> &#123;</span><br><span class="line">    .owner = THIS_MODULE,</span><br><span class="line">    .open = gpio_open,</span><br><span class="line">    .release = gpio_close,</span><br><span class="line">    .unlocked_ioctl = gpio_ioctl,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">miscdevice</span> <span class="title">gpio_dev</span> =</span> &#123;</span><br><span class="line">    .minor          = MISC_DYNAMIC_MINOR,</span><br><span class="line">    .name          = DEVICE_NAME,</span><br><span class="line">    .fops          = &amp;gpio_fops,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">volatile</span> <span class="type">unsigned</span> * GPIOCOUT;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">gpio_init</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">    printk(<span class="string">&quot;init\n&quot;</span>);</span><br><span class="line">    ret = misc_register(&amp;gpio_dev);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">gpio_exit</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    misc_deregister(&amp;gpio_dev);</span><br><span class="line">    printk(<span class="string">&quot;exit\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module_init(gpio_init);</span><br><span class="line">module_exit(gpio_exit);</span><br><span class="line"></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;GPL&quot;</span>);</span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;YPW&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>下面就是这个模块的Makefile：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">obj-m:=gpio.o</span><br><span class="line">mymodule-objs:=gpio</span><br><span class="line">KDIR:=/home/ypw/Desktop/linux-3.4.y/</span><br><span class="line">MAKE:=make</span><br><span class="line"># EXTRA_CFLAGS += -I$(KDIR)arch/arm/mach-s5p4418/prototype/module</span><br><span class="line">default:</span><br><span class="line">	$(MAKE) -C $(KDIR) M=$(PWD) modules</span><br><span class="line">clean:</span><br><span class="line">	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) clean</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>如果你需要编译这个内核模块，你首先需要下载linux内核的源代码：<a
+target="_blank" rel="noopener" href="https://github.com/friendlyarm/linux-3.4.y">https://github.com/friendlyarm/linux-3.4.y</a>，然后将KDIR修改为你的内核地址，make即可编译出gpio.ko。如果不想自己编译，只想使用GPIOC11，可以下载我编译好的内核模块：<a
+href="/images/gpio_ioctl.ko">gpio_ioctl.ko</a>。</p>
+<h5 id="操作demo">2.1.2 操作demo</h5>
+<p>安装和删除内核模块的办法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">insmod gpio_ioctl.ko</span><br><span class="line">rmmod gpio_ioctl.ko</span><br></pre></td></tr></table></figure>
+<p>安装好以后，如何使用呢？</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/ioctl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> HIGH    1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> LOW     0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SET_VALUE 123</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> fd = open(<span class="string">&quot;/dev/gpio&quot;</span>, O_RDWR);</span><br><span class="line">	<span class="type">int</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)&#123;</span><br><span class="line">		ioctl(fd, SET_VALUE, HIGH);</span><br><span class="line">		usleep(<span class="number">100000</span>);</span><br><span class="line">		ioctl(fd, SET_VALUE, LOW);</span><br><span class="line">		usleep(<span class="number">100000</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	close(fd);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc gpio_ioctl.c -o gpio_ioctl</span><br><span class="line">./gpio_ioctl</span><br></pre></td></tr></table></figure>
+<p>编译运行，即可看到灯闪三下。</p>
+<video src=/images/gpio.mp4 controls />
+<h4 id="基于文件操作">2.2 基于文件操作</h4>
+<p>2.2.1 内核代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/kernel.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/gpio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/miscdevice.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/fs.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/moduleparam.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/slab.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/cdev.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/delay.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/compat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/spi/spi.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/spi/spidev.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mach/platform.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mach/devices.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> OUTPUT  1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INPUT   0</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> HIGH    1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> LOW     0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SET_VALUE 123</span></span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span> GPIOC11 = PAD_GPIO_C + <span class="number">11</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DEVICE_NAME <span class="string">&quot;gpio&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">gpio_open</span><span class="params">(<span class="keyword">struct</span> inode *inode, <span class="keyword">struct</span> file *file)</span></span><br><span class="line">&#123;</span><br><span class="line">    gpio_request(GPIOC11, <span class="string">&quot;test&quot;</span>);</span><br><span class="line">    gpio_direction_output(GPIOC11, <span class="number">1</span>);</span><br><span class="line">    printk(<span class="string">&quot;request GPIOC11\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">gpio_close</span><span class="params">(<span class="keyword">struct</span> inode *inode, <span class="keyword">struct</span> file *file)</span>&#123;</span><br><span class="line">    printk(<span class="string">&quot;gpio_set_value LOW\n&quot;</span>);</span><br><span class="line">    gpio_set_value(GPIOC11, LOW);</span><br><span class="line">    gpio_free(GPIOC11);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">ssize_t</span> </span><br><span class="line"><span class="title function_">gpio_write</span><span class="params">(<span class="keyword">struct</span> file *filp, <span class="type">const</span> <span class="type">char</span> __user *buf,</span></span><br><span class="line"><span class="params">    <span class="type">size_t</span> count, <span class="type">loff_t</span> *f_pos)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> -EMSGSIZE;</span><br><span class="line">    <span class="keyword">if</span>(buf[<span class="number">0</span>] == <span class="string">&#x27;1&#x27;</span>)&#123;</span><br><span class="line">        gpio_set_value(GPIOC11, HIGH);</span><br><span class="line">        printk(<span class="string">&quot;gpio_set_value HIGH\n&quot;</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(buf[<span class="number">0</span>] == <span class="string">&#x27;0&#x27;</span>)&#123;</span><br><span class="line">        gpio_set_value(GPIOC11, LOW);</span><br><span class="line">        printk(<span class="string">&quot;gpio_set_value LOW\n&quot;</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> -EMSGSIZE;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -EMSGSIZE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">gpio_fops</span> =</span> &#123;</span><br><span class="line">    .owner = THIS_MODULE,</span><br><span class="line">    .open = gpio_open,</span><br><span class="line">    .release = gpio_close,</span><br><span class="line">    .write = gpio_write,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">miscdevice</span> <span class="title">gpio_dev</span> =</span> &#123;</span><br><span class="line">    .minor          = MISC_DYNAMIC_MINOR,</span><br><span class="line">    .name          = DEVICE_NAME,</span><br><span class="line">    .fops          = &amp;gpio_fops,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">volatile</span> <span class="type">unsigned</span> * GPIOCOUT;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">gpio_init</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">    printk(<span class="string">&quot;init\n&quot;</span>);</span><br><span class="line">    ret = misc_register(&amp;gpio_dev);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">gpio_exit</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    iounmap(GPIOCOUT);</span><br><span class="line">    misc_deregister(&amp;gpio_dev);</span><br><span class="line">    printk(<span class="string">&quot;exit\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module_init(gpio_init);</span><br><span class="line">module_exit(gpio_exit);</span><br><span class="line"></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;GPL&quot;</span>);</span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;YPW&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2.2.2 DEMO代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	FILE *p = fopen(<span class="string">&quot;/dev/gpio&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line">	<span class="type">int</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)&#123;</span><br><span class="line">		<span class="built_in">fprintf</span>(p, <span class="string">&quot;1&quot;</span>);fflush(p);</span><br><span class="line">		usleep(<span class="number">100000</span>);</span><br><span class="line">		<span class="built_in">fprintf</span>(p, <span class="string">&quot;0&quot;</span>);fflush(p);</span><br><span class="line">		usleep(<span class="number">100000</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	fclose(p);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个比较简单，跟上面的一样，我就不过多讲了。如果不想自己编译，可以下载我编译好的内核模块：<a
+href="/images/gpio_file.ko">gpio_file.ko</a></p>
+<p>不过有一点我想说的就是，可以通过寄存器加速控制IO口的速度，这里仅贴一个代码片段，只能在内核中操作，这种操作方式最快可以达到20ns：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;asm/io.h&gt;</span></span></span><br><span class="line"><span class="keyword">volatile</span> <span class="type">unsigned</span> * GPIOCOUT;</span><br><span class="line">GPIOCOUT = ioremap(<span class="number">0xC001C000</span>, <span class="number">4</span>);</span><br><span class="line">*GPIOCOUT = <span class="number">0xFFFF</span>;</span><br><span class="line">*GPIOCOUT = <span class="number">0</span>;</span><br><span class="line">iounmap(GPIOCOUT);</span><br></pre></td></tr></table></figure>
+<h2 id="通过配置寄存器来操作">3. 通过配置寄存器来操作</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GPIOC_BASE_ADDRESS   (0xC001C000)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAP_SIZE 40</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> dev_fd;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    dev_fd = open(<span class="string">&quot;/dev/mem&quot;</span>, O_RDWR | O_NDELAY);</span><br><span class="line">    <span class="keyword">if</span> (dev_fd &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;open(/dev/mem) failed.&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> base = (<span class="type">unsigned</span> <span class="type">int</span>)mmap(<span class="literal">NULL</span>, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, dev_fd, GPIOC_BASE_ADDRESS );</span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> GPIOCOUT *(unsigned int *)base</span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> GPIOCOUTENB *(unsigned int *)(base+0x04)</span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> GPIOCALTFN0 *(unsigned int *)(base+0x20)</span></span><br><span class="line">    GPIOCALTFN0 &amp;= ~(<span class="number">3</span>&lt;&lt;<span class="number">22</span>);</span><br><span class="line">    GPIOCALTFN0 |= (<span class="number">1</span>&lt;&lt;<span class="number">22</span>);</span><br><span class="line">    GPIOCOUTENB |= (<span class="number">1</span>&lt;&lt;<span class="number">11</span>);</span><br><span class="line">    GPIOCOUT |= (<span class="number">1</span>&lt;&lt;<span class="number">11</span>);</span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">    GPIOCOUT &amp;= ~(<span class="number">1</span>&lt;&lt;<span class="number">11</span>);</span><br><span class="line">    <span class="keyword">if</span>(dev_fd)</span><br><span class="line">        close(dev_fd);</span><br><span class="line">    munmap((<span class="type">unsigned</span> <span class="type">int</span> *)base,MAP_SIZE);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>效果是灯亮一秒，然后熄灭。这种方法操作速度很快，可以在80ns级别控制，而且很方便，不需要内核级的代码。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/NanoPi2/" rel="tag"># NanoPi2</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/NanoPi2%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" rel="prev" title="NanoPi2内核驱动">
+                  <i class="fa fa-chevron-left"></i> NanoPi2内核驱动
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Linux%20service%E5%90%AF%E5%8A%A8%E9%A1%B9/" rel="next" title="Linux service启动项">
+                  Linux service启动项 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨培文</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

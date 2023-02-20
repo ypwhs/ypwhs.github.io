@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xlk.png">
+  <link rel="mask-icon" href="/images/xkl.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="介绍 Amazon EC2 P2 实例 p2.xlarge 是一种非常适合深度学习的云服务器，它配备了 12G 显存的 Tesla K80 显卡，4核 CPU，60G 内存，以及 500M 的网速。如果你还嫌不够，可以选择它的8倍和16倍的版本。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在AWS上配置深度学习主机">
+<meta property="og:url" content="https://ypw.io/aws_p2/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="介绍 Amazon EC2 P2 实例 p2.xlarge 是一种非常适合深度学习的云服务器，它配备了 12G 显存的 Tesla K80 显卡，4核 CPU，60G 内存，以及 500M 的网速。如果你还嫌不够，可以选择它的8倍和16倍的版本。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ypw.io/aws_p2/gpu.png">
+<meta property="og:image" content="https://ypw.io/aws_p2/limit.png">
+<meta property="og:image" content="https://ypw.io/aws_p2/case.png">
+<meta property="og:image" content="https://ypw.io/aws_p2/udacity.png">
+<meta property="og:image" content="https://ypw.io/aws_p2/safe.png">
+<meta property="og:image" content="https://ypw.io/aws_p2/key.png">
+<meta property="og:image" content="https://ypw.io/aws_p2/bill.png">
+<meta property="og:image" content="https://ypw.io/aws_p2/ami.png">
+<meta property="og:image" content="https://ypw.io/aws_p2/spot.png">
+<meta property="og:image" content="https://ypw.io/aws_p2/gpu.png">
+<meta property="og:image" content="https://ypw.io/aws_p2/ram.png">
+<meta property="og:image" content="https://ypw.io/aws_p2/net.png">
+<meta property="article:published_time" content="2017-01-27T00:55:06.000Z">
+<meta property="article:modified_time" content="2019-08-06T15:59:15.000Z">
+<meta property="article:author" content="杨培文">
+<meta property="article:tag" content="Udacity">
+<meta property="article:tag" content="aws">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ypw.io/aws_p2/gpu.png">
+
+
+<link rel="canonical" href="https://ypw.io/aws_p2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/aws_p2/","path":"aws_p2/","title":"在AWS上配置深度学习主机"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>在AWS上配置深度学习主机 | 杨培文</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111276663-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-111276663-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E8%B4%A6%E5%8F%B7"><span class="nav-number">2.</span> <span class="nav-text">注册账号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A1%AB%E5%86%99%E5%B7%A5%E5%8D%95"><span class="nav-number">3.</span> <span class="nav-text">填写工单</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%90%AF%E5%AE%9E%E4%BE%8B"><span class="nav-number">4.</span> <span class="nav-text">开启实例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%8B%A9-ami"><span class="nav-number">4.1.</span> <span class="nav-text">选择 AMI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BE%8B%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.2.</span> <span class="nav-text">选择一个实例类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%AE%89%E5%85%A8%E7%BB%84"><span class="nav-number">4.3.</span> <span class="nav-text">配置安全组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%AF%86%E9%92%A5%E5%AF%B9"><span class="nav-number">4.4.</span> <span class="nav-text">配置密钥对</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5"><span class="nav-number">5.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%81%9C%E6%AD%A2"><span class="nav-number">6.</span> <span class="nav-text">停止</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AB%9E%E4%BB%B7%E5%AE%9E%E4%BE%8B"><span class="nav-number">7.</span> <span class="nav-text">竞价实例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E6%98%A0%E5%83%8Fami"><span class="nav-number">8.</span> <span class="nav-text">创建自己的映像（AMI）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%98%A0%E5%83%8F"><span class="nav-number">8.1.</span> <span class="nav-text">创建映像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E6%98%A0%E5%83%8Fami"><span class="nav-number">8.2.</span> <span class="nav-text">选择映像（AMI）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E4%BD%93%E9%AA%8C"><span class="nav-number">9.</span> <span class="nav-text">实际体验</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨培文"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ypwhs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/ypwhs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/yangpw" title="知乎 → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;yangpw" rel="noopener me" target="_blank"><i class="fa fa-book fa-fw"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/ypwhs" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fa-brands fa-linkedin fa-fw"></i>Linkedin</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/aws_p2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="在AWS上配置深度学习主机 | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在AWS上配置深度学习主机
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-01-27 08:55:06" itemprop="dateCreated datePublished" datetime="2017-01-27T08:55:06+08:00">2017-01-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="介绍">介绍</h1>
+<p><a target="_blank" rel="noopener" href="https://aws.amazon.com/cn/ec2/instance-types/p2/">Amazon EC2
+P2 实例</a></p>
+<p>p2.xlarge 是一种非常适合深度学习的云服务器，它配备了 12G 显存的 Tesla
+K80 显卡，4核 CPU，60G 内存，以及 500M
+的网速。如果你还嫌不够，可以选择它的8倍和16倍的版本。</p>
+<img src="/aws_p2/gpu.png" class="">
+<span id="more"></span>
+<h1 id="注册账号">注册账号</h1>
+<p>首先我们需要注册一个 aws 账号，从刚才的地址可以注册，需要 visa 或
+mastercard 信用卡。</p>
+<p>注册好了以后，我们需要申请 p2.xlarge 的权限，因为默认限制0台。</p>
+<h1 id="填写工单">填写工单</h1>
+<p><a
+target="_blank" rel="noopener" href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-ec2-instances">请求提高限制</a></p>
+<p>不然就会出现可恶的 <code>Instance Count Limit Exceeded</code> 。</p>
+<img src="/aws_p2/limit.png" class="">
+<p>填写方法很简单，随便写点理由证明你需要 GPU 就行，一般都能通过。</p>
+<img src="/aws_p2/case.png" class="">
+<p>图中的地区是<code>美国东部 (弗吉尼亚北部)</code>，你可以根据自己的喜好选择不同的地址。</p>
+<h1 id="开启实例">开启实例</h1>
+<h2 id="选择-ami">选择 AMI</h2>
+<p><a target="_blank" rel="noopener" href="https://console.aws.amazon.com/ec2/v2/home">EC2
+控制面板</a></p>
+<p>首先点击启动实例，然后这里我们记得选择 Udacity 的
+AMI，因为预装了Tensorflow GPU, Keras, OpenCV，比较省折腾。</p>
+<img src="/aws_p2/udacity.png" class="">
+<h2 id="选择一个实例类型">选择一个实例类型</h2>
+<p>这里选 p2.xlarge
+就好，开启以后一分钟和59分钟都算一个小时，所以开了以后可以放心大胆折腾一个小时，坏了也不用怕，删掉再开一个就好。</p>
+<h2 id="配置安全组">配置安全组</h2>
+<img src="/aws_p2/safe.png" class="">
+<p>入站和出站记得配置成任所有流量和任意位置，不然到时候 <code>ssh</code>
+不上去，或者开 <code>jupyter notebook</code>
+连不上去。懂的人可以自行配置，不懂就直接写所有流量就好了，反正有 key
+才能连上去。</p>
+<h2 id="配置密钥对">配置密钥对</h2>
+<p>如果你有自己常用的私钥和公钥，可以从<a
+target="_blank" rel="noopener" href="https://console.aws.amazon.com/ec2/v2/home#KeyPairs">密钥对</a>这里导入，否则你可以生成一个新的密钥，然后下载密钥对。</p>
+<img src="/aws_p2/key.png" class="">
+<h1 id="连接">连接</h1>
+<p>在连接以前，它需要进行一段时间初始化（大概五分钟），所以你可以先等待一会。等它显示已通过的时候，你就可以用
+ssh 连接它了。下面是我连接的命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i Downloads/test.pem ubuntu@52.91.231.174</span><br></pre></td></tr></table></figure>
+<p>其中的 key 你需要改为你自己的路径，IP 地址也要改为你自己的主机的 IP
+地址。如果它提示你是否要确定连接，你要确定：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Are you sure you want to continue connecting (yes/no)? yes</span><br></pre></td></tr></table></figure>
+<p>如果提示下面的信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</span><br><span class="line">@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @</span><br><span class="line">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</span><br><span class="line">Permissions 0644 for &#x27;Downloads/test.pem&#x27; are too open.</span><br></pre></td></tr></table></figure>
+<p>你需要将你的 key 的权限改为只有你可以访问，然后再进行连接：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 700 Downloads/test.pem</span><br></pre></td></tr></table></figure>
+<h1 id="停止">停止</h1>
+<p>当你不使用实例的时候，记得停止它。停止以后，不会计费。</p>
+<p>事实上由于我是新用户，所以会有一年免费 EBS
+试用，一年以后的收费可以参照这里：<a
+target="_blank" rel="noopener" href="https://aws.amazon.com/cn/ebs/pricing/">https://aws.amazon.com/cn/ebs/pricing/</a>，一个月
+30G 的 SSD
+收费是3美元，因此你可以自行权衡数据和价格，若是一个月以后还要用这些数据，而你愿意出3美元保持这些数据，避免一个月以后麻烦，那么你可以不必终止该实例。当你长期不打算使用该实例时，请务必终止该实例。</p>
+<h1 id="竞价实例">竞价实例</h1>
+<p>竞价实例是一种特殊的实例，它可以以超低的价格提供配置一样的实例，和普通实例的差别在于不可停止，因此当你想跑比较大的网络的时候（训练时间大于1小时），用竞价实例会非常划算。0.9美元每小时的
+p2.xlarge
+在竞价实例一个月的历史记录里很少超过0.3美元。即使超过了，我们也不会出高于0.9美元的价格。</p>
+<img src="/aws_p2/bill.png" class="">
+<p>上图是这两天的账单，我用了40小时，才花了5.33美元，平均一小时0.13美元。</p>
+<h1 id="创建自己的映像ami">创建自己的映像（AMI）</h1>
+<p>当你想创建竞价实例的时候，你可能并不想重新配置一遍环境，这时候你可以创建自己的映像，然后在创建竞价实例的时候使用该映像，这样创建的竞价实例可以完好无损地迁移之前的驱动，环境，以及数据和代码。</p>
+<h2 id="创建映像">创建映像</h2>
+<img src="/aws_p2/ami.png" class="">
+<h2 id="选择映像ami">选择映像（AMI）</h2>
+<img src="/aws_p2/spot.png" class="">
+<h1 id="实际体验">实际体验</h1>
+<img src="/aws_p2/gpu.png" class="">
+<p>训练时<code>nvidia-smi</code>的输出。</p>
+<img src="/aws_p2/ram.png" class="">
+<p>将二十多万张图片载入内存时<code>htop</code>的输出。</p>
+<img src="/aws_p2/net.png" class="">
+<p><a target="_blank" rel="noopener" href="https://github.com/sivel/speedtest-cli">speedtest</a>
+的结果。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Udacity/" rel="tag"># Udacity</a>
+              <a href="/tags/aws/" rel="tag"># aws</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/dogs-vs-cats/" rel="prev" title="猫狗大战">
+                  <i class="fa fa-chevron-left"></i> 猫狗大战
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/pm/" rel="next" title="如何自制室内空气质量检测仪">
+                  如何自制室内空气质量检测仪 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨培文</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

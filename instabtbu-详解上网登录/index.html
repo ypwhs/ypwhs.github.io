@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xlk.png">
+  <link rel="mask-icon" href="/images/xkl.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="最开始的时候我们的上网登录是通过HTTP的POST实现的. 1234567891011121314151617181920212223242526272829303132333435363738 public String POST(String url,String postdata) &amp;#123; 	String result &#x3D; &quot;&quot;;  	HttpPost hPost&#x3D;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="instabtbu-详解上网登录">
+<meta property="og:url" content="https://ypw.io/instabtbu-%E8%AF%A6%E8%A7%A3%E4%B8%8A%E7%BD%91%E7%99%BB%E5%BD%95/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="最开始的时候我们的上网登录是通过HTTP的POST实现的. 1234567891011121314151617181920212223242526272829303132333435363738 public String POST(String url,String postdata) &amp;#123; 	String result &#x3D; &quot;&quot;;  	HttpPost hPost&#x3D;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-02-23T13:23:08.000Z">
+<meta property="article:modified_time" content="2019-08-06T15:59:15.000Z">
+<meta property="article:author" content="杨培文">
+<meta property="article:tag" content="instabtbu">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ypw.io/instabtbu-%E8%AF%A6%E8%A7%A3%E4%B8%8A%E7%BD%91%E7%99%BB%E5%BD%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/instabtbu-%E8%AF%A6%E8%A7%A3%E4%B8%8A%E7%BD%91%E7%99%BB%E5%BD%95/","path":"instabtbu-详解上网登录/","title":"instabtbu-详解上网登录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>instabtbu-详解上网登录 | 杨培文</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111276663-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-111276663-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#section"><span class="nav-number">1.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#instabtbu2%E4%B8%8A%E7%BD%91%E7%99%BB%E5%BD%95%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">instabtbu2上网登录原理:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8Btcp%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.</span> <span class="nav-text">建立TCP连接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE"><span class="nav-number">4.</span> <span class="nav-text">读取返回数据:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E7%BB%93%E6%9E%84"><span class="nav-number">5.</span> <span class="nav-text">数据包结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8D%E8%BD%AC%E4%B9%89"><span class="nav-number">6.</span> <span class="nav-text">反转义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%8C%85"><span class="nav-number">7.</span> <span class="nav-text">构建数据包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rsa%E5%8A%A0%E5%AF%86"><span class="nav-number">8.</span> <span class="nav-text">RSA加密</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%81%E8%A3%85%E6%95%B0%E6%8D%AE%E5%8C%85"><span class="nav-number">9.</span> <span class="nav-text">封装数据包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#crc-16%E6%A0%A1%E9%AA%8C"><span class="nav-number">10.</span> <span class="nav-text">CRC-16校验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AC%E4%B9%89"><span class="nav-number">11.</span> <span class="nav-text">转义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%91%E9%80%81"><span class="nav-number">12.</span> <span class="nav-text">发送</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E5%B0%81%E8%A3%85"><span class="nav-number">13.</span> <span class="nav-text">解封装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rsa%E8%A7%A3%E5%AF%86"><span class="nav-number">14.</span> <span class="nav-text">RSA解密</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5"><span class="nav-number">15.</span> <span class="nav-text">断开连接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%9D%E6%8C%81%E5%9C%A8%E7%BA%BF"><span class="nav-number">16.</span> <span class="nav-text">保持在线</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E6%B5%81%E9%87%8F"><span class="nav-number">17.</span> <span class="nav-text">查流量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%96%E5%87%BA%E6%B5%81%E9%87%8F%E6%95%B0%E6%8D%AE"><span class="nav-number">18.</span> <span class="nav-text">取出流量数据</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨培文"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ypwhs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/ypwhs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/yangpw" title="知乎 → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;yangpw" rel="noopener me" target="_blank"><i class="fa fa-book fa-fw"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/ypwhs" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fa-brands fa-linkedin fa-fw"></i>Linkedin</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/instabtbu-%E8%AF%A6%E8%A7%A3%E4%B8%8A%E7%BD%91%E7%99%BB%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="instabtbu-详解上网登录 | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          instabtbu-详解上网登录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-02-23 21:23:08" itemprop="dateCreated datePublished" datetime="2015-02-23T21:23:08+08:00">2015-02-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>最开始的时候我们的上网登录是通过HTTP的POST实现的. <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> String <span class="title function_">POST</span><span class="params">(String url,String postdata)</span></span><br><span class="line"> &#123;</span><br><span class="line"> 	<span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">  	HttpPost hPost=<span class="keyword">new</span> <span class="title class_">HttpPost</span>(url);</span><br><span class="line">  	List  params=<span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">  	String posts[]=postdata.split(<span class="string">&quot;&amp;&quot;</span>);</span><br><span class="line">  	String posts2[];</span><br><span class="line">  	<span class="type">int</span> i;</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;posts.length;i++)</span><br><span class="line">&#123;</span><br><span class="line">	posts2=posts[i].split(<span class="string">&quot;=&quot;</span>);</span><br><span class="line">	<span class="keyword">if</span>(posts2.length==<span class="number">2</span>)</span><br><span class="line">	params.add(<span class="keyword">new</span> <span class="title class_">BasicNameValuePair</span> (posts2[<span class="number">0</span>],posts2[<span class="number">1</span>]));</span><br><span class="line">	<span class="keyword">else</span> params.add(<span class="keyword">new</span> <span class="title class_">BasicNameValuePair</span> (posts2[<span class="number">0</span>],<span class="string">&quot;&quot;</span>));</span><br><span class="line">&#125;</span><br><span class="line">  	<span class="keyword">try</span>&#123;</span><br><span class="line">  		HttpEntity hen=<span class="keyword">new</span> <span class="title class_">UrlEncodedFormEntity</span>(params,<span class="string">&quot;gb2312&quot;</span>);</span><br><span class="line">  		hPost.setEntity(hen);</span><br><span class="line">  		myClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, <span class="number">30000</span>);</span><br><span class="line">  		<span class="comment">//请求超时</span></span><br><span class="line">  		myClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, <span class="number">30000</span>);</span><br><span class="line">  		<span class="comment">//读取超时</span></span><br><span class="line">  		HttpResponse hResponse;</span><br><span class="line">  		hResponse = myClient.execute(hPost);</span><br><span class="line">  		<span class="keyword">if</span>(hResponse.getStatusLine().getStatusCode()==<span class="number">200</span>)</span><br><span class="line">  			&#123;</span><br><span class="line">  				result = EntityUtils.toString(hResponse.getEntity());</span><br><span class="line">  				<span class="comment">//result = new String(result.getBytes(&quot;ISO_8859_1&quot;),&quot;gbk&quot;);</span></span><br><span class="line">  				<span class="comment">//转码</span></span><br><span class="line">  			&#125;</span><br><span class="line"></span><br><span class="line">  	&#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">  		<span class="keyword">if</span>(dialog2.isShowing())dialog2.dismiss();</span><br><span class="line">  		show(<span class="string">&quot;连接BTBU失败。n请确认信号良好再操作。&quot;</span>);</span><br><span class="line">  	&#125;</span><br><span class="line"> 	<span class="keyword">return</span>(result);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+之后学校封了HTTP(80端口),只留下了HTTPS(443端口),于是我们将协议修改为HTTPS.不过这里有一个证书问题,我们选择信任所有证书来解决这个问题.引用了一个库里面的类:SSLSocketFactoryEx.下面是这个类的源码:
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> hk.ypw.instabtbu;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="keyword">import</span> java.net.UnknownHostException;</span><br><span class="line"><span class="keyword">import</span> java.security.KeyManagementException;</span><br><span class="line"><span class="keyword">import</span> java.security.KeyStore;</span><br><span class="line"><span class="keyword">import</span> java.security.KeyStoreException;</span><br><span class="line"><span class="keyword">import</span> java.security.NoSuchAlgorithmException;</span><br><span class="line"><span class="keyword">import</span> java.security.UnrecoverableKeyException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.net.ssl.SSLContext;</span><br><span class="line"><span class="keyword">import</span> javax.net.ssl.TrustManager;</span><br><span class="line"><span class="keyword">import</span> javax.net.ssl.X509TrustManager;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.http.HttpVersion;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.conn.ClientConnectionManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.conn.scheme.PlainSocketFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.conn.scheme.Scheme;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.conn.scheme.SchemeRegistry;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.conn.ssl.SSLSocketFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.impl.client.DefaultHttpClient;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.params.BasicHttpParams;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.params.HttpParams;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.params.HttpProtocolParams;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.protocol.HTTP;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SSLSocketFactoryEx</span> <span class="keyword">extends</span> <span class="title class_">SSLSocketFactory</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> DefaultHttpClient <span class="title function_">getNewHttpClient</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">KeyStore</span> <span class="variable">trustStore</span> <span class="operator">=</span> KeyStore.getInstance(KeyStore.getDefaultType());</span><br><span class="line">            trustStore.load(<span class="literal">null</span>, <span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">            <span class="type">SSLSocketFactoryEx</span> <span class="variable">sf</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SSLSocketFactoryEx</span>(trustStore);</span><br><span class="line">            sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);</span><br><span class="line"></span><br><span class="line">            <span class="type">HttpParams</span> <span class="variable">params</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BasicHttpParams</span>();</span><br><span class="line">            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);</span><br><span class="line">            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);</span><br><span class="line"></span><br><span class="line">            <span class="type">SchemeRegistry</span> <span class="variable">registry</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SchemeRegistry</span>();</span><br><span class="line">            registry.register(<span class="keyword">new</span> <span class="title class_">Scheme</span>(<span class="string">&quot;http&quot;</span>, PlainSocketFactory.getSocketFactory(), <span class="number">80</span>));</span><br><span class="line">            registry.register(<span class="keyword">new</span> <span class="title class_">Scheme</span>(<span class="string">&quot;https&quot;</span>, sf, <span class="number">443</span>));</span><br><span class="line"></span><br><span class="line">            <span class="type">ClientConnectionManager</span> <span class="variable">ccm</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadSafeClientConnManager</span>(params, registry);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">DefaultHttpClient</span>(ccm, params);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">DefaultHttpClient</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">SSLContext</span> <span class="variable">sslContext</span> <span class="operator">=</span> SSLContext.getInstance(<span class="string">&quot;TLS&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">SSLSocketFactoryEx</span><span class="params">(KeyStore truststore)</span></span><br><span class="line">                        <span class="keyword">throws</span> NoSuchAlgorithmException, KeyManagementException,</span><br><span class="line">                        KeyStoreException, UnrecoverableKeyException &#123;</span><br><span class="line">                <span class="built_in">super</span>(truststore);</span><br><span class="line"></span><br><span class="line">                <span class="type">TrustManager</span> <span class="variable">tm</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">X509TrustManager</span>() &#123;</span><br><span class="line">                        <span class="keyword">public</span> java.security.cert.X509Certificate[] getAcceptedIssuers() &#123;<span class="keyword">return</span> <span class="literal">null</span>;&#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">checkClientTrusted</span><span class="params">(</span></span><br><span class="line"><span class="params">                            java.security.cert.X509Certificate[] chain, String authType)</span></span><br><span class="line">                                            <span class="keyword">throws</span> java.security.cert.CertificateException &#123;&#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">checkServerTrusted</span><span class="params">(</span></span><br><span class="line"><span class="params">                            java.security.cert.X509Certificate[] chain, String authType)</span></span><br><span class="line">                                            <span class="keyword">throws</span> java.security.cert.CertificateException &#123;&#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        sslContext.init(<span class="literal">null</span>, <span class="keyword">new</span> <span class="title class_">TrustManager</span>[] &#123; tm &#125;, <span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Socket <span class="title function_">createSocket</span><span class="params">(Socket socket, String host, <span class="type">int</span> port,<span class="type">boolean</span> autoClose)</span> <span class="keyword">throws</span> IOException, UnknownHostException &#123;</span><br><span class="line">            <span class="keyword">return</span> sslContext.getSocketFactory().createSocket(socket, host, port,autoClose);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Socket <span class="title function_">createSocket</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="keyword">return</span> sslContext.getSocketFactory().createSocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure> 利用这个东西,我们实现了https: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">HttpPost</span> <span class="variable">hPost</span> <span class="operator">=</span> <span class="comment">/*跟之前一样*/</span>;</span><br><span class="line"><span class="type">HttpClient</span> <span class="variable">httpclient</span> <span class="operator">=</span> SSLSocketFactoryEx.getNewHttpClient();</span><br><span class="line"><span class="type">HttpResponse</span> <span class="variable">hResponse</span> <span class="operator">=</span> httpclient.execute(hPost);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+不过,神奇的网络中心干脆取消了https,全面取消网页上网方式,仅留下了电脑端登录的方式.
+而神奇的我们则再一次研究了他们的电脑端.</p>
+<h1 id="section"></h1>
+<h1 id="instabtbu2上网登录原理">instabtbu2上网登录原理:</h1>
+<p>电脑端的原理就和HTTP完全不沾边了. 电脑端需要的前置技能有:<a
+target="_blank" rel="noopener" href="http://baike.baidu.com/view/230306.htm">十六进制</a>数据处理,<a
+target="_blank" rel="noopener" href="http://baike.baidu.com/view/73.htm">转义</a>,<span
+style="line-height: 24px;"><a
+target="_blank" rel="noopener" href="http://baike.baidu.com/subview/32754/8048820.htm">TCP</a>通信协议,<a
+target="_blank" rel="noopener" href="http://baike.baidu.com/view/30509.htm">UDP</a>通信协议,<a
+target="_blank" rel="noopener" href="http://baike.baidu.com/view/1664507.htm">CRC16</a>校验,<a
+target="_blank" rel="noopener" href="http://baike.baidu.com/view/10613.htm">RSA</a>加密.</span></p>
+<p>电脑端登录的过程比较复杂.</p>
+<h1 id="建立tcp连接">建立TCP连接</h1>
+<p>首先我们要与192.168.8.8的21098端口建立TCP连接. <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">connect</span><span class="params">()</span> &#123;</span><br><span class="line">	<span class="type">boolean</span> <span class="variable">f</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		client = <span class="keyword">new</span> <span class="title class_">Socket</span>(<span class="string">&quot;192.168.8.8&quot;</span>,<span class="number">21098</span>);</span><br><span class="line">		outputStream=client.getOutputStream();</span><br><span class="line">		inputStream = client.getInputStream();</span><br><span class="line">		client.setSoTimeout(<span class="number">30000</span>);</span><br><span class="line">		f=<span class="literal">true</span>;</span><br><span class="line">	&#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		print(<span class="string">&quot;错误:&quot;</span>+e.getMessage());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> f;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+这里的outputStream和inputStream都是全局变量,用来输入输出的.
+连上之后我们要发送一个空包给服务器.</p>
+<h1 id="读取返回数据">读取返回数据:</h1>
+<p>读取方式很简单,我们通过刚才client得到的inputStream即可读出数据:
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">char</span>[] read()&#123;</span><br><span class="line">	<span class="type">char</span>[] read2=<span class="literal">null</span>;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		<span class="type">byte</span>[] buffer = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];</span><br><span class="line">		<span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> inputStream.read(buffer);</span><br><span class="line">		read2 = <span class="keyword">new</span> <span class="title class_">char</span>[len];</span><br><span class="line">		<span class="type">int</span> j;</span><br><span class="line">		<span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;len;j++)read2[j]=(<span class="type">char</span>)buffer[j];</span><br><span class="line">	&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		print(<span class="string">&quot;错误:&quot;</span>+e.getMessage());</span><br><span class="line">	&#125;</span><br><span class="line">	print(<span class="string">&quot;读到数据:&quot;</span>+charsToHexString(read2)+<span class="string">&quot;,长度:&quot;</span>+read2.length);</span><br><span class="line">	<span class="keyword">return</span> read2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h1 id="数据包结构">数据包结构</h1>
+BTBU网络服务器的数据包结构是这样的:
+<table style="width: 100%;">
+<tbody>
+<tr>
+<td style="width: 12.5%; background-color: #ddd;">
+7E
+</td>
+<td style="width: 12.5%; background-color: #faa;">
+命令
+</td>
+<td style="width: 12.5%; background-color: #afa;">
+长度 低位
+</td>
+<td style="width: 12.5%; background-color: #afa;">
+长度 高位
+</td>
+<td style="width: 12.5%; background-color: #aaf;">
+数据
+</td>
+<td style="width: 12.5%; background-color: #ccf;">
+CRC 低位
+</td>
+<td style="width: 12.5%; background-color: #ccf;">
+CRC 高位
+</td>
+<td style="width: 12.5%; background-color: #ddd;">
+7E
+</td>
+</tr>
+</tbody>
+</table>
+根据这个结构,我们可以计算出空包是这样的
+<table style="width: 87.5%;">
+<tbody>
+<tr>
+<td style="background-color: #ddd;">
+7E
+</td>
+<td style="background-color: #faa;">
+11
+</td>
+<td style="background-color: #afa;">
+00
+</td>
+<td style="background-color: #afa;">
+00
+</td>
+<td style="background-color: #ccf;">
+54
+</td>
+<td style="background-color: #ccf;">
+01
+</td>
+<td style="background-color: #ddd;">
+7E
+</td>
+</tr>
+</tbody>
+</table>
+<p>好,现在我们将这个数据(7E 11 00 00 54 01
+7E)发送给服务器,服务器返回给我们的就是这样的数据(这是例子) 7E 11 <span
+style="color: #afa;">10 00</span> <span style="color: #aaf;">E7 55 98 4A
+70 7D 3E 74 EE 44 95 E4 88 FA F5 58 37</span> E1 D1 7E 7E 11 <span
+style="color: #afa;">10 00</span> <span style="color: #aaf;">B7 12 5F E6
+60 5B A7 69 3E 18 06 16 9D 57 CC 81 </span>9C 93 7E
+这时候你发现了一个问题,长度<span style="color: #afa;">10
+00</span>明明是16位,第一行的数据却出现了17位,这是怎么回事呢?
+其实这只是数据的转义.由于我们的数据中可能包含<span
+style="color: #ff0000;">7E</span>,而它的意义是数据的结束,如果数据中出现了<span
+style="color: #ff0000;">7E</span>,我们必须对它进行转义. <span
+style="color: #aaf;">E7 55 98 4A 70 7D 3E 74 EE 44 95 E4 88 FA F5 58
+37</span>中的<span style="color: #aaf;">7D 3E</span>实际上就是<span
+style="color: #ff0000;">7E</span>转义以后的数据.</p>
+<h1 id="反转义">反转义</h1>
+<p>反转义规则: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">char</span>[] fanzhuan(<span class="type">char</span>[] buf)&#123;</span><br><span class="line">	<span class="type">char</span>[] rec = <span class="keyword">new</span> <span class="title class_">char</span>[<span class="number">1024</span>];</span><br><span class="line">	<span class="type">int</span> i,j=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;buf.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(buf[i]==<span class="number">0x7D</span>)&#123;</span><br><span class="line">			rec[j++]=(<span class="type">char</span>) (buf[++i]^<span class="number">0x40</span>);</span><br><span class="line">		&#125;<span class="keyword">else</span> rec[j++]=buf[i];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">char</span>[] rec2 = <span class="keyword">new</span> <span class="title class_">char</span>[j];</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;j;i++)rec2[i]=rec[i];</span><br><span class="line">	<span class="keyword">return</span> rec2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h1 id="构建数据包">构建数据包</h1>
+<p>OK我们理解转义之后,就能解析出服务器给我们发的固定长度的16字节数据.然后,我们需要构建出<span
+style="color: #ff0000;">登录数据包</span>来. <span
+style="color: #ff0000;">登录数据包(82字节)</span>格式如下:</p>
+<ul>
+<li>23字节用户名</li>
+<li>23字节密码</li>
+<li>20字节IP</li>
+<li>16字节验证数据 验证数据就是服务器发过来的那一串.
+那么这一部分用java生成登录数据包就是这样的: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">char</span>[] user(String number ,String password)&#123;</span><br><span class="line">	<span class="type">char</span>[] msg = <span class="keyword">new</span> <span class="title class_">char</span>[<span class="number">82</span>];</span><br><span class="line">	<span class="type">String</span> <span class="variable">ip</span> <span class="operator">=</span> getIp();</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">	<span class="type">int</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;number.length();i++)msg[i]=number.charAt(i);</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;password.length();i++)msg[i+<span class="number">23</span>]=password.charAt(i);</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;ip.length();i++)msg[i+<span class="number">23</span>+<span class="number">23</span>]=ip.charAt(i);</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;verify.length;i++)msg[i+<span class="number">23</span>+<span class="number">23</span>+<span class="number">20</span>]=verify[i];</span><br><span class="line">	&#125;<span class="keyword">catch</span>(Exception e)</span><br><span class="line">	&#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		print(<span class="string">&quot;错误:&quot;</span>+e.getMessage());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> msg;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+通过这样的方式,我们可以获得登录数据包: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>[] msg = user(editText_num.getText().toString(), editText_psw.getText().toString());</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="rsa加密">RSA加密</h1>
+<p>数据包生成之后,我们需要对它进行<span
+style="color: #ff0000;">RSA加密</span>,RSA加密是一种非对称加密方式,具体代码如下:
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">char</span>[] jiami(<span class="type">char</span>[] data)&#123;</span><br><span class="line">	<span class="type">PublicKey</span> <span class="variable">key</span> <span class="operator">=</span> getPublicKey();</span><br><span class="line">	Cipher cipher;</span><br><span class="line">	<span class="type">byte</span>[] buf = <span class="literal">null</span>;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		cipher = Cipher.getInstance(<span class="string">&quot;RSA/ECB/PKCS1Padding&quot;</span>);</span><br><span class="line">		cipher.init(Cipher.ENCRYPT_MODE, key);</span><br><span class="line">		buf=cipher.doFinal(charToByte(data));</span><br><span class="line">	&#125;<span class="keyword">catch</span>(Exception e)</span><br><span class="line">	&#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		print(<span class="string">&quot;错误:&quot;</span>+e.getMessage());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> byteToChar(buf);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> PublicKey <span class="title function_">getPublicKey</span><span class="params">()</span> &#123;</span><br><span class="line">	<span class="type">PublicKey</span> <span class="variable">publicKey</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">	<span class="type">String</span> <span class="variable">modulus</span> <span class="operator">=</span> <span class="string">&quot;EA32BA96FCC395CC766EAFFEBC8EFE1F0886E99504CB7C3877548698793446BA7BA07CF915DBB5BE69337A3697B4DC354DA78ABAE17ED33EDAD87674D0D0D2B54D549E566AF0C016C276F327ADC3D4EE06E64EBC608E4AC9E3CE63416C246FD57DBEA8ADA036AA683F9A812CD8ECA705E019D6A943121CDDB2CF9BF1BCD0F5F9&quot;</span>;</span><br><span class="line">	<span class="type">String</span> <span class="variable">publicExponent</span> <span class="operator">=</span> <span class="string">&quot;65537&quot;</span>;</span><br><span class="line">	<span class="type">BigInteger</span> <span class="variable">m</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigInteger</span>(modulus,<span class="number">16</span>);</span><br><span class="line">	<span class="type">BigInteger</span> <span class="variable">e</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigInteger</span>(publicExponent);</span><br><span class="line"></span><br><span class="line">	<span class="type">RSAPublicKeySpec</span> <span class="variable">keySpec</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RSAPublicKeySpec</span>(m, e);</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">	<span class="type">KeyFactory</span> <span class="variable">keyFactory</span> <span class="operator">=</span> KeyFactory.getInstance(<span class="string">&quot;RSA&quot;</span>);</span><br><span class="line">	publicKey = keyFactory.generatePublic(keySpec);</span><br><span class="line">	&#125; <span class="keyword">catch</span> (Exception e1) &#123;</span><br><span class="line">	e1.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> publicKey;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h1 id="封装数据包">封装数据包</h1>
+加密数据包之后,就可以<span
+style="color: #ff0000;">封装</span>成服务器需要的那个格式了:
+<table style="width: 100%;">
+<tbody>
+<tr>
+<td style="width: 12.5%; background-color: #ddd;">
+7E
+</td>
+<td style="width: 12.5%; background-color: #faa;">
+命令
+</td>
+<td style="width: 12.5%; background-color: #afa;">
+长度 低位
+</td>
+<td style="width: 12.5%; background-color: #afa;">
+长度 高位
+</td>
+<td style="width: 12.5%; background-color: #aaf;">
+数据
+</td>
+<td style="width: 12.5%; background-color: #ccf;">
+CRC 低位
+</td>
+<td style="width: 12.5%; background-color: #ccf;">
+CRC 高位
+</td>
+<td style="width: 12.5%; background-color: #ddd;">
+7E
+</td>
+</tr>
+</tbody>
+</table>
+<p>命令是1(msg=feng(msg, 0x01);),具体封装方式可以看到下面的代码:
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">char</span>[] feng(<span class="type">char</span>[] buf,<span class="type">int</span> cmd)&#123;</span><br><span class="line">	<span class="type">char</span>[] rec = <span class="keyword">new</span> <span class="title class_">char</span>[<span class="number">1024</span>];</span><br><span class="line">	<span class="type">char</span>[] jiami = jiami(buf);</span><br><span class="line">	<span class="type">char</span>[] crc = <span class="keyword">new</span> <span class="title class_">char</span>[jiami.length+<span class="number">3</span>];</span><br><span class="line">	<span class="type">char</span>[] rec2 = <span class="keyword">new</span> <span class="title class_">char</span>[crc.length+<span class="number">4</span>];</span><br><span class="line">	rec[<span class="number">0</span>]=<span class="number">0x7E</span>;</span><br><span class="line">	rec[<span class="number">1</span>]=(<span class="type">char</span>)cmd;</span><br><span class="line">	<span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> jiami.length;</span><br><span class="line">	rec[<span class="number">2</span>]=(<span class="type">char</span>) (len&amp;<span class="number">0xFF</span>);</span><br><span class="line">	rec[<span class="number">3</span>]=(<span class="type">char</span>) (len&gt;&gt;<span class="number">8</span>);</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;jiami.length;i++)rec[i+<span class="number">4</span>]=jiami[i];</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;jiami.length+<span class="number">4</span>;i++)crc[i-<span class="number">1</span>]=rec[i];</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> getCRC16(charToByte(crc));</span><br><span class="line"></span><br><span class="line">	rec[crc.length+<span class="number">1</span>]=(<span class="type">char</span>) (c&amp;<span class="number">0xFF</span>);</span><br><span class="line">	rec[crc.length+<span class="number">2</span>]=(<span class="type">char</span>) (c&gt;&gt;<span class="number">8</span>);</span><br><span class="line">	rec[crc.length+<span class="number">3</span>]=<span class="number">0x7E</span>;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;crc.length+<span class="number">4</span>;i++)rec2[i]=rec[i];</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> rec2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h1 id="crc-16校验">CRC-16校验</h1>
+<p>其中有用到getCRC16()这个命令,多项式它是这样的X16+X15+X2+1,下面是查表法获得CRC-16的程序:
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getCRC16</span><span class="params">(<span class="type">byte</span>[] bytes)</span> &#123;</span><br><span class="line">	<span class="type">int</span>[] table = &#123;<span class="number">0x0000</span>,<span class="number">0x8005</span>,<span class="number">0x800F</span>,<span class="number">0x000A</span>,<span class="number">0x801B</span>,<span class="number">0x001E</span>,<span class="number">0x0014</span>,<span class="number">0x8011</span>,<span class="number">0x8033</span>,<span class="number">0x0036</span>,<span class="number">0x003C</span>,<span class="number">0x8039</span>,<span class="number">0x0028</span>,<span class="number">0x802D</span>,<span class="number">0x8027</span>,</span><br><span class="line">			<span class="number">0x0022</span>,<span class="number">0x8063</span>,<span class="number">0x0066</span>,<span class="number">0x006C</span>,<span class="number">0x8069</span>,<span class="number">0x0078</span>,<span class="number">0x807D</span>,<span class="number">0x8077</span>,<span class="number">0x0072</span>,<span class="number">0x0050</span>,<span class="number">0x8055</span>,<span class="number">0x805F</span>,<span class="number">0x005A</span>,<span class="number">0x804B</span>,<span class="number">0x004E</span>,<span class="number">0x0044</span>,</span><br><span class="line">			<span class="number">0x8041</span>,<span class="number">0x80C3</span>,<span class="number">0x00C6</span>,<span class="number">0x00CC</span>,<span class="number">0x80C9</span>,<span class="number">0x00D8</span>,<span class="number">0x80DD</span>,<span class="number">0x80D7</span>,<span class="number">0x00D2</span>,<span class="number">0x00F0</span>,<span class="number">0x80F5</span>,<span class="number">0x80FF</span>,<span class="number">0x00FA</span>,<span class="number">0x80EB</span>,<span class="number">0x00EE</span>,<span class="number">0x00E4</span>,</span><br><span class="line">			<span class="number">0x80E1</span>, <span class="number">0x00A0</span>,<span class="number">0x80A5</span>,<span class="number">0x80AF</span>,<span class="number">0x00AA</span>,<span class="number">0x80BB</span>,<span class="number">0x00BE</span>,<span class="number">0x00B4</span>,<span class="number">0x80B1</span>,<span class="number">0x8093</span>,<span class="number">0x0096</span>,<span class="number">0x009C</span>,<span class="number">0x8099</span>,<span class="number">0x0088</span>,<span class="number">0x808D</span>,<span class="number">0x8087</span>,</span><br><span class="line">			<span class="number">0x0082</span>,<span class="number">0x8183</span>,<span class="number">0x0186</span>,<span class="number">0x018C</span>,<span class="number">0x8189</span>,<span class="number">0x0198</span>,<span class="number">0x819D</span>,<span class="number">0x8197</span>,<span class="number">0x0192</span>,<span class="number">0x01B0</span>,<span class="number">0x81B5</span>,<span class="number">0x81BF</span>,<span class="number">0x01BA</span>,<span class="number">0x81AB</span>,<span class="number">0x01AE</span>,<span class="number">0x01A4</span>,</span><br><span class="line">			<span class="number">0x81A1</span>,<span class="number">0x01E0</span>,<span class="number">0x81E5</span>,<span class="number">0x81EF</span>,<span class="number">0x01EA</span>,<span class="number">0x81FB</span>,<span class="number">0x01FE</span>,<span class="number">0x01F4</span>,<span class="number">0x81F1</span>,<span class="number">0x81D3</span>,<span class="number">0x01D6</span>,<span class="number">0x01DC</span>,<span class="number">0x81D9</span>,<span class="number">0x01C8</span>,<span class="number">0x81CD</span>,<span class="number">0x81C7</span>,</span><br><span class="line">			<span class="number">0x01C2</span>,<span class="number">0x0140</span>,<span class="number">0x8145</span>,<span class="number">0x814F</span>,<span class="number">0x014A</span>,<span class="number">0x815B</span>,<span class="number">0x015E</span>,<span class="number">0x0154</span>,<span class="number">0x8151</span>,<span class="number">0x8173</span>,<span class="number">0x0176</span>,<span class="number">0x017C</span>,<span class="number">0x8179</span>,<span class="number">0x0168</span>,<span class="number">0x816D</span>,<span class="number">0x8167</span>,</span><br><span class="line">			<span class="number">0x0162</span>,<span class="number">0x8123</span>,<span class="number">0x0126</span>,<span class="number">0x012C</span>,<span class="number">0x8129</span>,<span class="number">0x0138</span>,<span class="number">0x813D</span>,<span class="number">0x8137</span>,<span class="number">0x0132</span>,<span class="number">0x0110</span>,<span class="number">0x8115</span>,<span class="number">0x811F</span>,<span class="number">0x011A</span>,<span class="number">0x810B</span>,<span class="number">0x010E</span>,<span class="number">0x0104</span>,</span><br><span class="line">			<span class="number">0x8101</span>,<span class="number">0x8303</span>,<span class="number">0x0306</span>,<span class="number">0x030C</span>,<span class="number">0x8309</span>,<span class="number">0x0318</span>,<span class="number">0x831D</span>,<span class="number">0x8317</span>,<span class="number">0x0312</span>,<span class="number">0x0330</span>,<span class="number">0x8335</span>,<span class="number">0x833F</span>,<span class="number">0x033A</span>,<span class="number">0x832B</span>,<span class="number">0x032E</span>,<span class="number">0x0324</span>,</span><br><span class="line">			<span class="number">0x8321</span>,<span class="number">0x0360</span>,<span class="number">0x8365</span>,<span class="number">0x836F</span>,<span class="number">0x036A</span>,<span class="number">0x837B</span>,<span class="number">0x037E</span>,<span class="number">0x0374</span>,<span class="number">0x8371</span>,<span class="number">0x8353</span>,<span class="number">0x0356</span>,<span class="number">0x035C</span>,<span class="number">0x8359</span>,<span class="number">0x0348</span>,<span class="number">0x834D</span>,<span class="number">0x8347</span>,</span><br><span class="line">			<span class="number">0x0342</span>,<span class="number">0x03C0</span>,<span class="number">0x83C5</span>,<span class="number">0x83CF</span>,<span class="number">0x03CA</span>,<span class="number">0x83DB</span>,<span class="number">0x03DE</span>,<span class="number">0x03D4</span>,<span class="number">0x83D1</span>,<span class="number">0x83F3</span>,<span class="number">0x03F6</span>,<span class="number">0x03FC</span>,<span class="number">0x83F9</span>,<span class="number">0x03E8</span>,<span class="number">0x83ED</span>,<span class="number">0x83E7</span>,</span><br><span class="line">			<span class="number">0x03E2</span>,<span class="number">0x83A3</span>,<span class="number">0x03A6</span>,<span class="number">0x03AC</span>,<span class="number">0x83A9</span>,<span class="number">0x03B8</span>,<span class="number">0x83BD</span>,<span class="number">0x83B7</span>,<span class="number">0x03B2</span>,<span class="number">0x0390</span>,<span class="number">0x8395</span>,<span class="number">0x839F</span>,<span class="number">0x039A</span>,<span class="number">0x838B</span>,<span class="number">0x038E</span>,<span class="number">0x0384</span>,</span><br><span class="line">			<span class="number">0x8381</span>,<span class="number">0x0280</span>,<span class="number">0x8285</span>,<span class="number">0x828F</span>,<span class="number">0x028A</span>,<span class="number">0x829B</span>,<span class="number">0x029E</span>,<span class="number">0x0294</span>,<span class="number">0x8291</span>,<span class="number">0x82B3</span>,<span class="number">0x02B6</span>,<span class="number">0x02BC</span>,<span class="number">0x82B9</span>,<span class="number">0x02A8</span>,<span class="number">0x82AD</span>,<span class="number">0x82A7</span>,</span><br><span class="line">			<span class="number">0x02A2</span>,<span class="number">0x82E3</span>,<span class="number">0x02E6</span>,<span class="number">0x02EC</span>,<span class="number">0x82E9</span>,<span class="number">0x02F8</span>,<span class="number">0x82FD</span>,<span class="number">0x82F7</span>,<span class="number">0x02F2</span>,<span class="number">0x02D0</span>,<span class="number">0x82D5</span>,<span class="number">0x82DF</span>,<span class="number">0x02DA</span>,<span class="number">0x82CB</span>,<span class="number">0x02CE</span>,<span class="number">0x02C4</span>,</span><br><span class="line">			<span class="number">0x82C1</span>,<span class="number">0x8243</span>,<span class="number">0x0246</span>,<span class="number">0x024C</span>,<span class="number">0x8249</span>,<span class="number">0x0258</span>,<span class="number">0x825D</span>,<span class="number">0x8257</span>,<span class="number">0x0252</span>,<span class="number">0x0270</span>,<span class="number">0x8275</span>,<span class="number">0x827F</span>,<span class="number">0x027A</span>,<span class="number">0x826B</span>,<span class="number">0x026E</span>,<span class="number">0x0264</span>,</span><br><span class="line">			<span class="number">0x8261</span>,<span class="number">0x0220</span>,<span class="number">0x8225</span>,<span class="number">0x822F</span>,<span class="number">0x022A</span>,<span class="number">0x823B</span>,<span class="number">0x023E</span>,<span class="number">0x0234</span>,<span class="number">0x8231</span>,<span class="number">0x8213</span>,<span class="number">0x0216</span>,<span class="number">0x021C</span>,<span class="number">0x8219</span>,<span class="number">0x0208</span>,<span class="number">0x820D</span>,<span class="number">0x8207</span>,</span><br><span class="line">			<span class="number">0x0202</span>&#125;;</span><br><span class="line">	<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> bytes.length;</span><br><span class="line">	<span class="type">int</span> <span class="variable">crc</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;len)&#123;</span><br><span class="line">		<span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> (crc&gt;&gt;<span class="number">8</span>)^bytes[i++];</span><br><span class="line">		<span class="keyword">if</span>(index&lt;<span class="number">0</span>)index+=<span class="number">256</span>;</span><br><span class="line">		crc = ((crc&amp;<span class="number">0xFF</span>)&lt;&lt;<span class="number">8</span>) ^ table[index];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> crc;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h1 id="转义">转义</h1>
+<p>封装好了之后,我们还需要转义一次,以免出现7E: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">char</span>[] zhuan(<span class="type">char</span>[] buf)&#123;</span><br><span class="line">	<span class="type">char</span>[] rec = <span class="keyword">new</span> <span class="title class_">char</span>[<span class="number">1024</span>];</span><br><span class="line">	<span class="type">int</span> i=<span class="number">0</span>,j=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;buf.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>((buf[i]==<span class="number">0x7D</span>||buf[i]==<span class="number">0x7E</span>)&amp;&amp;i!=<span class="number">0</span>&amp;&amp;i!=buf.length-<span class="number">1</span>)&#123;</span><br><span class="line">			rec[j++]=<span class="number">0x7D</span>;</span><br><span class="line">			rec[j++]=(<span class="type">char</span>) (buf[i]^<span class="number">0x40</span>);</span><br><span class="line"></span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			rec[j++]=buf[i];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">char</span>[] rec2 = <span class="keyword">new</span> <span class="title class_">char</span>[j];</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;j;i++)rec2[i]=rec[i];</span><br><span class="line">	<span class="keyword">return</span> rec2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h1 id="发送">发送</h1>
+<p>转义好了之后,就可以发送了: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">send</span><span class="params">(<span class="type">char</span>[] buf)</span>&#123;</span><br><span class="line">	<span class="type">boolean</span> <span class="variable">f</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="type">byte</span>[] send = charToByte(buf);</span><br><span class="line">		outputStream.write(send);</span><br><span class="line">		outputStream.flush();</span><br><span class="line">		f=<span class="literal">true</span>;</span><br><span class="line">	&#125;<span class="keyword">catch</span>(Exception e)</span><br><span class="line">	&#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		print(<span class="string">&quot;错误:&quot;</span>+e.getMessage());</span><br><span class="line">	&#125;</span><br><span class="line">	print(<span class="string">&quot;发送数据:&quot;</span>+charsToHexString(buf)+<span class="string">&quot;,长度:&quot;</span>+buf.length);</span><br><span class="line">	<span class="keyword">return</span> f;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+利用之前的读取函数,我们在发送完毕之后马上读取数据:char[] rec =
+read();</p>
+<h1 id="解封装">解封装</h1>
+<p>那么发送过去登录数据之后,就要接收数据,不过接收到的数据依然是封装好的,我们需要对其解封装:
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">char</span>[] jiefeng(<span class="type">char</span>[] buf)&#123;</span><br><span class="line">	<span class="type">char</span>[] rec = <span class="literal">null</span>;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">	<span class="type">int</span> len=<span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> buf2=buf[<span class="number">2</span>],buf3=buf[<span class="number">3</span>];</span><br><span class="line">	<span class="keyword">if</span>(buf2&gt;<span class="number">256</span>)buf2=<span class="number">0x100</span>-<span class="number">0x10000</span>+buf2;</span><br><span class="line">	<span class="keyword">if</span>(buf3&gt;<span class="number">256</span>)buf3=<span class="number">0x100</span>-<span class="number">0x10000</span>+buf3;</span><br><span class="line">	len=buf2+buf3*<span class="number">0x100</span>;</span><br><span class="line">	buf=fanzhuan(buf);</span><br><span class="line">	rec = <span class="keyword">new</span> <span class="title class_">char</span>[len];</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;len;i++)rec[i]=buf[i+<span class="number">4</span>];</span><br><span class="line">	<span class="keyword">if</span>(buf[<span class="number">1</span>]==<span class="number">1</span>)&#123;</span><br><span class="line">		rec=jiemi(rec);</span><br><span class="line">		print(<span class="string">&quot;解密数据:&quot;</span>+charsToHexString(rec)+<span class="string">&quot;,长度:&quot;</span>+rec.length);</span><br><span class="line">		remain=rec;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		recString = <span class="keyword">new</span> <span class="title class_">String</span>(charToByte(rec), <span class="string">&quot;GBK&quot;</span>);</span><br><span class="line">		rec=<span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	&#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> rec;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+这里解封装有两种可能,一种是解出来纯文本数据,一种是解出来登录成功之后的保持在线数据,这里我们通过命令码判断,如果是1就代表登录成功,那么就进行RSA解密,并赋值给全局变量remain,否则就是string,我们对其进行GBK解码.</p>
+<h1 id="rsa解密">RSA解密</h1>
+<p>RSA解密如下: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">char</span>[] jiemi(<span class="type">char</span>[] data)&#123;</span><br><span class="line">	<span class="type">PublicKey</span> <span class="variable">key</span> <span class="operator">=</span> getPublicKey();</span><br><span class="line">	Cipher cipher;</span><br><span class="line">	<span class="type">byte</span>[] buf = <span class="literal">null</span>;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		cipher = Cipher.getInstance(<span class="string">&quot;RSA/ECB/PKCS1Padding&quot;</span>);</span><br><span class="line">		cipher.init(Cipher.DECRYPT_MODE, key);</span><br><span class="line">		buf=cipher.doFinal(charToByte(data));</span><br><span class="line">	&#125;<span class="keyword">catch</span>(Exception e)</span><br><span class="line">	&#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		print(<span class="string">&quot;错误:&quot;</span>+e.getMessage());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> byteToChar(buf);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+解密是DECRYPT_MODE,其余和加密没有差别.</p>
+<p>获取到remiain(通常是20字节)这个量之后就可以进行各项操作了,比如保持在线,断开等.</p>
+<h1 id="断开连接">断开连接</h1>
+下面是断开的操作(断开需要发送三次断开连接的数据): <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Runnable</span> <span class="variable">duankaiRunnable</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Runnable</span>() &#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="type">DatagramSocket</span> <span class="variable">datagramSocket</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			datagramSocket = <span class="keyword">new</span> <span class="title class_">DatagramSocket</span>();</span><br><span class="line">			print(<span class="string">&quot;建立断开socket&quot;</span>);</span><br><span class="line">		&#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="type">InetAddress</span> <span class="variable">ip</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			ip = InetAddress.getByName(<span class="string">&quot;192.168.8.8&quot;</span>);</span><br><span class="line">			<span class="type">char</span>[] data = getcmd(<span class="number">1</span>);</span><br><span class="line">			print(<span class="string">&quot;断开发送数据:&quot;</span>+charsToHexString(data));</span><br><span class="line">			<span class="type">DatagramPacket</span> <span class="variable">datagramPacket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramPacket</span>(charToByte(data), remain.length+<span class="number">7</span>, ip, <span class="number">21099</span>);</span><br><span class="line">			datagramSocket.send(datagramPacket);</span><br><span class="line">			datagramSocket.send(datagramPacket);</span><br><span class="line">			datagramSocket.send(datagramPacket);</span><br><span class="line">			remain=<span class="literal">null</span>;</span><br><span class="line">			show(<span class="string">&quot;断开成功&quot;</span>);</span><br><span class="line">		&#125;<span class="keyword">catch</span>(NullPointerException e)&#123;</span><br><span class="line">			show(<span class="string">&quot;你还没有登录&quot;</span>);</span><br><span class="line">		&#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">			print(<span class="string">&quot;断开出错:&quot;</span>+e.getMessage());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<table style="width: 100%;">
+<tbody>
+<tr>
+<td style="width: 12.5%; background-color: #ddd;">
+7E
+</td>
+<td style="width: 12.5%; background-color: #faa;">
+命令
+</td>
+<td style="width: 12.5%; background-color: #afa;">
+长度 低位
+</td>
+<td style="width: 12.5%; background-color: #afa;">
+长度 高位
+</td>
+<td style="width: 12.5%; background-color: #aaf;">
+数据
+</td>
+<td style="width: 12.5%; background-color: #ccf;">
+CRC 低位
+</td>
+<td style="width: 12.5%; background-color: #ccf;">
+CRC 高位
+</td>
+<td style="width: 12.5%; background-color: #ddd;">
+7E
+</td>
+</tr>
+</tbody>
+</table>
+<p>断开连接数据包例子: 7E 01 14 00 61 A1 06 AD 35 04 4B 23 0C DC 98 9C
+B6 6B D0 4B B3 16 01 00 03 D4 7E
+断开中的getcmd函数相当于封装那20字节的remain: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">char</span>[] getcmd(<span class="type">int</span> cmd)&#123;</span><br><span class="line">	<span class="type">char</span>[] data = <span class="keyword">new</span> <span class="title class_">char</span>[remain.length+<span class="number">7</span>];</span><br><span class="line">	data[<span class="number">0</span>]=<span class="number">0x7E</span>;</span><br><span class="line">	data[<span class="number">1</span>]=(<span class="type">char</span>)cmd;</span><br><span class="line">	data[<span class="number">2</span>]=<span class="number">0x14</span>;</span><br><span class="line">	data[<span class="number">3</span>]=<span class="number">0x00</span>;</span><br><span class="line">	<span class="type">int</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;remain.length;i++)data[i+<span class="number">4</span>]=(<span class="type">char</span>) remain[i];</span><br><span class="line">	<span class="type">char</span>[] crc = <span class="keyword">new</span> <span class="title class_">char</span>[remain.length+<span class="number">3</span>];</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;remain.length+<span class="number">3</span>;i++)crc[i]=data[i+<span class="number">1</span>];</span><br><span class="line">	<span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> getCRC16(charToByte(crc));</span><br><span class="line">	data[crc.length+<span class="number">1</span>]=(<span class="type">char</span>) (c&amp;<span class="number">0xFF</span>);</span><br><span class="line">	data[crc.length+<span class="number">2</span>]=(<span class="type">char</span>) (c&gt;&gt;<span class="number">8</span>);</span><br><span class="line">	data[crc.length+<span class="number">3</span>]=<span class="number">0x7E</span>;</span><br><span class="line">	<span class="keyword">return</span> data;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h1 id="保持在线"><span style="color: #ff0000;">保持在线</span></h1>
+<p>保持在线的话就这样获取数据包:<span
+style="color: #ff0000;">getcmd(0);</span>,其余的数据不变.</p>
+<h1 id="查流量">查流量</h1>
+<p>查流量的话与登录不同,查流量发送的数据第一发送的命令码是3,第二发送的数据不含IP
+也就是说查流量的格式是这样的:</p>
+<ul>
+<li>23字节用户名</li>
+<li>23字节密码</li>
+<li>16字节验证数据 没错,长度只有62字节. 其他的RSA,CRC都是一样的操作.
+返回的数据是纯文本的,储存在recString全局变量中.</li>
+</ul>
+<h1 id="取出流量数据">取出流量数据</h1>
+<p>得到文本之后,我们通过正则表达式得到剩余流量: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Pattern p=Pattern.compile(<span class="string">&quot;([0-9]+)(兆)&quot;</span>);</span><br><span class="line">Matcher m=p.matcher(result);</span><br><span class="line"><span class="type">int</span> liuliang=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span>(m.find())&#123;</span><br><span class="line">	<span class="type">String</span> <span class="variable">tempString</span> <span class="operator">=</span> m.group(<span class="number">1</span>);</span><br><span class="line">	liuliang+=Integer.valueOf(tempString).intValue();</span><br><span class="line">&#125;</span><br><span class="line">liuliangString=String.valueOf(liuliang);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+这里凡是兆前面的数字都会被找到,然后加到流量中去.
+同样我们也可以通过这个正则表达式得到网费数据: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Pattern.compile(<span class="string">&quot;剩余网费.*?(\\w+.\\w*元)&quot;</span>);</span><br></pre></td></tr></table></figure> 在线数据:
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Pattern.compile(<span class="string">&quot;在线:(\\d+)&quot;</span>);</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/instabtbu/" rel="tag"># instabtbu</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E5%9C%A8debian%E4%B8%8B%E9%85%8D%E7%BD%AEweb%E7%8E%AF%E5%A2%83(LAMP)%E4%BB%A5%E5%8F%8Awordpress/" rel="prev" title="在debian下配置web环境(LAMP)以及wordpress">
+                  <i class="fa fa-chevron-left"></i> 在debian下配置web环境(LAMP)以及wordpress
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/linux%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" rel="next" title="linux相关命令">
+                  linux相关命令 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨培文</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

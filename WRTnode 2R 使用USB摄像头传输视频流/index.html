@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xlk.png">
+  <link rel="mask-icon" href="/images/xkl.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="首先我们需要对固件重新编译，因为没有USB摄像头驱动是无法进行下一步的传输的。 1make menuconfig 12345Multimedia      ---&gt;   &lt;*&gt; mjpg-streamerKernel modules  ---&gt;   Video Support  ---&gt;        &lt;*&gt; kmod-video-core......">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WRTnode 2R 使用USB摄像头传输视频流">
+<meta property="og:url" content="https://ypw.io/WRTnode%202R%20%E4%BD%BF%E7%94%A8USB%E6%91%84%E5%83%8F%E5%A4%B4%E4%BC%A0%E8%BE%93%E8%A7%86%E9%A2%91%E6%B5%81/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="首先我们需要对固件重新编译，因为没有USB摄像头驱动是无法进行下一步的传输的。 1make menuconfig 12345Multimedia      ---&gt;   &lt;*&gt; mjpg-streamerKernel modules  ---&gt;   Video Support  ---&gt;        &lt;*&gt; kmod-video-core......">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-10-19T14:40:24.000Z">
+<meta property="article:modified_time" content="2019-08-06T15:59:15.000Z">
+<meta property="article:author" content="杨培文">
+<meta property="article:tag" content="WRTnode">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ypw.io/WRTnode%202R%20%E4%BD%BF%E7%94%A8USB%E6%91%84%E5%83%8F%E5%A4%B4%E4%BC%A0%E8%BE%93%E8%A7%86%E9%A2%91%E6%B5%81/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/WRTnode%202R%20%E4%BD%BF%E7%94%A8USB%E6%91%84%E5%83%8F%E5%A4%B4%E4%BC%A0%E8%BE%93%E8%A7%86%E9%A2%91%E6%B5%81/","path":"WRTnode 2R 使用USB摄像头传输视频流/","title":"WRTnode 2R 使用USB摄像头传输视频流"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>WRTnode 2R 使用USB摄像头传输视频流 | 杨培文</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111276663-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-111276663-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨培文"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ypwhs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/ypwhs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/yangpw" title="知乎 → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;yangpw" rel="noopener me" target="_blank"><i class="fa fa-book fa-fw"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/ypwhs" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fa-brands fa-linkedin fa-fw"></i>Linkedin</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/WRTnode%202R%20%E4%BD%BF%E7%94%A8USB%E6%91%84%E5%83%8F%E5%A4%B4%E4%BC%A0%E8%BE%93%E8%A7%86%E9%A2%91%E6%B5%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="WRTnode 2R 使用USB摄像头传输视频流 | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          WRTnode 2R 使用USB摄像头传输视频流
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-10-19 22:40:24" itemprop="dateCreated datePublished" datetime="2015-10-19T22:40:24+08:00">2015-10-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>首先我们需要对固件重新编译，因为没有USB摄像头驱动是无法进行下一步的传输的。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Multimedia      ---&gt;   &lt;*&gt; mjpg-streamer</span><br><span class="line"></span><br><span class="line">Kernel modules  ---&gt;   Video Support  ---&gt;        &lt;*&gt; kmod-video-core......</span><br><span class="line">                                                  &lt;*&gt;   kmod-video-uvc....</span><br><span class="line">                                                  -*-   kmod-video-videobuf2</span><br></pre></td></tr></table></figure>
+<p><a href="/images/Snip20151019_37.png"><img
+src="/images/Snip20151019_37.png" /></a></p>
+<p>配置好，Save之后，编译。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -j8</span><br></pre></td></tr></table></figure>
+<p><a href="/images/Snip20151019_38.png"><img
+src="/images/Snip20151019_38.png" /></a></p>
+<p>然后把生成的固件刷机。不会的话参照<a href="/WRTnode%202R%20SDK%E6%90%AD%E5%BB%BA%EF%BC%8C%E5%9B%BA%E4%BB%B6%E7%9A%84%E7%BC%96%E8%AF%91/" title="WRTnode 2R SDK搭建，固件的编译">WRTnode 2R SDK搭建，固件的编译</a>后部分。</p>
+<p>刷好之后，插上USB摄像头，<code>ls /dev</code>看看是否已连接上。结果并没有连上。</p>
+<p><a href="/images/Snip20151019_40.png"><img
+src="/images/Snip20151019_40.png" /></a></p>
+<p>查看内核日志发现是电流不够</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usb 1-1.3: rejected 1 configuration due to insufficient available bus power</span><br></pre></td></tr></table></figure>
+<p>其实内核日志也可以这样查看：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dmesg | grep usb</span><br></pre></td></tr></table></figure>
+<p>经过google查到解决方法执行下面的命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> 1 &gt; /sys/bus/usb/devices/1-1.3/bConfigurationValue</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>bConfigurationValue的意思大概是强制启用该USB设备。
+这里的1-1.3改为你的内核日志里的USB端口号，然后再<code>ls /dev</code>发现USB摄像头挂载成功，也就是绿色框内的video设备。</p>
+</blockquote>
+<p><a href="/images/Snip20151019_43.png"><img
+src="/images/Snip20151019_43.png" /></a></p>
+<p>再次查看内核日志，已经有摄像头成功加载的信息。</p>
+<p><a href="/images/Snip20151019_45.png"><img
+src="/images/Snip20151019_45.png" /></a></p>
+<p>然后我们就可以使用<code>mjpg_streamer</code> 来推流了。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mjpg_streamer -i <span class="string">&quot;input_uvc.so -f 25 -r 640*480&quot;</span> -o <span class="string">&quot;output_http.so -p 8080&quot;</span></span><br></pre></td></tr></table></figure>
+<p><a href="/images/Snip20151019_46.png"><img
+src="/images/Snip20151019_46.png" /></a></p>
+<p>不出意外的话，打开这个网址就可以看到摄像头的图像了。<a
+target="_blank" rel="noopener" href="http://192.168.8.1:8080/?action=stream">http://192.168.8.1:8080/?action=stream</a></p>
+<p><a href="/images/Snip20151019_47.png"><img
+src="/images/Snip20151019_47.png" /></a></p>
+<p>如果你想每次启动WRTnode
+2R之后，都会自动开启摄像头传输视频，可以在<strong>系统</strong>选项卡下的<strong>启动项</strong>设置的<strong>本地启动脚本</strong>中加入上面那些命令。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo 1 &gt; /sys/bus/usb/devices/1-1.3/bConfigurationValue</span><br><span class="line">mjpg_streamer -i &quot;input_uvc.so -f 25 -r 640*480&quot; -o &quot;output_http.so -p 8080&quot;</span><br></pre></td></tr></table></figure>
+<p><a href="/images/Snip20151019_51.png"><img
+src="/images/Snip20151019_51.png" /></a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/WRTnode/" rel="tag"># WRTnode</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/WRTnode%202R%20%E5%9B%BE%E7%89%87%E5%92%8C%E8%B5%84%E6%96%99/" rel="prev" title="WRTnode 2R 图片和资料">
+                  <i class="fa fa-chevron-left"></i> WRTnode 2R 图片和资料
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/WRTnode%202R%20%E4%BD%BF%E7%94%A8v4l-utils%E6%9F%A5%E7%9C%8B%E6%91%84%E5%83%8F%E5%A4%B4%E4%BF%A1%E6%81%AF/" rel="next" title="WRTnode 2R 使用v4l-utils查看摄像头信息">
+                  WRTnode 2R 使用v4l-utils查看摄像头信息 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨培文</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

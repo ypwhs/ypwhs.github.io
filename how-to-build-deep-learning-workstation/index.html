@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xlk.png">
+  <link rel="mask-icon" href="/images/xkl.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="如何配置一台深度学习工作站? 这篇文章主要介绍的是家用的深度学习工作站，典型的配置有两种，分别是一个 GPU 的机器和 四个 GPU的机器。如果需要更多的 GPU 可以考虑配置两台四个 GPU 的机器。如果希望一台机器同时具备 6~8 个 GPU 需要联系专门的供应商进行配置，并且有专业的机房存放，放在家里噪声很大并且容易跳闸。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何配置一台深度学习工作站?">
+<meta property="og:url" content="https://ypw.io/how-to-build-deep-learning-workstation/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="如何配置一台深度学习工作站? 这篇文章主要介绍的是家用的深度学习工作站，典型的配置有两种，分别是一个 GPU 的机器和 四个 GPU的机器。如果需要更多的 GPU 可以考虑配置两台四个 GPU 的机器。如果希望一台机器同时具备 6~8 个 GPU 需要联系专门的供应商进行配置，并且有专业的机房存放，放在家里噪声很大并且容易跳闸。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ypw.io/how-to-build-deep-learning-workstation/x299.png">
+<meta property="og:image" content="https://ypw.io/how-to-build-deep-learning-workstation/x299-manual.png">
+<meta property="og:image" content="https://ypw.io/how-to-build-deep-learning-workstation/ws-x299-sage.png">
+<meta property="og:image" content="https://ypw.io/how-to-build-deep-learning-workstation/turbine.png">
+<meta property="og:image" content="https://ypw.io/how-to-build-deep-learning-workstation/fan.png">
+<meta property="og:image" content="https://ypw.io/how-to-build-deep-learning-workstation/NVME-protocol-riser-card.png">
+<meta property="og:image" content="https://ypw.io/how-to-build-deep-learning-workstation/air540.png">
+<meta property="article:published_time" content="2019-06-14T17:27:45.000Z">
+<meta property="article:modified_time" content="2019-08-06T15:59:15.000Z">
+<meta property="article:author" content="杨培文">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ypw.io/how-to-build-deep-learning-workstation/x299.png">
+
+
+<link rel="canonical" href="https://ypw.io/how-to-build-deep-learning-workstation/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/how-to-build-deep-learning-workstation/","path":"how-to-build-deep-learning-workstation/","title":"如何配置一台深度学习工作站?"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何配置一台深度学习工作站? | 杨培文</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111276663-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-111276663-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE%E4%B8%80%E5%8F%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%B7%A5%E4%BD%9C%E7%AB%99"><span class="nav-number">1.</span> <span class="nav-text">如何配置一台深度学习工作站?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cpu"><span class="nav-number">2.</span> <span class="nav-text">CPU</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cpu-%E4%B8%8E-gpu-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">2.1.</span> <span class="nav-text">CPU 与 GPU 的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pci-e-%E6%94%AF%E6%8C%81%E6%83%85%E5%86%B5"><span class="nav-number">2.2.</span> <span class="nav-text">PCI-E 支持情况</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BB%E6%9D%BF"><span class="nav-number">3.</span> <span class="nav-text">主板</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E6%9D%BF%E5%BF%85%E7%9C%8B%E5%8F%82%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">主板必看参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A6%E6%9C%89%E6%A1%A5%E6%8E%A5%E8%8A%AF%E7%89%87%E7%9A%84%E4%B8%BB%E6%9D%BF"><span class="nav-number">3.2.</span> <span class="nav-text">带有桥接芯片的主板</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%98%BE%E5%8D%A1"><span class="nav-number">4.</span> <span class="nav-text">显卡</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%BE%E5%8D%A1%E6%80%A7%E8%83%BD%E8%A1%A8"><span class="nav-number">4.1.</span> <span class="nav-text">显卡性能表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%A1%E8%BD%AE%E4%B8%8E%E9%A3%8E%E6%89%87"><span class="nav-number">4.2.</span> <span class="nav-text">涡轮与风扇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8E%A8%E6%96%AD%E5%8D%A1"><span class="nav-number">4.3.</span> <span class="nav-text">服务器推断卡</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A1%AC%E7%9B%98"><span class="nav-number">5.</span> <span class="nav-text">硬盘</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AC%E7%9B%98%E7%B1%BB%E5%9E%8B"><span class="nav-number">5.1.</span> <span class="nav-text">硬盘类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E5%AF%B9%E6%AF%94"><span class="nav-number">5.2.</span> <span class="nav-text">参数对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98"><span class="nav-number">6.</span> <span class="nav-text">内存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%B5%E6%BA%90"><span class="nav-number">7.</span> <span class="nav-text">电源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E5%8D%A1"><span class="nav-number">8.</span> <span class="nav-text">网卡</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%BA%E7%AE%B1"><span class="nav-number">9.</span> <span class="nav-text">机箱</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E5%99%A8"><span class="nav-number">10.</span> <span class="nav-text">显示器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87"><span class="nav-number">11.</span> <span class="nav-text">键盘鼠标</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨培文"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ypwhs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/ypwhs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/yangpw" title="知乎 → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;yangpw" rel="noopener me" target="_blank"><i class="fa fa-book fa-fw"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/ypwhs" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fa-brands fa-linkedin fa-fw"></i>Linkedin</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/how-to-build-deep-learning-workstation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何配置一台深度学习工作站? | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何配置一台深度学习工作站?
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-06-15 01:27:45" itemprop="dateCreated datePublished" datetime="2019-06-15T01:27:45+08:00">2019-06-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="如何配置一台深度学习工作站">如何配置一台深度学习工作站?</h1>
+<p>这篇文章主要介绍的是家用的深度学习工作站，典型的配置有两种，分别是一个
+GPU 的机器和 四个 GPU的机器。如果需要更多的 GPU 可以考虑配置两台四个 GPU
+的机器。如果希望一台机器同时具备 6~8 个 GPU
+需要联系专门的供应商进行配置，并且有专业的机房存放，放在家里噪声很大并且容易跳闸。</p>
+<span id="more"></span>
+<h1 id="cpu">CPU</h1>
+<p>由于最近 AMD 和 Intel 频繁更新 CPU，因此大家选择新款的 CPU
+比较好。</p>
+<h2 id="cpu-与-gpu-的关系">CPU 与 GPU 的关系</h2>
+<p>CPU 瓶颈没有那么大，一般以一个 GPU 对应 2~4 个 CPU
+核比较好，比如单卡机器买四核 CPU，四卡机器买十核 CPU。</p>
+<p>当你在训练的时候，只要数据生成器（DataLoader）的产出速度比 GPU
+的消耗速度快，那么 CPU 就不会成为瓶颈，也就不会拖慢训练速度。</p>
+<h2 id="pci-e-支持情况">PCI-E 支持情况</h2>
+<p>除了核数，你还需要注意 PCI-E 支持情况，一般显卡是 PCI-E 3.0 x16，比如
+<a
+target="_blank" rel="noopener" href="https://ark.intel.com/content/www/cn/zh/ark/products/189121/intel-core-i9-9820x-x-series-processor-16-5m-cache-up-to-4-20-ghz.html">i9-9820X</a>
+的 PCI-E 通道数是 44 ，配置四卡的话，只能支持
+1x16+3x8+1x4，也就是单卡全速，三卡半速，一个 NVMe
+固态硬盘。这种情况下可以考虑选择带有 PLX 桥接芯片的主板。</p>
+<p>AMD 的 <a
+target="_blank" rel="noopener" href="https://www.amd.com/zh-hans/products/cpu/amd-ryzen-threadripper-2990wx">2990WX</a>
+有 64条 PCI-E，但是只支持 x16/x8/x16/x8 的四卡配置。</p>
+<h1 id="主板">主板</h1>
+<p>主板需要注意：</p>
+<ul>
+<li>CPU 接口是否能对上，如 LGA2066 和 SocketTR4</li>
+<li>PCI-E 插槽的高度是否够插显卡，比如 PCI-E
+插口之间的距离至少要满足<strong>双槽宽显卡的高度</strong></li>
+<li>PCI-E 同时可以支持几张卡以什么样的速度运行，如 1x16 + 3x8
+是常见的配置</li>
+</ul>
+<h2 id="主板必看参数">主板必看参数</h2>
+<p><a
+target="_blank" rel="noopener" href="https://www.gigabyte.cn/Motherboard/X299-AORUS-MASTER-rev-10">GIGABYTE
+X299 AORUS MASTER (rev. 1.0)</a> 使用了 4 组 2 槽间距显卡插槽设计，支持
+1x16、2x16、2x16 + 1x8、1x16 + 3x8 四种配置（需要十核以上的
+CPU），这里请参阅说明书安装显卡，安装在不同位置的速度是不一样的：</p>
+<img src="/how-to-build-deep-learning-workstation/x299.png" class="" title="GIGABYTE X299 AORUS MASTER (rev. 1.0)">
+<img src="/how-to-build-deep-learning-workstation/x299-manual.png" class="" title="GIGABYTE X299 AORUS MASTER manual">
+<h2 id="带有桥接芯片的主板">带有桥接芯片的主板</h2>
+<p>有的主板如 <a
+target="_blank" rel="noopener" href="https://www.asus.com.cn/Motherboards/WS-X299-SAGE/overview/">WS
+X299 SAGE</a> 带有 PLX 桥接芯片，可以在 CPU 没有足够 PCI-E
+的情况下达到四卡 x16 的速度：</p>
+<p>有的主板如 <a
+target="_blank" rel="noopener" href="https://www.asus.com.cn/Motherboards/WS-X299-SAGE/overview/">WS
+X299 SAGE</a> 带有 PLX 桥接芯片，可以在 CPU 没有足够 PCI-E
+的情况下达到四卡 x16 的速度：</p>
+<img src="/how-to-build-deep-learning-workstation/ws-x299-sage.png" class="" title="WS X299 SAGE">
+
+<p>在多卡并行训练的时候，PCI-E
+的传输速度决定了梯度同步的速度，如果你训练的的模型比较大，希望搭建多卡机器，建议选择支持四路
+PCI-E x16 的主板。</p>
+<h1 id="显卡">显卡</h1>
+<h2 id="显卡性能表">显卡性能表</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">型号</th>
+<th style="text-align: left;">架构</th>
+<th style="text-align: left;">价格(元)</th>
+<th style="text-align: left;">显存(GB)</th>
+<th style="text-align: left;">CUDA核</th>
+<th style="text-align: left;">Tensor核</th>
+<th style="text-align: left;">FP32(TFLOPS)</th>
+<th style="text-align: left;">FP16</th>
+<th style="text-align: left;">INT8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">GTX 1080Ti</td>
+<td style="text-align: left;">Pascal</td>
+<td style="text-align: left;">5299</td>
+<td style="text-align: left;">11</td>
+<td style="text-align: left;">3584</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">11.3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RTX 2080</td>
+<td style="text-align: left;">Turing</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://item.jd.com/8945581.html">5499</a></td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">2944</td>
+<td style="text-align: left;">368</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">40.3</td>
+<td style="text-align: left;">161.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RTX 2080Ti</td>
+<td style="text-align: left;">Turing</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://item.jd.com/100002166999.html">8599</a></td>
+<td style="text-align: left;">11</td>
+<td style="text-align: left;">4532</td>
+<td style="text-align: left;">544</td>
+<td style="text-align: left;">13.4</td>
+<td style="text-align: left;">53.8</td>
+<td style="text-align: left;">215.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TITAN RTX</td>
+<td style="text-align: left;">Turing</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://item.jd.com/100001808707.html">16499</a></td>
+<td style="text-align: left;">24</td>
+<td style="text-align: left;">4608</td>
+<td style="text-align: left;">576</td>
+<td style="text-align: left;">16.3</td>
+<td style="text-align: left;">130</td>
+<td style="text-align: left;">260</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tesla V100</td>
+<td style="text-align: left;">Volta</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://detail.tmall.com/item.htm?id=561577884286&amp;skuId=3749195716874">79600</a></td>
+<td style="text-align: left;">32</td>
+<td style="text-align: left;">5120</td>
+<td style="text-align: left;">640</td>
+<td style="text-align: left;">15.7</td>
+<td style="text-align: left;">125</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+<p>考虑成本可以买 RTX 2080Ti，想要高性能并且高性价比可以买 TITAN
+RTX。</p>
+<p>RTX 2080 显存较小，不推荐。GTX 1080Ti
+已经出了太久了，网上都是二手卡，不推荐。</p>
+<p>参考链接：</p>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/technologies/turing-architecture/NVIDIA-Turing-Architecture-Whitepaper.pdf">Turing
+架构白皮书</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://images.nvidia.com/content/volta-architecture/pdf/volta-architecture-whitepaper.pdf">Volta
+架构白皮书</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://lambdalabs.com/blog/2080-ti-deep-learning-benchmarks/">RTX
+2080 Ti Deep Learning Benchmarks with TensorFlow - 2019</a></li>
+</ul>
+<h2 id="涡轮与风扇">涡轮与风扇</h2>
+<p>采购显卡的时候，一定要注意买涡轮版的，不要买两个或者三个风扇的版本，除非你只打算买一张卡。</p>
+<p>因为涡轮风扇的热是往外机箱外部吹的，所以可以很好地带走热量，散热比较好。如果买三个风扇的版本，插多卡的时候，上面的卡会把热量吹向第二张卡，导致第二张卡温度过高，影响性能。</p>
+<p>风扇显卡很有可能是超过双槽宽的，第二张卡可能插不上第二个 PCI-E
+插槽，这个也需要注意。</p>
+<img src="/how-to-build-deep-learning-workstation/turbine.png" class="" title="涡轮散热">
+<img src="/how-to-build-deep-learning-workstation/fan.png" class="" title="风扇散热">
+<h2 id="服务器推断卡">服务器推断卡</h2>
+<p>除了用于训练，还有一类卡是用于推断的（只预测，不训练），如：</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">型号</th>
+<th style="text-align: left;">架构</th>
+<th style="text-align: left;">价格(元)</th>
+<th style="text-align: left;">显存(GB)</th>
+<th style="text-align: left;">CUDA核</th>
+<th style="text-align: left;">Tensor核</th>
+<th style="text-align: left;">FP32(TFLOPS)</th>
+<th style="text-align: left;">FP16</th>
+<th style="text-align: left;">INT8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Tesla P4</td>
+<td style="text-align: left;">Pascal</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://detail.tmall.com/item.htm?id=551740053195">14500</a></td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">2560</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">5.5</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">22</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tesla P40</td>
+<td style="text-align: left;">Pascal</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://item.jd.com/6426833.html">43999</a></td>
+<td style="text-align: left;">24</td>
+<td style="text-align: left;">3584</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">47</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tesla P100</td>
+<td style="text-align: left;">Pascal</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://item.jd.com/6362210.html">48900</a></td>
+<td style="text-align: left;">16</td>
+<td style="text-align: left;">3584</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">10.6</td>
+<td style="text-align: left;">21.2</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tesla V100</td>
+<td style="text-align: left;">Volta</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://detail.tmall.com/item.htm?id=561577884286&amp;skuId=3749195716874">79600</a></td>
+<td style="text-align: left;">32</td>
+<td style="text-align: left;">5120</td>
+<td style="text-align: left;">640</td>
+<td style="text-align: left;">15.7</td>
+<td style="text-align: left;">125</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tesla T4</td>
+<td style="text-align: left;">Turing</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://item.jd.com/100001630485.html">19500</a></td>
+<td style="text-align: left;">16</td>
+<td style="text-align: left;">2560</td>
+<td style="text-align: left;">320</td>
+<td style="text-align: left;">8.1</td>
+<td style="text-align: left;">65</td>
+<td style="text-align: left;">130</td>
+</tr>
+</tbody>
+</table>
+<p>这些卡全部都是不带风扇的，但它们也需要散热，需要借助服务器强大的风扇被动散热，所以只能在专门设计的服务器上运行，具体请参考<a
+target="_blank" rel="noopener" href="https://www.nvidia.cn/object/where-to-buy-tesla-catalog-cn.html">英伟达官网的说明</a>。</p>
+<p>性价比之选应该是 Tesla T4，但是发挥全部性能需要使用 TensorRT
+深度优化，目前仍然存在许多坑，比如当你的网络使用了不支持的运算符时，需要自己实现。</p>
+<p>英伟达只允许这类卡在服务器上运行，像 GTX 1080Ti、RTX 2080Ti
+都是不能在数据中心使用的。</p>
+<blockquote>
+<p>No Datacenter Deployment. The SOFTWARE is not licensed for datacenter
+deployment, except that blockchain processing in a datacenter is
+permitted.</p>
+</blockquote>
+<p>参考链接：</p>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://developer.nvidia.com/deep-learning-performance-training-inference">https://developer.nvidia.com/deep-learning-performance-training-inference</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.nvidia.cn/object/where-to-buy-tesla-catalog-cn.html">https://www.nvidia.cn/object/where-to-buy-tesla-catalog-cn.html</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.supermicro.org.cn/support/resources/gpu/">https://www.supermicro.org.cn/support/resources/gpu/</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.geforce.com/drivers/license/geforce">https://www.geforce.com/drivers/license/geforce</a></li>
+</ul>
+<h1 id="硬盘">硬盘</h1>
+<h2 id="硬盘类型">硬盘类型</h2>
+<p>常用硬盘接口有三种：</p>
+<ul>
+<li>SATA3.0，速度 600MB/s</li>
+<li>SAS，速度 1200MB/s</li>
+<li>PCIE 3.0 x4（NVMe)，速度 3.94GB/s</li>
+</ul>
+<h2 id="参数对比">参数对比</h2>
+<p>下面是根据代表产品查询的参数：</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">价格(元/TB)</th>
+<th style="text-align: left;">读取速度(MB/s)</th>
+<th style="text-align: left;">写入速度</th>
+<th style="text-align: left;">4K随机读取(IOPS)</th>
+<th style="text-align: left;">4K随机写入(IOPS)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SATA3 机械硬盘</td>
+<td style="text-align: left;">200</td>
+<td style="text-align: left;">100</td>
+<td style="text-align: left;">100</td>
+<td style="text-align: left;">100</td>
+<td style="text-align: left;">100</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SATA3 固态硬盘</td>
+<td style="text-align: left;">800</td>
+<td style="text-align: left;">550</td>
+<td style="text-align: left;">520</td>
+<td style="text-align: left;">98000</td>
+<td style="text-align: left;">90000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NVMe 固态硬盘</td>
+<td style="text-align: left;">1000</td>
+<td style="text-align: left;">3230</td>
+<td style="text-align: left;">1625</td>
+<td style="text-align: left;">340000</td>
+<td style="text-align: left;">275000</td>
+</tr>
+</tbody>
+</table>
+<p>注：</p>
+<ul>
+<li>4K 随机读写的队列深度为 32</li>
+<li>SATA3 机械硬盘没有太好的数据来源，所以数据是经验值</li>
+<li>SATA3 固态硬盘数据来源：<a
+target="_blank" rel="noopener" href="https://item.jd.com/6301071.html">三星（SAMSUNG）1TB SSD固态硬盘
+SATA3.0接口 860 EVO</a></li>
+<li>NVMe 固态硬盘数据来源：<a
+target="_blank" rel="noopener" href="https://item.jd.com/7591647.html">英特尔（Intel）1TB SSD固态硬盘
+M.2接口(NVMe协议) 760P系</a></li>
+</ul>
+<p>在面对大量小文件的时候，使用 NVMe 硬盘可以一分钟扫完
+1000万文件，如果使用普通硬盘，那么就需要一天时间。为了节省生命，简化代码，硬盘建议选择
+NVMe 协议的固态硬盘。</p>
+<p>如果你的主板不够新，没有NVMe 插槽，你可以使用 M.2 转接卡将 M.2
+接口转为 PCI-E 接口。</p>
+<img src="/how-to-build-deep-learning-workstation/NVME-protocol-riser-card.png" class="" title="NVME 协议转接卡">
+<h1 id="内存">内存</h1>
+<p>内存容量的选择通常大于显存，比如单卡配 16GB 内存，四卡配 64GB
+内存。由于有数据生成器（DataLoader），数据不必全部加载到内存里，通常不会成为瓶颈。</p>
+<h1 id="电源">电源</h1>
+<p>先计算功率总和，如单卡 CPU 100W，显卡 250W，加上其他的大概
+400W，那么就买 650W 的电源。</p>
+<p>双卡最好买 1000W 以上的电源，四卡最好买 1600W
+的电源，我这里实测过四卡机用 1500W
+的电源来带，跑起来所有的卡以后会因为电源不足而自动关机。</p>
+<p>一般墙上的插座只支持 220V 10A，也就是 2200W
+的交流电，由于电源要把交流电转直流电，所以会有一些损耗，最高只有
+1600W，因此如果想要支持八卡，最好不要在家尝试。八卡一般是双电源，并且需要使用专用的
+PDU 插座，并且使用的是 16A 插口，如果在家使用，会插不上墙上的插座。</p>
+<h1 id="网卡">网卡</h1>
+<p>一般主板自带千兆网卡。如果需要组建多机多卡集群，请联系供应商咨询专业的解决方案。</p>
+<h1 id="机箱">机箱</h1>
+<p>如果配单卡，可以直接买个普通机箱，注意显卡长度能放下就行。</p>
+<p>如果配四卡机器，建议买一个 <a
+target="_blank" rel="noopener" href="https://item.jd.com/1024817.html">Air 540</a>
+机箱，因为我正在用这一款。</p>
+<img src="/how-to-build-deep-learning-workstation/air540.png" class="" title="Air 540 机箱">
+<h1 id="显示器">显示器</h1>
+<p>深度学习工作站装好系统以后就不需要显示器了，装系统的时候使用手边的显示器就行。</p>
+<h1 id="键盘鼠标">键盘鼠标</h1>
+<p>深度学习工作站装好系统以后就不需要键盘鼠标了，装系统的时候使用手边的键盘鼠标就行。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/style-transfer/" rel="prev" title="风格迁移三部曲">
+                  <i class="fa fa-chevron-left"></i> 风格迁移三部曲
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/ChatGPT/" rel="next" title="ChatGPT：全方位评测，揭示真实实力">
+                  ChatGPT：全方位评测，揭示真实实力 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨培文</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xlk.png">
+  <link rel="mask-icon" href="/images/xkl.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="安装LAMP 123apt-get updateapt-get upgradeapt-get install apache2 mysql-server mysql-client php5 php5-mysql 选配: phpmyadmin 12apt-get install phpmyadminln -s &#x2F;usr&#x2F;share&#x2F;phpmyadmin&#x2F; &#x2F;var&#x2F;www&#x2F; vsftpd 123456">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在debian下配置web环境(LAMP)以及wordpress">
+<meta property="og:url" content="https://ypw.io/%E5%9C%A8debian%E4%B8%8B%E9%85%8D%E7%BD%AEweb%E7%8E%AF%E5%A2%83(LAMP)%E4%BB%A5%E5%8F%8Awordpress/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="安装LAMP 123apt-get updateapt-get upgradeapt-get install apache2 mysql-server mysql-client php5 php5-mysql 选配: phpmyadmin 12apt-get install phpmyadminln -s &#x2F;usr&#x2F;share&#x2F;phpmyadmin&#x2F; &#x2F;var&#x2F;www&#x2F; vsftpd 123456">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-02-22T10:05:51.000Z">
+<meta property="article:modified_time" content="2019-08-06T15:59:15.000Z">
+<meta property="article:author" content="杨培文">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ypw.io/%E5%9C%A8debian%E4%B8%8B%E9%85%8D%E7%BD%AEweb%E7%8E%AF%E5%A2%83(LAMP)%E4%BB%A5%E5%8F%8Awordpress/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/%E5%9C%A8debian%E4%B8%8B%E9%85%8D%E7%BD%AEweb%E7%8E%AF%E5%A2%83(LAMP)%E4%BB%A5%E5%8F%8Awordpress/","path":"在debian下配置web环境(LAMP)以及wordpress/","title":"在debian下配置web环境(LAMP)以及wordpress"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>在debian下配置web环境(LAMP)以及wordpress | 杨培文</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111276663-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-111276663-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85lamp"><span class="nav-number">1.</span> <span class="nav-text">安装LAMP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#phpmyadmin"><span class="nav-number">2.</span> <span class="nav-text">phpmyadmin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vsftpd"><span class="nav-number">3.</span> <span class="nav-text">vsftpd</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#wordpress"><span class="nav-number">4.</span> <span class="nav-text">wordpress</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#php%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="nav-number">5.</span> <span class="nav-text">php相关配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AA%E7%AB%99%E7%82%B9apache2"><span class="nav-number">6.</span> <span class="nav-text">配置多个站点:apache2:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEmysql%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98"><span class="nav-number">7.</span> <span class="nav-text">配置mysql编码问题:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E8%BF%98%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E8%AF%9D"><span class="nav-number">7.0.1.</span> <span class="nav-text">编码还有问题的话:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#wordpress%E9%85%8D%E7%BD%AE%E7%BC%93%E5%AD%98wp-super-cache"><span class="nav-number">8.</span> <span class="nav-text">wordpress配置缓存(WP Super
+Cache):</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%BB%E6%8E%89%E5%B7%A5%E5%85%B7%E6%A0%8Fwordpress.org"><span class="nav-number">9.</span> <span class="nav-text">去掉工具栏wordpress.org:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#wordpress%E9%85%8D%E7%BD%AEgravatar%E5%A4%B4%E5%83%8F"><span class="nav-number">10.</span> <span class="nav-text">wordpress配置gravatar头像:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#php%E9%85%8D%E7%BD%AEmemcached"><span class="nav-number">11.</span> <span class="nav-text">php配置memcached:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#wordpress%E9%85%8D%E7%BD%AEmemcached"><span class="nav-number">12.</span> <span class="nav-text">wordpress配置memcached:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#memcached%E5%91%BD%E4%B8%AD%E7%8E%87%E6%9F%A5%E7%9C%8B"><span class="nav-number">13.</span> <span class="nav-text">memcached命中率查看:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%99wordpress%E6%B7%BB%E5%8A%A0%E6%9F%A5%E8%AF%A2%E6%AC%A1%E6%95%B0%E5%8A%A0%E8%BD%BD%E6%97%B6%E9%97%B4"><span class="nav-number">14.</span> <span class="nav-text">给wordpress添加查询次数,加载时间:</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨培文"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ypwhs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/ypwhs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/yangpw" title="知乎 → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;yangpw" rel="noopener me" target="_blank"><i class="fa fa-book fa-fw"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/ypwhs" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fa-brands fa-linkedin fa-fw"></i>Linkedin</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/%E5%9C%A8debian%E4%B8%8B%E9%85%8D%E7%BD%AEweb%E7%8E%AF%E5%A2%83(LAMP)%E4%BB%A5%E5%8F%8Awordpress/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="在debian下配置web环境(LAMP)以及wordpress | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在debian下配置web环境(LAMP)以及wordpress
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-02-22 18:05:51" itemprop="dateCreated datePublished" datetime="2015-02-22T18:05:51+08:00">2015-02-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="安装lamp">安装LAMP</h1>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get upgrade</span><br><span class="line">apt-get install apache2 mysql-server mysql-client php5 php5-mysql</span><br></pre></td></tr></table></figure>
+<p>选配:</p>
+<h1 id="phpmyadmin">phpmyadmin</h1>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install phpmyadmin</span><br><span class="line"><span class="built_in">ln</span> -s /usr/share/phpmyadmin/ /var/www/</span><br></pre></td></tr></table></figure>
+<h1 id="vsftpd">vsftpd</h1>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apt-get install vsftpd</span><br><span class="line">useradd -d /var/www ftpypw</span><br><span class="line"><span class="built_in">chown</span> ftpypw /var/www</span><br><span class="line">passwd ftpypw  <span class="comment">#设置你的密码</span></span><br><span class="line"></span><br><span class="line">nano /etc/vsftpd.conf  <span class="comment">#按照下面的设置,禁止匿名,允许本地用户</span></span><br><span class="line">/etc/init.d/./vsftpd restart</span><br></pre></td></tr></table></figure>
+<p>anonymous_enable=NO local_enable=YES write_enable=YES</p>
+<h1 id="wordpress">wordpress</h1>
+<p><a target="_blank" rel="noopener" href="https://cn.wordpress.org/"
+title="https://cn.wordpress.org/">https://cn.wordpress.org/</a>下载好最新版,解压后通过ftp上传即可</p>
+<p>创建新的ftp用户:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /var/wzq</span><br><span class="line">useradd -d /var/wzq ftpwzq</span><br><span class="line"><span class="built_in">chown</span> ftpypw /var/www</span><br><span class="line"><span class="built_in">ls</span> -l  <span class="comment"># 查看所有者</span></span><br></pre></td></tr></table></figure>
+<h1 id="php相关配置">php相关配置</h1>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/php5/apache2/php.ini</span><br></pre></td></tr></table></figure>
+<pre><code>display_errors = On
+upload_max_filesize = 8M
+max_execution_time = 300
+memory_limit = 128M</code></pre>
+<h1 id="配置多个站点apache2">配置多个站点:apache2:</h1>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /etc/apache2/sites-enabled</span><br><span class="line"><span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">VirtualHost</span> *<span class="attr">:80</span>&gt;</span></span><br><span class="line">	ServerName ypw.hk</span><br><span class="line">	ServerAlias ypw.hk</span><br><span class="line">	DocumentRoot &quot;/var/www/&quot;</span><br><span class="line">	ErrorLog &quot;/var/log/apache2/edunuke_errors.log&quot;</span><br><span class="line">	CustomLog &quot;/var/log/apache2/edunuke_accesses.log&quot; common</span><br><span class="line"><span class="tag">&lt;/<span class="name">VirtualHost</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="配置mysql编码问题">配置mysql编码问题:</h1>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -proot</span><br><span class="line"><span class="built_in">set</span> character_set_client = utf8;</span><br><span class="line"><span class="built_in">set</span> character_set_server = utf8;</span><br><span class="line"><span class="built_in">set</span> character_set_connection = utf8;</span><br><span class="line"><span class="built_in">set</span> character_set_database = utf8;</span><br><span class="line"><span class="built_in">set</span> character_set_results = utf8;</span><br><span class="line"><span class="built_in">set</span> collation_connection = utf8_general_ci;</span><br><span class="line"><span class="built_in">set</span> collation_database = utf8_general_ci;</span><br><span class="line"><span class="built_in">set</span> collation_server = utf8_general_ci;</span><br><span class="line">show variables like <span class="string">&#x27;character_set_%&#x27;</span>;</span><br><span class="line">nano /etc/mysql/my.cnf <span class="comment">#按照下面的内容修改</span></span><br><span class="line"></span><br><span class="line">service mysql restart</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[client]</span><br><span class="line">default-character-set=utf8</span><br><span class="line"></span><br><span class="line">[mysql]</span><br><span class="line">default-character-set=utf8</span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8</span><br></pre></td></tr></table></figure>
+<h3 id="编码还有问题的话">编码还有问题的话:</h3>
+<p>php每次查询之前加这句话:mysql_query("SET NAMES UTF8");
+就像下面一样:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$con</span> = <span class="title function_ invoke__">mysql_connect</span>(SAE_MYSQL_HOST_M.<span class="string">&#x27;:&#x27;</span>.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);</span><br><span class="line"><span class="variable">$db</span>=<span class="title function_ invoke__">mysql_select_db</span>(<span class="string">&quot;app_ypw2&quot;</span>, <span class="variable">$con</span>);</span><br><span class="line"><span class="title function_ invoke__">mysql_query</span>(<span class="string">&quot;SET NAMES UTF8&quot;</span>);</span><br><span class="line"><span class="variable">$count</span> = <span class="title function_ invoke__">mysql_query</span>(<span class="string">&quot;SELECT COUNT(*) FROM content&quot;</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="wordpress配置缓存wp-super-cache">wordpress配置缓存(WP Super
+Cache):</h1>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a2enmod rewrite</span><br><span class="line">a2enmod headers</span><br><span class="line">a2enmod expires</span><br><span class="line">/etc/init.d/apache2 force-reload</span><br></pre></td></tr></table></figure>
+<h1 id="去掉工具栏wordpress.org">去掉工具栏wordpress.org:</h1>
+<p>在wp-includes/default-widgets.php中修改,搜索wordpress.org然后删除</p>
+<h1 id="wordpress配置gravatar头像">wordpress配置gravatar头像:</h1>
+<p>将以下内容添加到主题文件的functions.php里:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_avatar_deadwood</span>(<span class="params"> <span class="variable">$avatar</span> </span>) </span>&#123;</span><br><span class="line">    <span class="variable">$avatar</span> = <span class="title function_ invoke__">str_replace</span>(<span class="keyword">array</span>(<span class="string">&quot;gravatar.proxy.ustclug.org&quot;</span>,<span class="string">&quot;gravatar.proxy.ustclug.org&quot;</span>,<span class="string">&quot;gravatar.proxy.ustclug.org&quot;</span>,<span class="string">&quot;gravatar.proxy.ustclug.org&quot;</span>),<span class="string">&quot;gravatar.duoshuo.com&quot;</span>,<span class="variable">$avatar</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$avatar</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_ invoke__">add_filter</span>( <span class="string">&#x27;get_avatar&#x27;</span>, <span class="string">&#x27;get_avatar_deadwood&#x27;</span> );</span><br></pre></td></tr></table></figure>
+<h1 id="php配置memcached">php配置memcached:</h1>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install memcached php5-memcache php5-memcached</span><br><span class="line">/etc/init.d/apache2 restart</span><br></pre></td></tr></table></figure>
+<h1 id="wordpress配置memcached">wordpress配置memcached:</h1>
+<p>首先去插件安装Memcached Object Cache 2.0.2 然后:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /var/www</span><br><span class="line"><span class="built_in">cp</span> wp-content/plugins/memcached/object-cache.php wp-content/</span><br></pre></td></tr></table></figure>
+<p>然后删了之前那个memcached...
+复制的那个content目录下的插件会在Drop-in高级插件中显示. 安装成功之后去WP
+Super Cache 设置的高级设置中开启 使用对象缓存系统来存储缓存文件。
+(实验室功能)</p>
+<h1 id="memcached命中率查看">memcached命中率查看:</h1>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">telnet 127.0.0.1 11211</span><br><span class="line">stats</span><br><span class="line">quit</span><br></pre></td></tr></table></figure>
+<p>其中我感兴趣的数据就是这些:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">STAT cmd_get 919</span><br><span class="line">STAT cmd_set 281</span><br><span class="line">STAT cmd_flush 0</span><br><span class="line">STAT cmd_touch 0</span><br><span class="line">STAT get_hits 746</span><br><span class="line">STAT get_misses 173</span><br></pre></td></tr></table></figure>
+<h1
+id="给wordpress添加查询次数加载时间">给wordpress添加查询次数,加载时间:</h1>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /var/www/wp-content/themes/twentyfourteen</span><br><span class="line">nano footer.php</span><br></pre></td></tr></table></figure>
+<p>在最底部添加:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">本次查询<span class="meta">&lt;?php</span> <span class="keyword">echo</span> <span class="title function_ invoke__">get_num_queries</span>();<span class="meta">?&gt;</span>次,耗时<span class="meta">&lt;?php</span> <span class="title function_ invoke__">timer_stop</span>(<span class="number">1</span>);<span class="meta">?&gt;</span>秒</span><br></pre></td></tr></table></figure>
+<p>就像这样:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">                    <span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;float:right;&quot;</span>&gt;</span></span><br><span class="line">                    本次查询<span class="meta">&lt;?php echo get_num_queries();?&gt;</span>次,耗时<span class="meta">&lt;?php timer_stop(1);?&gt;</span>秒</span><br><span class="line">                    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="comment">&lt;!-- .site-info --&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">footer</span>&gt;</span><span class="comment">&lt;!-- #colophon --&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="comment">&lt;!-- #page --&gt;</span></span><br><span class="line">    <span class="meta">&lt;?php wp_footer(); ?&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/simple.exe/" rel="prev" title="simple.exe">
+                  <i class="fa fa-chevron-left"></i> simple.exe
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/instabtbu-%E8%AF%A6%E8%A7%A3%E4%B8%8A%E7%BD%91%E7%99%BB%E5%BD%95/" rel="next" title="instabtbu-详解上网登录">
+                  instabtbu-详解上网登录 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨培文</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
