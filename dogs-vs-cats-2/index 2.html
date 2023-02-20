@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文会通过 Keras 搭建一个深度卷积神经网络来识别一张图片是猫还是狗，在验证集上的准确率可以达到99.6%，建议使用显卡来运行该项目。本项目使用的 Keras 版本是1.2.2。 猫狗大战数据集来自 kaggle 上的一个竞赛：Dogs vs. Cats，训练集有25000张，猫狗各占一半。测试集12500张，没有标定是猫还是狗。 1234567891011121314151617181920">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手把手教你如何在Kaggle猫狗大战冲到Top2%">
+<meta property="og:url" content="https://ypw.io/dogs-vs-cats-2/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="本文会通过 Keras 搭建一个深度卷积神经网络来识别一张图片是猫还是狗，在验证集上的准确率可以达到99.6%，建议使用显卡来运行该项目。本项目使用的 Keras 版本是1.2.2。 猫狗大战数据集来自 kaggle 上的一个竞赛：Dogs vs. Cats，训练集有25000张，猫狗各占一半。测试集12500张，没有标定是猫还是狗。 1234567891011121314151617181920">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ypw.io/dogs-vs-cats-2/dataset.png">
+<meta property="og:image" content="https://ypw.io/dogs-vs-cats-2/model.png">
+<meta property="og:image" content="https://ypw.io/dogs-vs-cats-2/logloss.png">
+<meta property="article:published_time" content="2017-03-18T13:41:55.000Z">
+<meta property="article:modified_time" content="2023-02-20T14:28:05.816Z">
+<meta property="article:author" content="杨培文">
+<meta property="article:tag" content="Udacity">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ypw.io/dogs-vs-cats-2/dataset.png">
+
+
+<link rel="canonical" href="https://ypw.io/dogs-vs-cats-2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/dogs-vs-cats-2/","path":"dogs-vs-cats-2/","title":"手把手教你如何在Kaggle猫狗大战冲到Top2%"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>手把手教你如何在Kaggle猫狗大战冲到Top2% | 杨培文</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8C%AB%E7%8B%97%E5%A4%A7%E6%88%98"><span class="nav-number">1.</span> <span class="nav-text">猫狗大战</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">数据预处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text">导出特征向量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%BD%E5%85%A5%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">载入特征向量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.</span> <span class="nav-text">构建模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B"><span class="nav-number">6.</span> <span class="nav-text">训练模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%84%E6%B5%8B%E6%B5%8B%E8%AF%95%E9%9B%86"><span class="nav-number">7.</span> <span class="nav-text">预测测试集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/dogs-vs-cats-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="手把手教你如何在Kaggle猫狗大战冲到Top2% | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          手把手教你如何在Kaggle猫狗大战冲到Top2%
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-03-18 21:41:55" itemprop="dateCreated datePublished" datetime="2017-03-18T21:41:55+08:00">2017-03-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-20 22:28:05" itemprop="dateModified" datetime="2023-02-20T22:28:05+08:00">2023-02-20</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文会通过 Keras 搭建一个深度卷积神经网络来识别一张图片是猫还是狗，在验证集上的准确率可以达到99.6%，建议使用显卡来运行该项目。本项目使用的 Keras 版本是1.2.2。</p>
+<h1 id="猫狗大战"><a href="#猫狗大战" class="headerlink" title="猫狗大战"></a>猫狗大战</h1><p>数据集来自 kaggle 上的一个竞赛：<a target="_blank" rel="noopener" href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition">Dogs vs. Cats</a>，训练集有25000张，猫狗各占一半。测试集12500张，没有标定是猫还是狗。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">➜  猫狗大战 ls train | head</span><br><span class="line">cat.0.jpg</span><br><span class="line">cat.1.jpg</span><br><span class="line">cat.10.jpg</span><br><span class="line">cat.100.jpg</span><br><span class="line">cat.1000.jpg</span><br><span class="line">cat.10000.jpg</span><br><span class="line">cat.10001.jpg</span><br><span class="line">cat.10002.jpg</span><br><span class="line">cat.10003.jpg</span><br><span class="line">cat.10004.jpg</span><br><span class="line">➜  猫狗大战 ls test | head</span><br><span class="line">1.jpg</span><br><span class="line">10.jpg</span><br><span class="line">100.jpg</span><br><span class="line">1000.jpg</span><br><span class="line">10000.jpg</span><br><span class="line">10001.jpg</span><br><span class="line">10002.jpg</span><br><span class="line">10003.jpg</span><br><span class="line">10004.jpg</span><br><span class="line">10005.jpg</span><br></pre></td></tr></table></figure>
+
+<p>下面是训练集的一部分例子：</p>
+<img src="/dogs-vs-cats-2/dataset.png" class="">
+
+<span id="more"></span>
+
+<h1 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h1><p>由于我们的数据集的文件名是以<code>type.num.jpg</code>这样的方式命名的，比如<code>cat.0.jpg</code>，但是使用 Keras 的 ImageDataGenerator 需要将不同种类的图片分在不同的文件夹中，因此我们需要对数据集进行预处理。这里我们采取的思路是创建符号链接(symbol link)，这样的好处是不用复制一遍图片，占用不必要的空间。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"></span><br><span class="line">train_filenames = os.listdir(<span class="string">&#x27;train&#x27;</span>)</span><br><span class="line">train_cat = <span class="built_in">filter</span>(<span class="keyword">lambda</span> x:x[:<span class="number">3</span>] == <span class="string">&#x27;cat&#x27;</span>, train_filenames)</span><br><span class="line">train_dog = <span class="built_in">filter</span>(<span class="keyword">lambda</span> x:x[:<span class="number">3</span>] == <span class="string">&#x27;dog&#x27;</span>, train_filenames)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rmrf_mkdir</span>(<span class="params">dirname</span>):</span><br><span class="line">    <span class="keyword">if</span> os.path.exists(dirname):</span><br><span class="line">        shutil.rmtree(dirname)</span><br><span class="line">    os.mkdir(dirname)</span><br><span class="line"></span><br><span class="line">rmrf_mkdir(<span class="string">&#x27;train2&#x27;</span>)</span><br><span class="line">os.mkdir(<span class="string">&#x27;train2/cat&#x27;</span>)</span><br><span class="line">os.mkdir(<span class="string">&#x27;train2/dog&#x27;</span>)</span><br><span class="line"></span><br><span class="line">rmrf_mkdir(<span class="string">&#x27;test2&#x27;</span>)</span><br><span class="line">os.symlink(<span class="string">&#x27;../test/&#x27;</span>, <span class="string">&#x27;test2/test&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> filename <span class="keyword">in</span> train_cat:</span><br><span class="line">    os.symlink(<span class="string">&#x27;../../train/&#x27;</span>+filename, <span class="string">&#x27;train2/cat/&#x27;</span>+filename)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> filename <span class="keyword">in</span> train_dog:</span><br><span class="line">    os.symlink(<span class="string">&#x27;../../train/&#x27;</span>+filename, <span class="string">&#x27;train2/dog/&#x27;</span>+filename)</span><br></pre></td></tr></table></figure>
+
+<p>我们可以从下面看到文件夹的结构，train2里面有两个文件夹，分别是猫和狗，每个文件夹里是12500张图。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">├── test [12500 images]</span><br><span class="line">├── test.zip</span><br><span class="line">├── test2</span><br><span class="line">│   └── test -&gt; ../test/</span><br><span class="line">├── train [25000 images]</span><br><span class="line">├── train.zip</span><br><span class="line">└── train2</span><br><span class="line">    ├── cat [12500 images]</span><br><span class="line">    └── dog [12500 images]</span><br></pre></td></tr></table></figure>
+
+<h1 id="导出特征向量"><a href="#导出特征向量" class="headerlink" title="导出特征向量"></a>导出特征向量</h1><p>对于这个题目来说，使用预训练的网络是最好不过的了，经过前期的测试，我们测试了 ResNet50 等不同的网络，但是排名都不高，现在看来只有一两百名的样子，所以我们需要提高我们的模型表现。那么一种有效的方法是综合各个不同的模型，从而得到不错的效果，兼听则明。如果是直接在一个巨大的网络后面加我们的全连接，那么训练10代就需要跑十次巨大的网络，而且我们的卷积层都是不可训练的，那么这个计算就是浪费的。所以我们可以将多个不同的网络输出的特征向量先保存下来，以便后续的训练，这样做的好处是我们一旦保存了特征向量，即使是在普通笔记本上也能轻松训练。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> keras.applications <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> keras.preprocessing.image <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> h5py</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">write_gap</span>(<span class="params">MODEL, image_size, lambda_func=<span class="literal">None</span></span>):</span><br><span class="line">    width = image_size[<span class="number">0</span>]</span><br><span class="line">    height = image_size[<span class="number">1</span>]</span><br><span class="line">    input_tensor = Input((height, width, <span class="number">3</span>))</span><br><span class="line">    x = input_tensor</span><br><span class="line">    <span class="keyword">if</span> lambda_func:</span><br><span class="line">        x = Lambda(lambda_func)(x)</span><br><span class="line">    </span><br><span class="line">    base_model = MODEL(input_tensor=x, weights=<span class="string">&#x27;imagenet&#x27;</span>, include_top=<span class="literal">False</span>)</span><br><span class="line">    model = Model(base_model.<span class="built_in">input</span>, GlobalAveragePooling2D()(base_model.output))</span><br><span class="line"></span><br><span class="line">    gen = ImageDataGenerator()</span><br><span class="line">    train_generator = gen.flow_from_directory(<span class="string">&quot;train2&quot;</span>, image_size, shuffle=<span class="literal">False</span>, </span><br><span class="line">                                              batch_size=<span class="number">16</span>)</span><br><span class="line">    test_generator = gen.flow_from_directory(<span class="string">&quot;test2&quot;</span>, image_size, shuffle=<span class="literal">False</span>, </span><br><span class="line">                                             batch_size=<span class="number">16</span>, class_mode=<span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">    train = model.predict_generator(train_generator, train_generator.nb_sample)</span><br><span class="line">    test = model.predict_generator(test_generator, test_generator.nb_sample)</span><br><span class="line">    <span class="keyword">with</span> h5py.File(<span class="string">&quot;gap_%s.h5&quot;</span>%MODEL.func_name) <span class="keyword">as</span> h:</span><br><span class="line">        h.create_dataset(<span class="string">&quot;train&quot;</span>, data=train)</span><br><span class="line">        h.create_dataset(<span class="string">&quot;test&quot;</span>, data=test)</span><br><span class="line">        h.create_dataset(<span class="string">&quot;label&quot;</span>, data=train_generator.classes)</span><br><span class="line"></span><br><span class="line">write_gap(ResNet50, (<span class="number">224</span>, <span class="number">224</span>))</span><br><span class="line">write_gap(InceptionV3, (<span class="number">299</span>, <span class="number">299</span>), inception_v3.preprocess_input)</span><br><span class="line">write_gap(Xception, (<span class="number">299</span>, <span class="number">299</span>), xception.preprocess_input)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>为了复用代码，我觉得写一个函数是非常有必要的，那么我们的函数就需要输入模型，输入图片的大小，以及<a target="_blank" rel="noopener" href="https://github.com/fchollet/keras/blob/master/keras/applications/inception_v3.py#L389-L393">预处理函数</a>，因为 Xception 和 Inception V3 都需要将数据限定在 <code>(-1, 1)</code> 的范围内，然后我们利用 <code>GlobalAveragePooling2D</code> 将卷积层输出的每个激活图直接求平均值，不然输出的文件会非常大，且容易过拟合。然后我们定义了两个 generator，利用 <code>model.predict_generator</code> 函数来导出特征向量，最后我们选择了 ResNet50, Xception, Inception V3 这三个模型（如果有兴趣也可以导出 VGG 的特征向量）。每个模型导出的时间都挺长的，在 aws p2.xlarge 上大概需要用<strong>十分钟到二十分钟</strong>。 这三个模型都是在 <a target="_blank" rel="noopener" href="http://www.image-net.org/">ImageNet</a> 上面预训练过的，所以每一个模型都可以说是身经百战，通过这三个老司机导出的特征向量，可以高度概括一张图片有哪些内容。</p>
+<p>最后导出的 h5 文件包括三个 numpy 数组：</p>
+<ul>
+<li>train (25000, 2048)</li>
+<li>test (12500, 2048)</li>
+<li>label (25000,)</li>
+</ul>
+<p>如果你不想自己计算特征向量，可以直接在这里下载导出的文件：<a target="_blank" rel="noopener" href="https://github.com/ypwhs/dogs_vs_cats/releases/tag/gap">GitHub releases</a> <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1pK7psxX#list/path=%2Fdataset%2FDogs%20vs%20Cats">百度云</a></p>
+<p>参考资料：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1512.03385">ResNet</a> 15.12</li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1512.00567">Inception v3</a> 15.12</li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1610.02357">Xception</a> 16.10</li>
+</ul>
+<h1 id="载入特征向量"><a href="#载入特征向量" class="headerlink" title="载入特征向量"></a>载入特征向量</h1><p>经过上面的代码以后，我们获得了三个特征向量文件，分别是：</p>
+<ul>
+<li>gap_ResNet50.h5</li>
+<li>gap_InceptionV3.h5</li>
+<li>gap_Xception.h5</li>
+</ul>
+<p>我们需要载入这些特征向量，并且将它们合成一条特征向量，然后记得把 X 和 y 打乱，不然之后我们设置<code>validation_split</code>的时候会出问题。这里设置了 numpy 的随机数种子为2017，这样可以确保每个人跑这个代码，输出都能是一样的结果。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> h5py</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.utils <span class="keyword">import</span> shuffle</span><br><span class="line">np.random.seed(<span class="number">2017</span>)</span><br><span class="line"></span><br><span class="line">X_train = []</span><br><span class="line">X_test = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> filename <span class="keyword">in</span> [<span class="string">&quot;gap_ResNet50.h5&quot;</span>, <span class="string">&quot;gap_Xception.h5&quot;</span>, <span class="string">&quot;gap_InceptionV3.h5&quot;</span>]:</span><br><span class="line">    <span class="keyword">with</span> h5py.File(filename, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> h:</span><br><span class="line">        X_train.append(np.array(h[<span class="string">&#x27;train&#x27;</span>]))</span><br><span class="line">        X_test.append(np.array(h[<span class="string">&#x27;test&#x27;</span>]))</span><br><span class="line">        y_train = np.array(h[<span class="string">&#x27;label&#x27;</span>])</span><br><span class="line"></span><br><span class="line">X_train = np.concatenate(X_train, axis=<span class="number">1</span>)</span><br><span class="line">X_test = np.concatenate(X_test, axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">X_train, y_train = shuffle(X_train, y_train)</span><br></pre></td></tr></table></figure>
+
+<h1 id="构建模型"><a href="#构建模型" class="headerlink" title="构建模型"></a>构建模型</h1><p>模型的构建很简单，直接 dropout 然后分类就好了。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">np.random.seed(<span class="number">2017</span>)</span><br><span class="line"></span><br><span class="line">input_tensor = Input(X_train.shape[<span class="number">1</span>:])</span><br><span class="line">x = Dropout(<span class="number">0.5</span>)(input_tensor)</span><br><span class="line">x = Dense(<span class="number">1</span>, activation=<span class="string">&#x27;sigmoid&#x27;</span>)(x)</span><br><span class="line">model = Model(input_tensor, x)</span><br><span class="line"></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&#x27;adadelta&#x27;</span>,</span><br><span class="line">              loss=<span class="string">&#x27;binary_crossentropy&#x27;</span>,</span><br><span class="line">              metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>我们还可以对模型进行可视化：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">digraph G&#123;</span><br><span class="line">    node [shape=record]</span><br><span class="line">    a[label=&quot;ResNet50|&#123;input:|output:&#125;|&#123;(224, 224, 3)|(2048)&#125;&quot;]</span><br><span class="line">    b[label=&quot;InceptionV3|&#123;input:|output:&#125;|&#123;(299, 299, 3)|(2048)&#125;&quot;]</span><br><span class="line">    c[label=&quot;Xception|&#123;input:|output:&#125;|&#123;(299, 299, 3)|(2048)&#125;&quot;]</span><br><span class="line">    Merge[label=&quot;Merge|&#123;input:|output:&#125;|&#123;(3, 2048)|(6144)&#125;&quot;]</span><br><span class="line">    Dropout[label=&quot;Dropout|Rate:|0.5&quot;]</span><br><span class="line">    Output[label=&quot;Output|&#123;input:|output:&#125;|&#123;(6144)|(1)&#125;&quot;]</span><br><span class="line">    Image -&gt; a -&gt; Merge</span><br><span class="line">    Image -&gt; b -&gt; Merge</span><br><span class="line">    Image -&gt; c -&gt; Merge</span><br><span class="line">    Merge -&gt; Dropout -&gt; Output</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="/dogs-vs-cats-2/model.png" class="">
+
+<h1 id="训练模型"><a href="#训练模型" class="headerlink" title="训练模型"></a>训练模型</h1><p>模型构件好了以后，我们就可以进行训练了，这里我们设置验证集大小为 20% ，也就是说训练集是20000张图，验证集是5000张图。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.fit(X_train, y_train, batch_size=<span class="number">128</span>, nb_epoch=<span class="number">8</span>, validation_split=<span class="number">0.2</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Train on 20000 samples, validate on 5000 samples</span><br><span class="line">Epoch 1/8</span><br><span class="line">20000/20000 [==============================] - 1s - loss: 0.1193 - acc: 0.9591 - val_loss: 0.0283 - val_acc: 0.9936</span><br><span class="line">Epoch 2/8</span><br><span class="line">20000/20000 [==============================] - 0s - loss: 0.0319 - acc: 0.9898 - val_loss: 0.0181 - val_acc: 0.9952</span><br><span class="line">Epoch 3/8</span><br><span class="line">20000/20000 [==============================] - 0s - loss: 0.0252 - acc: 0.9916 - val_loss: 0.0172 - val_acc: 0.9934</span><br><span class="line">Epoch 4/8</span><br><span class="line">20000/20000 [==============================] - 0s - loss: 0.0214 - acc: 0.9936 - val_loss: 0.0140 - val_acc: 0.9956</span><br><span class="line">Epoch 5/8</span><br><span class="line">20000/20000 [==============================] - 0s - loss: 0.0200 - acc: 0.9926 - val_loss: 0.0139 - val_acc: 0.9954</span><br><span class="line">Epoch 6/8</span><br><span class="line">20000/20000 [==============================] - 0s - loss: 0.0189 - acc: 0.9933 - val_loss: 0.0129 - val_acc: 0.9956</span><br><span class="line">Epoch 7/8</span><br><span class="line">20000/20000 [==============================] - 0s - loss: 0.0170 - acc: 0.9946 - val_loss: 0.0123 - val_acc: 0.9960</span><br><span class="line">Epoch 8/8</span><br><span class="line">20000/20000 [==============================] - 0s - loss: 0.0163 - acc: 0.9945 - val_loss: 0.0119 - val_acc: 0.9958</span><br><span class="line">Out[4]:</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到，训练的过程很快，十秒以内就能训练完，准确率也很高，在验证集上最高达到了99.6%的准确率，这相当于一千张图只错了4张，可以说比我还厉害。</p>
+<h1 id="预测测试集"><a href="#预测测试集" class="headerlink" title="预测测试集"></a>预测测试集</h1><p>模型训练好以后，我们就可以对测试集进行预测，然后提交到 kaggle 上看看最终成绩了。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">y_pred = model.predict(X_test, verbose=<span class="number">1</span>)</span><br><span class="line">y_pred = y_pred.clip(<span class="built_in">min</span>=<span class="number">0.005</span>, <span class="built_in">max</span>=<span class="number">0.995</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> keras.preprocessing.image <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">df = pd.read_csv(<span class="string">&quot;sample_submission.csv&quot;</span>)</span><br><span class="line"></span><br><span class="line">gen = ImageDataGenerator()</span><br><span class="line">test_generator = gen.flow_from_directory(<span class="string">&quot;test2&quot;</span>, (<span class="number">224</span>, <span class="number">224</span>), shuffle=<span class="literal">False</span>, </span><br><span class="line">                                         batch_size=<span class="number">16</span>, class_mode=<span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i, fname <span class="keyword">in</span> <span class="built_in">enumerate</span>(test_generator.filenames):</span><br><span class="line">    index = <span class="built_in">int</span>(fname[fname.rfind(<span class="string">&#x27;/&#x27;</span>)+<span class="number">1</span>:fname.rfind(<span class="string">&#x27;.&#x27;</span>)])</span><br><span class="line">    df.set_value(index-<span class="number">1</span>, <span class="string">&#x27;label&#x27;</span>, y_pred[i])</span><br><span class="line"></span><br><span class="line">df.to_csv(<span class="string">&#x27;pred.csv&#x27;</span>, index=<span class="literal">None</span>)</span><br><span class="line">df.head(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+
+<p>预测这里我们用到了一个小技巧，我们将每个预测值限制到了 [0.005, 0.995] 个区间内，这个原因很简单，kaggle 官方的评估标准是 <a target="_blank" rel="noopener" href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/details/evaluation">LogLoss</a>，对于预测正确的样本，0.995 和 1 相差无几，但是对于预测错误的样本，0 和 0.005 的差距非常大，是 15 和 2 的差别。参考 <a target="_blank" rel="noopener" href="https://www.kaggle.com/wiki/LogLoss">LogLoss 如何处理无穷大问题</a>，下面的表达式就是二分类问题的 LogLoss 定义。</p>
+<p>$$\textrm{LogLoss} &#x3D; - \frac{1}{n} \sum_{i&#x3D;1}^n \left[ y_i \log(\hat{y}_i) + (1 - y_i) \log(1 - \hat{y}_i)\right]$$</p>
+<img src="/dogs-vs-cats-2/logloss.png" class="">
+
+<p>还有一个值得一提的地方就是测试集的文件名不是按 1, 2, 3 这样排的，而是按下面的顺序排列的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[&#x27;test/1.jpg&#x27;,</span><br><span class="line"> &#x27;test/10.jpg&#x27;,</span><br><span class="line"> &#x27;test/100.jpg&#x27;,</span><br><span class="line"> &#x27;test/1000.jpg&#x27;,</span><br><span class="line"> &#x27;test/10000.jpg&#x27;,</span><br><span class="line"> &#x27;test/10001.jpg&#x27;,</span><br><span class="line"> &#x27;test/10002.jpg&#x27;,</span><br><span class="line"> &#x27;test/10003.jpg&#x27;,</span><br><span class="line"> ......</span><br></pre></td></tr></table></figure>
+
+<p>因此我们需要对每个文件名进行处理，然后赋值到 df 里，最后导出为 csv 文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">	id	label</span><br><span class="line">0	1	0.995</span><br><span class="line">1	2	0.995</span><br><span class="line">2	3	0.995</span><br><span class="line">3	4	0.995</span><br><span class="line">4	5	0.005</span><br><span class="line">5	6	0.005</span><br><span class="line">6	7	0.005</span><br><span class="line">7	8	0.005</span><br><span class="line">8	9	0.005</span><br><span class="line">9	10	0.005</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>我们可以从上图中看到，模型对于前十个样本都给出了很肯定的预测，提交到 kaggle 以后，得分也是很棒，0.04141，在全球排名中可以排到20&#x2F;1314。我们如果要继续优化模型表现，可以使用更棒的预训练模型来导出特征向量，或者对预训练模型进行微调（fine-tune），或者进行数据增强（data augmentation）等。</p>
+<p>参考链接：<a target="_blank" rel="noopener" href="http://keras-cn.readthedocs.io/en/latest/blog/image_classification_using_very_little_data/">面向小数据集构建图像分类模型</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Udacity/" rel="tag"># Udacity</a>
+          </div>
+
+        
+
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨培文</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
