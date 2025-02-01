@@ -14,9 +14,9 @@
 
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":["always"],"padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="杨培文的 blog">
 <meta property="og:type" content="website">
@@ -126,7 +126,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -162,6 +162,194 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">docker常用命令</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-11-18 17:04:48" itemprop="dateCreated datePublished" datetime="2015-11-18T17:04:48+08:00">2015-11-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>创建一个 docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu:14.04</span><br></pre></td></tr></table></figure> 启动一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -t -i --cpuset-cpus=0-7 wrtnode-2r-sdk /bin/bash</span><br></pre></td></tr></table></figure>
+恢复运行中的docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker attach wrtnode-2r-sdk</span><br></pre></td></tr></table></figure> 保存一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker commit 7d mycaffe</span><br></pre></td></tr></table></figure>
+导出一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker export 4bf6cd922cfd &gt; wrtnode-2r-sdk.tar</span><br></pre></td></tr></table></figure> 导入一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat wrtnode-2r-sdk.tar | docker import - wrtnode-2r-sdk:latest</span><br></pre></td></tr></table></figure>
+删除一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f wrtnode-2r-sdk</span><br></pre></td></tr></table></figure> 修改DNS： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;nameserver 8.8.8.8&quot; &gt; /etc/resolv.conf</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/WRTnode%202R%20%E6%95%91%E7%A0%96%E6%95%99%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/WRTnode%202R%20%E6%95%91%E7%A0%96%E6%95%99%E7%A8%8B/" class="post-title-link" itemprop="url">WRTnode 2R 救砖教程</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-11-03 16:13:42" itemprop="dateCreated datePublished" datetime="2015-11-03T16:13:42+08:00">2015-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>当你修改了网络设置，或者刷了其他型号的固件，或者各种复杂的原因，导致了你无法连接上WRTnode，那么我们就可以认为WRTnode已经变成砖头了。这时候就需要救砖。</p>
+<p>可能需要的软件：<a href="/images/tftp.zip">tftp.zip</a>
+包括tftpd32，putty，sscom42，openwrt-ramips-mt7628-wrtnode2r-squashfs-sysupgrade.bin（自己编译的WRTnode
+2R固件，带中文，有点偏大是因为我之前编译过opencv之类的东西可能有依赖库没有去掉）</p>
+<p>首先我们需要一个USB转TTL，通过它我们可以让电脑连上WRTnode的UART接口。这是单片机常用的通讯方式，这里不作详细介绍。接线方式：</p>
+<p>WRTndoe ---- USB to TTL TX0 ---- RXD RX0 ---- TXD GND ---- GND</p>
+<p><a href="/images/2R-pin-map.jpg"><img
+src="/images/2R-pin-map.jpg" /></a></p>
+<p>如图所示：</p>
+<p><a href="/images/IMG_0674.jpg"><img
+src="/images/IMG_0674.jpg" /></a></p>
+<p>然后我们还需要连接上网线口，如图所示：</p>
+<p><a href="/images/IMG_0675.jpg"><img
+src="/images/IMG_0675.jpg" /></a></p>
+<p>我们连接网线以后，需要设置静态IP，设置方法如下：</p>
+<p><a href="/images/Snip20151103_10.png"><img
+src="/images/Snip20151103_10.png" /></a></p>
+<p>然后我们打开串口助手，上电，可以看到类似的信息输出：</p>
+<p><a href="/images/Snip20151103_5.png"><img
+src="/images/Snip20151103_5.png" /></a></p>
+<p>很显然内核挂了，我们打开Tftpd32软件，配置如图所示：<a
+href="/images/无标题21.png"><img src="/images/无标题21.png" /></a></p>
+<p>配置好之后将WRTnode的电断掉再插上，再次重启，然后在出现下面这段话的时候按2，然后按y来配置IP等信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Please choose the operation: </span><br><span class="line"></span><br><span class="line">   1: Load system code to SDRAM via TFTP. </span><br><span class="line"></span><br><span class="line">   2: Load system code then write to Flash via TFTP. </span><br><span class="line"></span><br><span class="line">   3: Boot system code via Flash (default).</span><br><span class="line"></span><br><span class="line">   4: Entr boot command line interface.</span><br><span class="line"></span><br><span class="line">   7: Load Boot Loader code then write to Flash via Serial. </span><br><span class="line"></span><br><span class="line">   9: Load Boot Loader code then write to Flash via TFTP.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">You choosed 2</span><br><span class="line"></span><br><span class="line">2: System Load Linux Kernel then write to Flash via TFTP. </span><br><span class="line"></span><br><span class="line"> Warning!! Erase Linux in Flash then burn new one. Are you sure?(Y/N)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Please Input new ones /or Ctrl-C to discard</span><br><span class="line"></span><br><span class="line">	Input device IP (192.168.1.1) ==:192.168.1.1</span><br><span class="line"></span><br><span class="line">	Input server IP (192.168.1.100) ==:192.168.1.100</span><br><span class="line"></span><br><span class="line">	Input Linux Kernel filename () ==:test.bin</span><br></pre></td></tr></table></figure>
+<p>当你按下回车的那一瞬间，Tftpd32就会开始传输你选择的固件。</p>
+<p><a href="/images/无标题.png"><img src="/images/无标题.png" /></a></p>
+<p>传输完成之后，WRTnode就会开始进行刷机，这时候注意千万不能断电。</p>
+<p><a href="/images/无标题2.png"><img
+src="/images/无标题2.png" /></a></p>
+<p>最后我们可以看到，WRTnode已经可以正常启动！</p>
+<video width=100% src=/images/A-55.mp4 controls />
+<p>久违的闪瞎眼的LED！</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -976,165 +1164,8 @@ src="/images/Snip20151015_47.png" /></a></p>
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ypw.io/sublime%20text%202%20%E5%AE%89%E8%A3%85%EF%BC%8C%E9%85%8D%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="杨培文">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="杨培文">
-      <meta itemprop="description" content="杨培文的 blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 杨培文">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/sublime%20text%202%20%E5%AE%89%E8%A3%85%EF%BC%8C%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">sublime text 2 安装，配置</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2015-05-18 11:31:27" itemprop="dateCreated datePublished" datetime="2015-05-18T11:31:27+08:00">2015-05-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>安装： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:webupd8team/sublime-text-2</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install sublime-text</span><br></pre></td></tr></table></figure></p>
-<p>包管理器: <a
-target="_blank" rel="noopener" href="https://packagecontrol.io/installation#st2">https://packagecontrol.io/installation#st2</a></p>
-<p>Build System:</p>
-<p>在OS X 中使用Sublime Text编译和运行C/C++。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> &quot;cmd&quot;: [&quot;bash&quot;, &quot;-c&quot;, &quot;g++ &#x27;$&#123;file&#125;&#x27; -o &#x27;$&#123;file_path&#125;/$&#123;file_base_name&#125;&#x27; &amp;&amp; osascript -e &#x27;tell application \&quot;Terminal\&quot; to activate do script \&quot;clear&amp;&amp;cd \\\&quot;$&#123;file_path&#125;\\\&quot;&amp;&amp;\\\&quot;$&#123;file_path&#125;/$&#123;file_base_name&#125;\\\&quot; &amp;&amp; echo \\\&quot;Finished \\\&quot;$&#123;file_base_name&#125; &amp;&amp;exit\&quot;&#x27;&quot;],</span><br><span class="line"> &quot;file_regex&quot;: &quot;^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$&quot;,</span><br><span class="line"> &quot;working_dir&quot;: &quot;$&#123;file_path&#125;&quot;,</span><br><span class="line"> &quot;selector&quot;: &quot;source.c, source.c++&quot;,</span><br><span class="line"></span><br><span class="line"> &quot;variants&quot;:</span><br><span class="line"> [</span><br><span class="line"> &#123;</span><br><span class="line"> &quot;name&quot;: &quot;Run&quot;,</span><br><span class="line"> &quot;cmd&quot;: [&quot;bash&quot;, &quot;-c&quot;, &quot;g++ &#x27;$&#123;file&#125;&#x27; -o &#x27;$&#123;file_path&#125;/$&#123;file_base_name&#125;&#x27; &amp;&amp; &#x27;$&#123;file_path&#125;/$&#123;file_base_name&#125;&#x27;&quot;]</span><br><span class="line"> &#125;</span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-iTerm运行C/C++程序： <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;cmd&quot;</span>: [<span class="string">&quot;bash&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;g++ &#x27;<span class="variable">$&#123;file&#125;</span>&#x27; -o &#x27;<span class="variable">$&#123;file_path&#125;</span>/<span class="variable">$&#123;file_base_name&#125;</span>&#x27; &amp;&amp; osascript -e &#x27;tell app \&quot;iTerm\&quot;&#x27; -e &#x27;set newWindow to (create window with default profile command \&quot;/bin/zsh\&quot;)&#x27; -e &#x27;tell current session of current window&#x27; -e &#x27;write text \&quot;clear &amp;&amp; cd \\\&quot;<span class="variable">$&#123;file_path&#125;</span>\\\&quot;&amp;&amp;\\\&quot;<span class="variable">$&#123;file_path&#125;</span>/<span class="variable">$&#123;file_base_name&#125;</span>\\\&quot; &amp;&amp; echo \\\&quot;Finished \\\&quot;<span class="variable">$&#123;file_base_name&#125;</span>\&quot;&#x27; -e &#x27;end tell&#x27; -e &#x27;end tell&#x27;&quot;</span>],</span><br><span class="line">  <span class="string">&quot;file_regex&quot;</span>: <span class="string">&quot;^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$&quot;</span>,</span><br><span class="line">  <span class="string">&quot;working_dir&quot;</span>: <span class="string">&quot;<span class="variable">$&#123;file_path&#125;</span>&quot;</span>,</span><br><span class="line">  <span class="string">&quot;selector&quot;</span>: <span class="string">&quot;source.c, source.c++, source.cpp&quot;</span>,</span><br><span class="line"></span><br><span class="line">  <span class="string">&quot;variants&quot;</span>:</span><br><span class="line">  [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Run&quot;</span>,</span><br><span class="line">      <span class="string">&quot;cmd&quot;</span>: [<span class="string">&quot;bash&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;g++ &#x27;<span class="variable">$&#123;file&#125;</span>&#x27; -o &#x27;<span class="variable">$&#123;file_path&#125;</span>/<span class="variable">$&#123;file_base_name&#125;</span>&#x27; &amp;&amp; &#x27;<span class="variable">$&#123;file_path&#125;</span>/<span class="variable">$&#123;file_base_name&#125;</span>&#x27;&quot;</span>]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ypw.io/%E5%B0%86%E4%BF%9D%E5%AD%98%E4%B8%8B%E6%9D%A5%E7%9A%84%E5%9B%BE%E4%B9%A6%E9%A6%86%E6%95%B0%E6%8D%AEtxt%E8%BD%AC%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="杨培文">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="杨培文">
-      <meta itemprop="description" content="杨培文的 blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 杨培文">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/%E5%B0%86%E4%BF%9D%E5%AD%98%E4%B8%8B%E6%9D%A5%E7%9A%84%E5%9B%BE%E4%B9%A6%E9%A6%86%E6%95%B0%E6%8D%AEtxt%E8%BD%AC%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD/" class="post-title-link" itemprop="url">将保存下来的图书馆数据txt转到数据库中</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2015-05-06 21:16:31" itemprop="dateCreated datePublished" datetime="2015-05-06T21:16:31+08:00">2015-05-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line">__author__ = <span class="string">&#x27;Administrator&#x27;</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">fileall = <span class="built_in">open</span>(<span class="string">&quot;libraryall.txt&quot;</span>, <span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">fileall.seek(-<span class="number">10000</span>, os.SEEK_END)</span><br><span class="line">text = <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">getfilename</span>(<span class="params">myurl</span>):</span><br><span class="line">    <span class="keyword">return</span> myurl[myurl.rindex(<span class="string">&#x27;/&#x27;</span>)+<span class="number">1</span>:]</span><br><span class="line"></span><br><span class="line">lines = fileall.readlines()</span><br><span class="line"></span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        text = lines[i]</span><br><span class="line">        <span class="keyword">if</span> text.find(<span class="string">&quot;http://libopac.btbu.edu.cn&quot;</span>) &gt;= <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">break</span>  <span class="comment"># 循环找到起点,网址</span></span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> i &gt;= <span class="built_in">len</span>(lines):</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">if</span> i &gt;= <span class="built_in">len</span>(lines):</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    link = text.strip()</span><br><span class="line">    bookid = getfilename(text).strip()</span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line">    name = lines[i].strip()  <span class="comment"># 下一行是书名</span></span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line">    detail = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        detail += lines[i]</span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(lines[i]) &lt;= <span class="number">2</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    detail = detail.strip()</span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line">    guancang = lines[i].strip()</span><br><span class="line">    guancang = guancang.replace(<span class="string">&quot;false&quot;</span>, <span class="string">&quot;False&quot;</span>)</span><br><span class="line">    guancang = guancang.replace(<span class="string">&quot;true&quot;</span>, <span class="string">&quot;True&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span> link, bookid, name, detail, guancang</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="built_in">exec</span>(<span class="string">&quot;guancang = &quot;</span>+guancang)</span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> guancang:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;-----------&quot;</span></span><br><span class="line">            <span class="keyword">for</span> item2 <span class="keyword">in</span> item:</span><br><span class="line">                <span class="keyword">if</span> (item2 == <span class="string">&#x27;索书号&#x27;</span>) | (item2 == <span class="string">&#x27;条形码&#x27;</span>) | (item2 == <span class="string">&#x27;部门名称&#x27;</span>) | (item2 == <span class="string">&#x27;备注&#x27;</span>):</span><br><span class="line">                    <span class="built_in">print</span> item2, item[item2]</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;\n&quot;</span></span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -1143,15 +1174,14 @@ iTerm运行C/C++程序： <figure class="highlight sh"><table><tr><td class="gut
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">杨培文</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">杨培文</span>
+  </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
@@ -1174,6 +1204,8 @@ iTerm运行C/C++程序： <figure class="highlight sh"><table><tr><td class="gut
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
+
+
 
 
 

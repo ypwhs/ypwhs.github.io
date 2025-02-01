@@ -14,9 +14,9 @@
 
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":["always"],"padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="杨培文的 blog">
 <meta property="og:type" content="website">
@@ -126,7 +126,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -162,6 +162,274 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/deepseek_webui/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/deepseek_webui/" class="post-title-link" itemprop="url">部署 DeepSeek R1 32B + Open WebUI 教程</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-02-01 18:01:27 / 修改时间：18:04:07" itemprop="dateCreated datePublished" datetime="2025-02-01T18:01:27+08:00">2025-02-01</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="DeepSeek-R1-厉害在哪"><a href="#DeepSeek-R1-厉害在哪" class="headerlink" title="DeepSeek R1 厉害在哪"></a>DeepSeek R1 厉害在哪</h1><p>我觉得最主要的点在于，它具备思维的能力，是一个有智商的模型。</p>
+<p>不同于 ChatGPT 的 gpt-3.5、gpt-4、gpt-4o 等模型，根据你的问题输出结果，即使说错了，也在错误的道路上狂奔。</p>
+<p>R1 是能够思考，能够提出猜想，验证猜想，逐渐思考出正确答案的一个 LLM。这使得它的逻辑思维能力达到了一个新的高度。它的能力类似于 OpenAI 的 o1 模型，但是 o1 没有输出思维链，R1 会输出它的思维链，也就是思考的过程，所以我认为 R1 是目前开源的最强模型。</p>
+<h1 id="为什么要自己部署"><a href="#为什么要自己部署" class="headerlink" title="为什么要自己部署"></a>为什么要自己部署</h1><p>一般来说，大家部署 LLM 都有这些目的：</p>
+<ul>
+<li>探索，希望能够亲手试试最前沿的科技</li>
+<li>折腾，希望挑战自己，探索没做过的事情</li>
+<li>隐私，不希望自己的问答被发布到互联网上，成为 LLM 的燃料</li>
+<li>商业，公司不希望任何核心代码发布到互联网上，担心商业泄密</li>
+<li>稳定，目前 DeepSeek 的服务很不稳定，需要给自己留条后路</li>
+</ul>
+<p>对我来说，每一点都是我的原因。</p>
+<p>接下来让我们开始部署模型。</p>
+<h1 id="部署模型推理服务-Ollama"><a href="#部署模型推理服务-Ollama" class="headerlink" title="部署模型推理服务 Ollama"></a>部署模型推理服务 Ollama</h1><h2 id="首先安装-Ollama"><a href="#首先安装-Ollama" class="headerlink" title="首先安装 Ollama"></a>首先安装 Ollama</h2><p><a target="_blank" rel="noopener" href="https://ollama.com/">https://ollama.com/</a></p>
+<p><img src="/ollama_install.png"></p>
+<p>Windows、Linux、Mac 都支持，M 系列的芯片、英伟达系列的显卡的支持也都很到位，直接下载下来安装即可。</p>
+<h2 id="然后下载模型"><a href="#然后下载模型" class="headerlink" title="然后下载模型"></a>然后下载模型</h2><p>参考链接：<a target="_blank" rel="noopener" href="https://ollama.com/library/deepseek-r1:32b">https://ollama.com/library/deepseek-r1:32b</a></p>
+<p>使用下面的命令下载模型：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ollama pull deepseek-r1:32b</span><br><span class="line"></span><br><span class="line"><span class="comment"># ollama pull deepseek-r1:70b</span></span><br></pre></td></tr></table></figure>
+
+<p>显存超过 40GB，可以考虑 部署 70b 的模型，否则建议使用 32b 的模型。</p>
+<p>显存多少 GB 就部署大概多少 b 的模型，比如 24GB 部署 32b，16GB 部署 14b，8GB 部署 7b。如果出现 OOM，也就是爆显存了，就部署小一档的模型。</p>
+<p><img src="upload://e9nWTmtkOthUTLBCPJfC16sPYwC.png" alt="image|690x328"></p>
+<p>如果有大佬想部署 671b 的原版模型，建议配置是八卡 H200，能达到 3872 token&#x2F;s，显存是141GB * 8 &#x3D; 1128GB。参考链接：<a target="_blank" rel="noopener" href="https://blogs.nvidia.com/blog/deepseek-r1-nim-microservice/">https://blogs.nvidia.com/blog/deepseek-r1-nim-microservice/</a></p>
+<h2 id="验证模型"><a href="#验证模型" class="headerlink" title="验证模型"></a>验证模型</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ollama run deepseek-r1:32b</span><br><span class="line"></span><br><span class="line"><span class="comment"># 问它</span></span><br><span class="line">1+1=多少</span><br></pre></td></tr></table></figure>
+
+<p>输出 1+1&#x3D;2 就说明模型下载好了。</p>
+<p><img src="upload://uzdoJLUiqsqO0KepfakGHioQCoc.png" alt="image|580x328"></p>
+<h1 id="部署前端服务-Open-WebUI"><a href="#部署前端服务-Open-WebUI" class="headerlink" title="部署前端服务 Open WebUI"></a>部署前端服务 Open WebUI</h1><p>建议使用 Docker 部署，不需要配置环境，避免环境冲突的影响。</p>
+<blockquote>
+<p>若希望使用 Python 部署，参考官方文档：<a target="_blank" rel="noopener" href="https://docs.openwebui.com/#manual-installation">https://docs.openwebui.com/#manual-installation</a></p>
+</blockquote>
+<h2 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h2><p>直接在官网下载：</p>
+<p><a target="_blank" rel="noopener" href="https://www.docker.com/">https://www.docker.com/</a></p>
+<h2 id="你可能需要配置"><a href="#你可能需要配置" class="headerlink" title="你可能需要配置"></a>你可能需要配置</h2><p>你可能需要配置这个：<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/cli/proxy/">https://docs.docker.com/engine/cli/proxy/</a></p>
+<p><img src="upload://9In0CNTCrIfpv1BbJlKuJcMPv3d.png" alt="image|656x500"></p>
+<h2 id="使用-docker-compose-部署"><a href="#使用-docker-compose-部署" class="headerlink" title="使用 docker-compose 部署"></a>使用 docker-compose 部署</h2><p>首先将下面的文字保存为 docker-compose.yaml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.8&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">open-webui:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ghcr.io/open-webui/open-webui:main</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">open-webui</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3000:8080&quot;</span></span><br><span class="line">    <span class="attr">extra_hosts:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;host.docker.internal:host-gateway&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/backend/data</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ENABLE_OPENAI_API=False</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ENABLE_RAG_WEB_SEARCH=True</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RAG_WEB_SEARCH_ENGINE=&quot;duckduckgo&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RAG_WEB_SEARCH_RESULT_COUNT=3</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RAG_WEB_SEARCH_CONCURRENT_REQUESTS=10</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br></pre></td></tr></table></figure>
+
+<p>在同级文件夹创建 data 目录，然后使用下面的命令启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up</span><br></pre></td></tr></table></figure>
+
+<p>第一次启动需要较长时间，大概 2 分钟。启动成功之后是这样显示的：</p>
+<p><img src="upload://mymxvkseYr10EuxhfQdqtOrbJJa.png" alt="image|690x270"></p>
+<p>其他常见命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull ghcr.io/open-webui/open-webui:main  <span class="comment"># 手动下载镜像</span></span><br><span class="line">docker-compose up -d  <span class="comment"># 后台启动服务</span></span><br><span class="line">docker <span class="built_in">rm</span> -f open-webui  <span class="comment"># 删除正在运行的 open-webui</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="配置-Open-WebUI"><a href="#配置-Open-WebUI" class="headerlink" title="配置 Open WebUI"></a>配置 Open WebUI</h2><p>进入页面：<a target="_blank" rel="noopener" href="http://localhost:3000/">http://localhost:3000/</a></p>
+<p>第一次启动可以看到这个提示：</p>
+<p><img src="upload://oQMrR0aETI6HlVVOYTt7IUZta05.png" alt="image|690x384, 75%"></p>
+<p>根据提示创建管理员账号：</p>
+<p><img src="upload://hCWA2mAL3DpZVJEd4da1WF5phdR.png" alt="image|605x500, 75%"></p>
+<p>然后就可以开始使用了：</p>
+<p><img src="upload://b6pN6DyYgNXS3NFmoW9cTLJarIG.png" alt="image|320x500"></p>
+<h2 id="网络搜索"><a href="#网络搜索" class="headerlink" title="网络搜索"></a>网络搜索</h2><p>首先我们主要在管理员面板开启联网搜索，选择 duckduckgo 搜索引擎：<a target="_blank" rel="noopener" href="http://localhost:3000/admin/settings">http://localhost:3000/admin/settings</a></p>
+<p><img src="upload://cO5YMEHBnIu6A4xAVCrwowOip0U.png" alt="image|690x363"></p>
+<p>然后记得点保存。参考文档：<a target="_blank" rel="noopener" href="https://docs.openwebui.com/tutorials/web_search">https://docs.openwebui.com/tutorials/web_search</a></p>
+<p>最后我们在聊天框中打开联网搜索的功能：</p>
+<p><img src="upload://lPkn54ogsKzNMyM2Dcd09H55hYL.png" alt="image|690x371"></p>
+<p>即可看到结合了搜索结果的回答：</p>
+<p><img src="upload://kwIF35xrhauV2KLu7OZigSPFYCK.png" alt="image|402x500"></p>
+<h1 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h1><p>如果你用的是 Mac 推理，可以使用 <a target="_blank" rel="noopener" href="https://github.com/tlkh/asitop">asitop</a> 和 <a target="_blank" rel="noopener" href="https://bjango.com/mac/istatmenus/">iStat Menus</a> 查看性能：</p>
+<p><img src="upload://xELkoJk9Cox4R9lUrnJJS0670b4.png" alt="image|574x500"></p>
+<p>如果你使用的是 Windows 或者 Linux，用英伟达显卡推理，可以使用 <a target="_blank" rel="noopener" href="https://github.com/XuehaiPan/nvitop">nvitop</a> 查看性能：</p>
+<p><img src="upload://bu5XwH2mRxlgaskj5iCRxlA8LzT.png" alt="image|514x500"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/%E9%83%A8%E7%BD%B2-DeepSeek-R1-32B-Open-WebUI-%E6%95%99%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/%E9%83%A8%E7%BD%B2-DeepSeek-R1-32B-Open-WebUI-%E6%95%99%E7%A8%8B/" class="post-title-link" itemprop="url">部署 DeepSeek R1 32B + Open WebUI 教程</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-02-01 18:01:27 / 修改时间：18:09:43" itemprop="dateCreated datePublished" datetime="2025-02-01T18:01:27+08:00">2025-02-01</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="DeepSeek-R1-厉害在哪"><a href="#DeepSeek-R1-厉害在哪" class="headerlink" title="DeepSeek R1 厉害在哪"></a>DeepSeek R1 厉害在哪</h1><p>我觉得最主要的点在于，它具备思维的能力，是一个有智商的模型。</p>
+<p>不同于 ChatGPT 的 gpt-3.5、gpt-4、gpt-4o 等模型，根据你的问题输出结果，即使说错了，也在错误的道路上狂奔。</p>
+<p>R1 是能够思考，能够提出猜想，验证猜想，逐渐思考出正确答案的一个 LLM。这使得它的逻辑思维能力达到了一个新的高度。它的能力类似于 OpenAI 的 o1 模型，但是 o1 没有输出思维链，R1 会输出它的思维链，也就是思考的过程，所以我认为 R1 是目前开源的最强模型。</p>
+<h1 id="为什么要自己部署"><a href="#为什么要自己部署" class="headerlink" title="为什么要自己部署"></a>为什么要自己部署</h1><p>一般来说，大家部署 LLM 都有这些目的：</p>
+<ul>
+<li>探索，希望能够亲手试试最前沿的科技</li>
+<li>折腾，希望挑战自己，探索没做过的事情</li>
+<li>隐私，不希望自己的问答被发布到互联网上，成为 LLM 的燃料</li>
+<li>商业，公司不希望任何核心代码发布到互联网上，担心商业泄密</li>
+<li>稳定，目前 DeepSeek 的服务很不稳定，需要给自己留条后路</li>
+</ul>
+<p>对我来说，每一点都是我的原因。</p>
+<p>接下来让我们开始部署模型。</p>
+<h1 id="部署模型推理服务-Ollama"><a href="#部署模型推理服务-Ollama" class="headerlink" title="部署模型推理服务 Ollama"></a>部署模型推理服务 Ollama</h1><h2 id="首先安装-Ollama"><a href="#首先安装-Ollama" class="headerlink" title="首先安装 Ollama"></a>首先安装 Ollama</h2><p><a target="_blank" rel="noopener" href="https://ollama.com/">https://ollama.com/</a></p>
+<p><img src="/deepseek_webui/ollama_install.png"></p>
+<p>Windows、Linux、Mac 都支持，M 系列的芯片、英伟达系列的显卡的支持也都很到位，直接下载下来安装即可。</p>
+<h2 id="然后下载模型"><a href="#然后下载模型" class="headerlink" title="然后下载模型"></a>然后下载模型</h2><p>参考链接：<a target="_blank" rel="noopener" href="https://ollama.com/library/deepseek-r1:32b">https://ollama.com/library/deepseek-r1:32b</a></p>
+<p>使用下面的命令下载模型：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ollama pull deepseek-r1:32b</span><br><span class="line"></span><br><span class="line"><span class="comment"># ollama pull deepseek-r1:70b</span></span><br></pre></td></tr></table></figure>
+
+<p>显存超过 40GB，可以考虑 部署 70b 的模型，否则建议使用 32b 的模型。</p>
+<p>显存多少 GB 就部署大概多少 b 的模型，比如 24GB 部署 32b，16GB 部署 14b，8GB 部署 7b。如果出现 OOM，也就是爆显存了，就部署小一档的模型。</p>
+<p><img src="/deepseek_webui/ollama_pull.png"></p>
+<p>如果有大佬想部署 671b 的原版模型，建议配置是八卡 H200，能达到 3872 token&#x2F;s，显存是141GB * 8 &#x3D; 1128GB。参考链接：<a target="_blank" rel="noopener" href="https://blogs.nvidia.com/blog/deepseek-r1-nim-microservice/">https://blogs.nvidia.com/blog/deepseek-r1-nim-microservice/</a></p>
+<h2 id="验证模型"><a href="#验证模型" class="headerlink" title="验证模型"></a>验证模型</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ollama run deepseek-r1:32b</span><br><span class="line"></span><br><span class="line"><span class="comment"># 问它</span></span><br><span class="line">1+1=多少</span><br></pre></td></tr></table></figure>
+
+<p>输出 1+1&#x3D;2 就说明模型下载好了。</p>
+<p><img src="/deepseek_webui/ollama_run.png"></p>
+<h1 id="部署前端服务-Open-WebUI"><a href="#部署前端服务-Open-WebUI" class="headerlink" title="部署前端服务 Open WebUI"></a>部署前端服务 Open WebUI</h1><p>建议使用 Docker 部署，不需要配置环境，避免环境冲突的影响。</p>
+<blockquote>
+<p>若希望使用 Python 部署，参考官方文档：<a target="_blank" rel="noopener" href="https://docs.openwebui.com/#manual-installation">https://docs.openwebui.com/#manual-installation</a></p>
+</blockquote>
+<h2 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h2><p>直接在官网下载：</p>
+<p><a target="_blank" rel="noopener" href="https://www.docker.com/">https://www.docker.com/</a></p>
+<h2 id="你可能需要配置"><a href="#你可能需要配置" class="headerlink" title="你可能需要配置"></a>你可能需要配置</h2><p>你可能需要配置这个：<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/cli/proxy/">https://docs.docker.com/engine/cli/proxy/</a></p>
+<p><img src="/deepseek_webui/docker_proxy.png" alt="image|656x500"></p>
+<h2 id="使用-docker-compose-部署"><a href="#使用-docker-compose-部署" class="headerlink" title="使用 docker-compose 部署"></a>使用 docker-compose 部署</h2><p>首先将下面的文字保存为 docker-compose.yaml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.8&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">open-webui:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ghcr.io/open-webui/open-webui:main</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">open-webui</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3000:8080&quot;</span></span><br><span class="line">    <span class="attr">extra_hosts:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;host.docker.internal:host-gateway&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/backend/data</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ENABLE_OPENAI_API=False</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ENABLE_RAG_WEB_SEARCH=True</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RAG_WEB_SEARCH_ENGINE=&quot;duckduckgo&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RAG_WEB_SEARCH_RESULT_COUNT=3</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RAG_WEB_SEARCH_CONCURRENT_REQUESTS=10</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br></pre></td></tr></table></figure>
+
+<p>在同级文件夹创建 data 目录，然后使用下面的命令启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up</span><br></pre></td></tr></table></figure>
+
+<p>第一次启动需要较长时间，大概 2 分钟。启动成功之后是这样显示的：</p>
+<p><img src="/deepseek_webui/docker_compose_up.png" alt="image|690x270"></p>
+<p>其他常见命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull ghcr.io/open-webui/open-webui:main  <span class="comment"># 手动下载镜像</span></span><br><span class="line">docker-compose up -d  <span class="comment"># 后台启动服务</span></span><br><span class="line">docker <span class="built_in">rm</span> -f open-webui  <span class="comment"># 删除正在运行的 open-webui</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="配置-Open-WebUI"><a href="#配置-Open-WebUI" class="headerlink" title="配置 Open WebUI"></a>配置 Open WebUI</h2><p>进入页面：<a target="_blank" rel="noopener" href="http://localhost:3000/">http://localhost:3000/</a></p>
+<p>第一次启动可以看到这个提示：</p>
+<p><img src="/deepseek_webui/openwebui_init.png"></p>
+<p>根据提示创建管理员账号：</p>
+<p><img src="/deepseek_webui/openwebui_init2.png"></p>
+<p>然后就可以开始使用了：</p>
+<p><img src="/deepseek_webui/openwebui_deepseek.png"></p>
+<h2 id="网络搜索"><a href="#网络搜索" class="headerlink" title="网络搜索"></a>网络搜索</h2><p>首先我们主要在管理员面板开启联网搜索，选择 duckduckgo 搜索引擎：<a target="_blank" rel="noopener" href="http://localhost:3000/admin/settings">http://localhost:3000/admin/settings</a></p>
+<p><img src="/deepseek_webui/openwebui_settings.png"></p>
+<p>然后记得点保存。参考文档：<a target="_blank" rel="noopener" href="https://docs.openwebui.com/tutorials/web_search">https://docs.openwebui.com/tutorials/web_search</a></p>
+<p>最后我们在聊天框中打开联网搜索的功能：</p>
+<p><img src="/deepseek_webui/openwebui_web_search_on.png"></p>
+<p>即可看到结合了搜索结果的回答：</p>
+<p><img src="/deepseek_webui/openwebui_web_search_result.png"></p>
+<h1 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h1><p>如果你用的是 Mac 推理，可以使用 <a target="_blank" rel="noopener" href="https://github.com/tlkh/asitop">asitop</a> 和 <a target="_blank" rel="noopener" href="https://bjango.com/mac/istatmenus/">iStat Menus</a> 查看性能：</p>
+<p><img src="/deepseek_webui/asitop.png"></p>
+<p>如果你使用的是 Windows 或者 Linux，用英伟达显卡推理，可以使用 <a target="_blank" rel="noopener" href="https://github.com/XuehaiPan/nvitop">nvitop</a> 查看性能：</p>
+<p><img src="/deepseek_webui/nvitop.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -923,182 +1191,8 @@ target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%86%B3%E7%
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ypw.io/pm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="杨培文">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="杨培文">
-      <meta itemprop="description" content="杨培文的 blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 杨培文">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/pm/" class="post-title-link" itemprop="url">如何自制室内空气质量检测仪</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2017-02-11 22:50:51" itemprop="dateCreated datePublished" datetime="2017-02-11T22:50:51+08:00">2017-02-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <img src="/pm/demo.jpg" class="">
-<h1 id="为什么做这个">为什么做这个</h1>
-<p>其实很简单，我本科学自动化的，毕业设计选题的时候正好看到了这个题目，觉得很简单，对于生活在帝都的我也很实用，于是就想做个这个<strong>室内空气质量检测仪</strong>。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/pm/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ypw.io/aws_p2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="杨培文">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="杨培文">
-      <meta itemprop="description" content="杨培文的 blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 杨培文">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/aws_p2/" class="post-title-link" itemprop="url">在AWS上配置深度学习主机</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2017-01-27 08:55:06" itemprop="dateCreated datePublished" datetime="2017-01-27T08:55:06+08:00">2017-01-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="介绍">介绍</h1>
-<p><a target="_blank" rel="noopener" href="https://aws.amazon.com/cn/ec2/instance-types/p2/">Amazon EC2
-P2 实例</a></p>
-<p>p2.xlarge 是一种非常适合深度学习的云服务器，它配备了 12G 显存的 Tesla
-K80 显卡，4核 CPU，60G 内存，以及 500M
-的网速。如果你还嫌不够，可以选择它的8倍和16倍的版本。</p>
-<img src="/aws_p2/gpu.png" class="">
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/aws_p2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -1107,15 +1201,14 @@ K80 显卡，4核 CPU，60G 内存，以及 500M
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">杨培文</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">杨培文</span>
+  </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
@@ -1138,6 +1231,8 @@ K80 显卡，4核 CPU，60G 内存，以及 500M
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
+
+
 
 
 

@@ -14,9 +14,9 @@
 
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":["always"],"padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="首先奉上PDF资料，万变不离其宗，掌握核心科技才是最重要的： SEC_Users_Manual_S5P4418_Users_Manual_Preliminary_Ver.0.10.pdf 我目前找到了三种方式控制NanoPi2的IO口：  通过sysfs(&#x2F;sys&#x2F;class&#x2F;gpio)来操作； 通过内核的gpio_set_value函数来操作； 通过配置寄存器(0xC001X000)来操作。">
 <meta property="og:type" content="article">
@@ -130,7 +130,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -224,8 +224,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <p>首先奉上PDF资料，万变不离其宗，掌握核心科技才是最重要的：</p>
+    <div class="post-body" itemprop="articleBody"><p>首先奉上PDF资料，万变不离其宗，掌握核心科技才是最重要的：</p>
 <p><a
 target="_blank" rel="noopener" href="http://wiki.friendlyarm.com/wiki/images/3/3d/SEC_Users_Manual_S5P4418_Users_Manual_Preliminary_Ver.0.10.pdf">SEC_Users_Manual_S5P4418_Users_Manual_Preliminary_Ver.0.10.pdf</a></p>
 <p>我目前找到了三种方式控制NanoPi2的IO口：</p>
@@ -289,12 +288,12 @@ href="/images/gpio_file.ko">gpio_file.ko</a></p>
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/NanoPi2%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" rel="prev" title="NanoPi2内核驱动">
-                  <i class="fa fa-chevron-left"></i> NanoPi2内核驱动
+                  <i class="fa fa-angle-left"></i> NanoPi2内核驱动
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/Linux%20service%E5%90%AF%E5%8A%A8%E9%A1%B9/" rel="next" title="Linux service启动项">
-                  Linux service启动项 <i class="fa fa-chevron-right"></i>
+                  Linux service启动项 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -313,15 +312,14 @@ href="/images/gpio_file.ko">gpio_file.ko</a></p>
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">杨培文</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">杨培文</span>
+  </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
@@ -344,6 +342,8 @@ href="/images/gpio_file.ko">gpio_file.ko</a></p>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
+
+
 
 
 

@@ -14,9 +14,9 @@
 
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":["always"],"padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="今天我们目的是实现串口回环测试，意思就是自己给自己发，然后自己接收到自己发送的内容。 首先呢，根据pinMap我们可以知道，8脚是UART3_TXD，10脚是UART3_RXD，所以我们需要将NanoPi2的8脚和10脚用杜邦线接起来。 然后呢，我们连接NanoPi2，写一个程序循环读取串口数据，并打印到屏幕上。 12345678910111213141516171819202122232425">
 <meta property="og:type" content="article">
@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -223,8 +223,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <p>今天我们目的是实现串口回环测试，意思就是自己给自己发，然后自己接收到自己发送的内容。</p>
+    <div class="post-body" itemprop="articleBody"><p>今天我们目的是实现串口回环测试，意思就是自己给自己发，然后自己接收到自己发送的内容。</p>
 <p>首先呢，根据pinMap我们可以知道，8脚是UART3_TXD，10脚是UART3_RXD，所以我们需要将NanoPi2的8脚和10脚用杜邦线接起来。</p>
 <p>然后呢，我们连接NanoPi2，写一个程序循环读取串口数据，并打印到屏幕上。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;termios.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">    fd = open(<span class="string">&quot;/dev/ttyAMA2&quot;</span>, O_RDWR | O_NOCTTY | O_NDELAY);</span><br><span class="line">    <span class="keyword">if</span> (fd == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;Open Serial Port Error!\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">termios</span> <span class="title">options</span>;</span></span><br><span class="line">    tcgetattr(fd, &amp;options);</span><br><span class="line">    <span class="comment">//115200, 8N1</span></span><br><span class="line">    options.c_cflag = B115200 | CS8 | CLOCAL | CREAD;</span><br><span class="line">    options.c_iflag = IGNPAR;</span><br><span class="line">    options.c_oflag = <span class="number">0</span>;</span><br><span class="line">    options.c_lflag = <span class="number">0</span>;</span><br><span class="line">    options.c_cc[VTIME]=<span class="number">0</span>;</span><br><span class="line">    options.c_cc[VMIN]=<span class="number">1</span>;</span><br><span class="line">    tcflush(fd, TCIFLUSH);</span><br><span class="line">    tcsetattr(fd, TCSANOW, &amp;options);</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> rx_buffer[<span class="number">256</span>];</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="type">int</span> rx_length = read(fd, (<span class="type">void</span>*)rx_buffer, <span class="number">255</span>);</span><br><span class="line">        <span class="keyword">if</span> (rx_length &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//Bytes received</span></span><br><span class="line">            rx_buffer[rx_length] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%i bytes read : %s\n&quot;</span>, rx_length, rx_buffer);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -253,12 +252,12 @@ src="/images/Snip20151229_70.png" /></a></p>
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/%E8%AE%A9NanoPi2%E6%94%AF%E6%8C%81USB%E5%A3%B0%E5%8D%A1/" rel="prev" title="让NanoPi2支持USB声卡">
-                  <i class="fa fa-chevron-left"></i> 让NanoPi2支持USB声卡
+                  <i class="fa fa-angle-left"></i> 让NanoPi2支持USB声卡
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/NanoPi2%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" rel="next" title="NanoPi2内核驱动">
-                  NanoPi2内核驱动 <i class="fa fa-chevron-right"></i>
+                  NanoPi2内核驱动 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -277,15 +276,14 @@ src="/images/Snip20151229_70.png" /></a></p>
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">杨培文</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">杨培文</span>
+  </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
@@ -308,6 +306,8 @@ src="/images/Snip20151229_70.png" /></a></p>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
+
+
 
 
 

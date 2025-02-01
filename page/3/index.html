@@ -14,9 +14,9 @@
 
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":["always"],"padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="杨培文的 blog">
 <meta property="og:type" content="website">
@@ -126,7 +126,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -162,6 +162,187 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/%E4%BD%BF%E7%94%A8NanoPi2%E7%9A%84%E4%B8%B2%E5%8F%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/%E4%BD%BF%E7%94%A8NanoPi2%E7%9A%84%E4%B8%B2%E5%8F%A3/" class="post-title-link" itemprop="url">使用NanoPi2的串口</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-12-29 01:18:45" itemprop="dateCreated datePublished" datetime="2015-12-29T01:18:45+08:00">2015-12-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>今天我们目的是实现串口回环测试，意思就是自己给自己发，然后自己接收到自己发送的内容。</p>
+<p>首先呢，根据pinMap我们可以知道，8脚是UART3_TXD，10脚是UART3_RXD，所以我们需要将NanoPi2的8脚和10脚用杜邦线接起来。</p>
+<p>然后呢，我们连接NanoPi2，写一个程序循环读取串口数据，并打印到屏幕上。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;termios.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">    fd = open(<span class="string">&quot;/dev/ttyAMA2&quot;</span>, O_RDWR | O_NOCTTY | O_NDELAY);</span><br><span class="line">    <span class="keyword">if</span> (fd == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;Open Serial Port Error!\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">termios</span> <span class="title">options</span>;</span></span><br><span class="line">    tcgetattr(fd, &amp;options);</span><br><span class="line">    <span class="comment">//115200, 8N1</span></span><br><span class="line">    options.c_cflag = B115200 | CS8 | CLOCAL | CREAD;</span><br><span class="line">    options.c_iflag = IGNPAR;</span><br><span class="line">    options.c_oflag = <span class="number">0</span>;</span><br><span class="line">    options.c_lflag = <span class="number">0</span>;</span><br><span class="line">    options.c_cc[VTIME]=<span class="number">0</span>;</span><br><span class="line">    options.c_cc[VMIN]=<span class="number">1</span>;</span><br><span class="line">    tcflush(fd, TCIFLUSH);</span><br><span class="line">    tcsetattr(fd, TCSANOW, &amp;options);</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> rx_buffer[<span class="number">256</span>];</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="type">int</span> rx_length = read(fd, (<span class="type">void</span>*)rx_buffer, <span class="number">255</span>);</span><br><span class="line">        <span class="keyword">if</span> (rx_length &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//Bytes received</span></span><br><span class="line">            rx_buffer[rx_length] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%i bytes read : %s\n&quot;</span>, rx_length, rx_buffer);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nano read.c</span><br><span class="line">gcc read.c -o <span class="built_in">read</span></span><br><span class="line">./read</span><br></pre></td></tr></table></figure>
+<p>然后我们向串口写入数据：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> hello &gt; /dev/ttyAMA2</span><br><span class="line"><span class="built_in">echo</span> <span class="built_in">test</span> &gt; /dev/ttyAMA2</span><br><span class="line"><span class="built_in">echo</span> hahaha &gt; /dev/ttyAMA2</span><br></pre></td></tr></table></figure>
+<p><a href="/images/Snip20151229_71.png"><img
+src="/images/Snip20151229_71.png" /></a></p>
+<p>read程序就会输出刚才发送的字符，带换行。</p>
+<p><a href="/images/Snip20151229_70.png"><img
+src="/images/Snip20151229_70.png" /></a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/%E8%AE%A9NanoPi2%E6%94%AF%E6%8C%81USB%E5%A3%B0%E5%8D%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/%E8%AE%A9NanoPi2%E6%94%AF%E6%8C%81USB%E5%A3%B0%E5%8D%A1/" class="post-title-link" itemprop="url">让NanoPi2支持USB声卡</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-12-26 00:53:55" itemprop="dateCreated datePublished" datetime="2015-12-26T00:53:55+08:00">2015-12-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>首先必须修改内核，因为目前官方默认的内核是不带USB声卡驱动的。修改内核就必须先编译uboot中的mkimage。所以先编译mkimage：
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/friendlyarm/uboot_nanopi2.git</span><br><span class="line"><span class="built_in">cd</span> uboot_nanopi2</span><br><span class="line">git checkout nanopi2-lollipop-mr1</span><br><span class="line">make CROSS_COMPILE=arm-linux- tools</span><br><span class="line">sudo <span class="built_in">mkdir</span> -p /usr/local/sbin &amp;&amp; sudo <span class="built_in">cp</span> -v tools/mkimage /usr/local/sbin</span><br><span class="line"></span><br></pre></td></tr></table></figure> <a href="/images/Snip20151226_32.png"><img
+src="/images/Snip20151226_32.png" /></a></p>
+<p>然后下载内核源码并开始配置： <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/friendlyarm/linux-3.4.y.git</span><br><span class="line"><span class="built_in">cd</span> linux-3.4.y</span><br><span class="line">git checkout nanopi2-lollipop-mr1</span><br><span class="line">make nanopi2_linux_defconfig</span><br><span class="line">make menuconfig</span><br></pre></td></tr></table></figure> 我们需要在Device Drivers
+&gt; Sound card support &gt; Advanced Linux Sound Architecture &gt; USB
+sound devices中选择，我不知道我的设备是什么，所以我全选了。
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Device Drivers --&gt;</span><br><span class="line">  Sound card support --&gt;</span><br><span class="line">    Advanced Linux Sound Architecture --&gt;</span><br><span class="line">      USB sound devices</span><br></pre></td></tr></table></figure> <a href="/images/Snip20151226_25.png"><img
+src="/images/Snip20151226_25.png" /></a></p>
+<p>然后保存配置，编译uImage： <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">touch</span> .scmversion</span><br><span class="line">make uImage</span><br></pre></td></tr></table></figure>
+然后将此内核传到NanoPi2上，并覆盖原来的内核（下面的代码仅供参考）：
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp /home/ypw/Desktop/linux-3.4.y/arch/arm/boot/uImage root@192.168.2.22:/media/fa/boot2/uImage.hdmi</span><br></pre></td></tr></table></figure> 当然，使用读卡器直接覆盖也是可以的。</p>
+<p>注意：此处由于我并没有接LCD，所以我直接覆盖的hdmi内核，需要接LCD的话，还需要这样修改内核：
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">make menuconfig</span><br><span class="line">  Device Drivers --&gt;</span><br><span class="line">    Graphics support --&gt;</span><br><span class="line">      Nexell Graphics --&gt;</span><br><span class="line">        [*] LCD</span><br><span class="line">        [ ] HDMI</span><br></pre></td></tr></table></figure>
+内核装好了之后，我们上传一个音乐文件到NanoPi2上，然后使用mplayer播放：
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scp /Users/ypw/Desktop/周杰伦\ -\ 青花瓷.mp3 root@192.168.2.22:/home/fa/Desktop/qinghuaci.mp3</span><br><span class="line">ssh root@192.168.2.22</span><br><span class="line">mplayer /home/fa/Desktop/qinghuaci.mp3</span><br></pre></td></tr></table></figure> <a href="/images/Snip20151226_33.png"><img
+src="/images/Snip20151226_33.png" /></a></p>
+<p>当然，也可以在vnc中播放音乐</p>
+<p><a href="/images/Snip20151226_34.png"><img
+src="/images/Snip20151226_34.png" /></a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -929,196 +1110,8 @@ target="_blank" rel="noopener" href="https://github.com/WRTnode/openwrt-packages
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ypw.io/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="杨培文">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="杨培文">
-      <meta itemprop="description" content="杨培文的 blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 杨培文">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">docker常用命令</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2015-11-18 17:04:48" itemprop="dateCreated datePublished" datetime="2015-11-18T17:04:48+08:00">2015-11-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>创建一个 docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu:14.04</span><br></pre></td></tr></table></figure> 启动一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -t -i --cpuset-cpus=0-7 wrtnode-2r-sdk /bin/bash</span><br></pre></td></tr></table></figure>
-恢复运行中的docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker attach wrtnode-2r-sdk</span><br></pre></td></tr></table></figure> 保存一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker commit 7d mycaffe</span><br></pre></td></tr></table></figure>
-导出一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker export 4bf6cd922cfd &gt; wrtnode-2r-sdk.tar</span><br></pre></td></tr></table></figure> 导入一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat wrtnode-2r-sdk.tar | docker import - wrtnode-2r-sdk:latest</span><br></pre></td></tr></table></figure>
-删除一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f wrtnode-2r-sdk</span><br></pre></td></tr></table></figure> 修改DNS： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;nameserver 8.8.8.8&quot; &gt; /etc/resolv.conf</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ypw.io/WRTnode%202R%20%E6%95%91%E7%A0%96%E6%95%99%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="杨培文">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="杨培文">
-      <meta itemprop="description" content="杨培文的 blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 杨培文">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/WRTnode%202R%20%E6%95%91%E7%A0%96%E6%95%99%E7%A8%8B/" class="post-title-link" itemprop="url">WRTnode 2R 救砖教程</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2015-11-03 16:13:42" itemprop="dateCreated datePublished" datetime="2015-11-03T16:13:42+08:00">2015-11-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>当你修改了网络设置，或者刷了其他型号的固件，或者各种复杂的原因，导致了你无法连接上WRTnode，那么我们就可以认为WRTnode已经变成砖头了。这时候就需要救砖。</p>
-<p>可能需要的软件：<a href="/images/tftp.zip">tftp.zip</a>
-包括tftpd32，putty，sscom42，openwrt-ramips-mt7628-wrtnode2r-squashfs-sysupgrade.bin（自己编译的WRTnode
-2R固件，带中文，有点偏大是因为我之前编译过opencv之类的东西可能有依赖库没有去掉）</p>
-<p>首先我们需要一个USB转TTL，通过它我们可以让电脑连上WRTnode的UART接口。这是单片机常用的通讯方式，这里不作详细介绍。接线方式：</p>
-<p>WRTndoe ---- USB to TTL TX0 ---- RXD RX0 ---- TXD GND ---- GND</p>
-<p><a href="/images/2R-pin-map.jpg"><img
-src="/images/2R-pin-map.jpg" /></a></p>
-<p>如图所示：</p>
-<p><a href="/images/IMG_0674.jpg"><img
-src="/images/IMG_0674.jpg" /></a></p>
-<p>然后我们还需要连接上网线口，如图所示：</p>
-<p><a href="/images/IMG_0675.jpg"><img
-src="/images/IMG_0675.jpg" /></a></p>
-<p>我们连接网线以后，需要设置静态IP，设置方法如下：</p>
-<p><a href="/images/Snip20151103_10.png"><img
-src="/images/Snip20151103_10.png" /></a></p>
-<p>然后我们打开串口助手，上电，可以看到类似的信息输出：</p>
-<p><a href="/images/Snip20151103_5.png"><img
-src="/images/Snip20151103_5.png" /></a></p>
-<p>很显然内核挂了，我们打开Tftpd32软件，配置如图所示：<a
-href="/images/无标题21.png"><img src="/images/无标题21.png" /></a></p>
-<p>配置好之后将WRTnode的电断掉再插上，再次重启，然后在出现下面这段话的时候按2，然后按y来配置IP等信息：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Please choose the operation: </span><br><span class="line"></span><br><span class="line">   1: Load system code to SDRAM via TFTP. </span><br><span class="line"></span><br><span class="line">   2: Load system code then write to Flash via TFTP. </span><br><span class="line"></span><br><span class="line">   3: Boot system code via Flash (default).</span><br><span class="line"></span><br><span class="line">   4: Entr boot command line interface.</span><br><span class="line"></span><br><span class="line">   7: Load Boot Loader code then write to Flash via Serial. </span><br><span class="line"></span><br><span class="line">   9: Load Boot Loader code then write to Flash via TFTP.</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">You choosed 2</span><br><span class="line"></span><br><span class="line">2: System Load Linux Kernel then write to Flash via TFTP. </span><br><span class="line"></span><br><span class="line"> Warning!! Erase Linux in Flash then burn new one. Are you sure?(Y/N)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Please Input new ones /or Ctrl-C to discard</span><br><span class="line"></span><br><span class="line">	Input device IP (192.168.1.1) ==:192.168.1.1</span><br><span class="line"></span><br><span class="line">	Input server IP (192.168.1.100) ==:192.168.1.100</span><br><span class="line"></span><br><span class="line">	Input Linux Kernel filename () ==:test.bin</span><br></pre></td></tr></table></figure>
-<p>当你按下回车的那一瞬间，Tftpd32就会开始传输你选择的固件。</p>
-<p><a href="/images/无标题.png"><img src="/images/无标题.png" /></a></p>
-<p>传输完成之后，WRTnode就会开始进行刷机，这时候注意千万不能断电。</p>
-<p><a href="/images/无标题2.png"><img
-src="/images/无标题2.png" /></a></p>
-<p>最后我们可以看到，WRTnode已经可以正常启动！</p>
-<video width=100% src=/images/A-55.mp4 controls />
-<p>久违的闪瞎眼的LED！</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -1127,15 +1120,14 @@ src="/images/无标题2.png" /></a></p>
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">杨培文</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">杨培文</span>
+  </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
@@ -1158,6 +1150,8 @@ src="/images/无标题2.png" /></a></p>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
+
+
 
 
 

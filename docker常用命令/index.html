@@ -14,9 +14,9 @@
 
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":["always"],"padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="创建一个 docker： 1docker pull ubuntu:14.04 启动一个docker： 1docker run -t -i --cpuset-cpus&#x3D;0-7 wrtnode-2r-sdk &#x2F;bin&#x2F;bash 恢复运行中的docker： 1docker attach wrtnode-2r-sdk 保存一个docker： 12docker psdocker commit 7d myca">
 <meta property="og:type" content="article">
@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -223,8 +223,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <p>创建一个 docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu:14.04</span><br></pre></td></tr></table></figure> 启动一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -t -i --cpuset-cpus=0-7 wrtnode-2r-sdk /bin/bash</span><br></pre></td></tr></table></figure>
+    <div class="post-body" itemprop="articleBody"><p>创建一个 docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu:14.04</span><br></pre></td></tr></table></figure> 启动一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -t -i --cpuset-cpus=0-7 wrtnode-2r-sdk /bin/bash</span><br></pre></td></tr></table></figure>
 恢复运行中的docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker attach wrtnode-2r-sdk</span><br></pre></td></tr></table></figure> 保存一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker commit 7d mycaffe</span><br></pre></td></tr></table></figure>
 导出一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker export 4bf6cd922cfd &gt; wrtnode-2r-sdk.tar</span><br></pre></td></tr></table></figure> 导入一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat wrtnode-2r-sdk.tar | docker import - wrtnode-2r-sdk:latest</span><br></pre></td></tr></table></figure>
 删除一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f wrtnode-2r-sdk</span><br></pre></td></tr></table></figure> 修改DNS： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;nameserver 8.8.8.8&quot; &gt; /etc/resolv.conf</span><br></pre></td></tr></table></figure></p>
@@ -245,12 +244,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/WRTnode%202R%20%E6%95%91%E7%A0%96%E6%95%99%E7%A8%8B/" rel="prev" title="WRTnode 2R 救砖教程">
-                  <i class="fa fa-chevron-left"></i> WRTnode 2R 救砖教程
+                  <i class="fa fa-angle-left"></i> WRTnode 2R 救砖教程
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/WRTnode%202R%20STM32%E5%9B%BA%E4%BB%B6%E7%9A%84%E7%83%A7%E5%86%99%E5%92%8Cspi-bridge%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="next" title="WRTnode 2R STM32固件的烧写和spi-bridge的使用">
-                  WRTnode 2R STM32固件的烧写和spi-bridge的使用 <i class="fa fa-chevron-right"></i>
+                  WRTnode 2R STM32固件的烧写和spi-bridge的使用 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -269,15 +268,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">杨培文</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">杨培文</span>
+  </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
@@ -300,6 +298,8 @@
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
+
+
 
 
 

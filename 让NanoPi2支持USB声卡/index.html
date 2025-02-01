@@ -14,9 +14,9 @@
 
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":["always"],"padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="首先必须修改内核，因为目前官方默认的内核是不带USB声卡驱动的。修改内核就必须先编译uboot中的mkimage。所以先编译mkimage： 1234567sudo apt-get install gitgit clone https:&#x2F;&#x2F;github.com&#x2F;friendlyarm&#x2F;uboot_nanopi2.gitcd uboot_nanopi2git checkout nanopi2-lol">
 <meta property="og:type" content="article">
@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -223,8 +223,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <p>首先必须修改内核，因为目前官方默认的内核是不带USB声卡驱动的。修改内核就必须先编译uboot中的mkimage。所以先编译mkimage：
+    <div class="post-body" itemprop="articleBody"><p>首先必须修改内核，因为目前官方默认的内核是不带USB声卡驱动的。修改内核就必须先编译uboot中的mkimage。所以先编译mkimage：
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/friendlyarm/uboot_nanopi2.git</span><br><span class="line"><span class="built_in">cd</span> uboot_nanopi2</span><br><span class="line">git checkout nanopi2-lollipop-mr1</span><br><span class="line">make CROSS_COMPILE=arm-linux- tools</span><br><span class="line">sudo <span class="built_in">mkdir</span> -p /usr/local/sbin &amp;&amp; sudo <span class="built_in">cp</span> -v tools/mkimage /usr/local/sbin</span><br><span class="line"></span><br></pre></td></tr></table></figure> <a href="/images/Snip20151226_32.png"><img
 src="/images/Snip20151226_32.png" /></a></p>
 <p>然后下载内核源码并开始配置： <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/friendlyarm/linux-3.4.y.git</span><br><span class="line"><span class="built_in">cd</span> linux-3.4.y</span><br><span class="line">git checkout nanopi2-lollipop-mr1</span><br><span class="line">make nanopi2_linux_defconfig</span><br><span class="line">make menuconfig</span><br></pre></td></tr></table></figure> 我们需要在Device Drivers
@@ -260,12 +259,12 @@ src="/images/Snip20151226_34.png" /></a></p>
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/NanoPi2%E5%AE%89%E8%A3%85OpenCV%EF%BC%8C%E9%A9%B1%E5%8A%A8%E6%91%84%E5%83%8F%E5%A4%B4/" rel="prev" title="NanoPi2安装OpenCV，驱动摄像头">
-                  <i class="fa fa-chevron-left"></i> NanoPi2安装OpenCV，驱动摄像头
+                  <i class="fa fa-angle-left"></i> NanoPi2安装OpenCV，驱动摄像头
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/%E4%BD%BF%E7%94%A8NanoPi2%E7%9A%84%E4%B8%B2%E5%8F%A3/" rel="next" title="使用NanoPi2的串口">
-                  使用NanoPi2的串口 <i class="fa fa-chevron-right"></i>
+                  使用NanoPi2的串口 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -284,15 +283,14 @@ src="/images/Snip20151226_34.png" /></a></p>
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">杨培文</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">杨培文</span>
+  </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
@@ -315,6 +313,8 @@ src="/images/Snip20151226_34.png" /></a></p>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
+
+
 
 
 

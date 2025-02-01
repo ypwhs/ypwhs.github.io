@@ -14,9 +14,9 @@
 
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":["always"],"padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="1234567891011121314151617181920212223242526272829303132333435363738# coding:utf-8__author__ &#x3D; &amp;#x27;yangpeiwen&amp;#x27;from urllib import *from bs4 import BeautifulSoupimport socketimport osurl &#x3D; &quot;h">
 <meta property="og:type" content="article">
@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -223,8 +223,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line">__author__ = <span class="string">&#x27;yangpeiwen&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://wap.jdxs.net/index.php/book/chapter/bid=100722/cid=16819732/&quot;</span></span><br><span class="line">socket.setdefaulttimeout(<span class="number">3</span>)</span><br><span class="line">path = <span class="string">&quot;xs&quot;</span></span><br><span class="line"></span><br><span class="line">socket.setdefaulttimeout(<span class="number">3</span>)  <span class="comment"># 3秒超时</span></span><br><span class="line"><span class="keyword">if</span> os.path.exists(path) <span class="keyword">is</span> <span class="literal">False</span>:</span><br><span class="line">    os.makedirs(path)</span><br><span class="line">    <span class="comment"># 如果没有这个文件夹就创建一个</span></span><br><span class="line">f = <span class="built_in">open</span>(path+<span class="string">&quot;/xs.txt&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br><span class="line"></span><br><span class="line">always = <span class="literal">True</span></span><br><span class="line"><span class="keyword">while</span> always:</span><br><span class="line">    ci = <span class="number">0</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        html = urlopen(url).read()</span><br><span class="line">        soup = BeautifulSoup(html)</span><br><span class="line">        text = soup.find(attrs=&#123;<span class="string">&#x27;class&#x27;</span>: <span class="string">&#x27;chapter&#x27;</span>&#125;).text</span><br><span class="line">        <span class="built_in">print</span> text</span><br><span class="line">        f.write(text.encode(<span class="string">&quot;utf-8&quot;</span>))</span><br><span class="line">        <span class="keyword">if</span> soup.find(<span class="built_in">id</span>=<span class="string">&#x27;btnNext&#x27;</span>).text.encode(<span class="string">&#x27;utf-8&#x27;</span>).index(<span class="string">&#x27;下一章&#x27;</span>) == <span class="number">0</span>:</span><br><span class="line">            url = <span class="string">&quot;http://wap.jdxs.net/&quot;</span> + soup.find(<span class="built_in">id</span>=<span class="string">&#x27;btnNext&#x27;</span>)[<span class="string">&#x27;href&#x27;</span>]</span><br><span class="line">            <span class="built_in">print</span> url</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">except</span> IOError:</span><br><span class="line">        ci += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> ci &gt; <span class="number">10</span>:</span><br><span class="line">            always = <span class="literal">False</span></span><br><span class="line">f.close()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    <div class="post-body" itemprop="articleBody"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line">__author__ = <span class="string">&#x27;yangpeiwen&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://wap.jdxs.net/index.php/book/chapter/bid=100722/cid=16819732/&quot;</span></span><br><span class="line">socket.setdefaulttimeout(<span class="number">3</span>)</span><br><span class="line">path = <span class="string">&quot;xs&quot;</span></span><br><span class="line"></span><br><span class="line">socket.setdefaulttimeout(<span class="number">3</span>)  <span class="comment"># 3秒超时</span></span><br><span class="line"><span class="keyword">if</span> os.path.exists(path) <span class="keyword">is</span> <span class="literal">False</span>:</span><br><span class="line">    os.makedirs(path)</span><br><span class="line">    <span class="comment"># 如果没有这个文件夹就创建一个</span></span><br><span class="line">f = <span class="built_in">open</span>(path+<span class="string">&quot;/xs.txt&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br><span class="line"></span><br><span class="line">always = <span class="literal">True</span></span><br><span class="line"><span class="keyword">while</span> always:</span><br><span class="line">    ci = <span class="number">0</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        html = urlopen(url).read()</span><br><span class="line">        soup = BeautifulSoup(html)</span><br><span class="line">        text = soup.find(attrs=&#123;<span class="string">&#x27;class&#x27;</span>: <span class="string">&#x27;chapter&#x27;</span>&#125;).text</span><br><span class="line">        <span class="built_in">print</span> text</span><br><span class="line">        f.write(text.encode(<span class="string">&quot;utf-8&quot;</span>))</span><br><span class="line">        <span class="keyword">if</span> soup.find(<span class="built_in">id</span>=<span class="string">&#x27;btnNext&#x27;</span>).text.encode(<span class="string">&#x27;utf-8&#x27;</span>).index(<span class="string">&#x27;下一章&#x27;</span>) == <span class="number">0</span>:</span><br><span class="line">            url = <span class="string">&quot;http://wap.jdxs.net/&quot;</span> + soup.find(<span class="built_in">id</span>=<span class="string">&#x27;btnNext&#x27;</span>)[<span class="string">&#x27;href&#x27;</span>]</span><br><span class="line">            <span class="built_in">print</span> url</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">except</span> IOError:</span><br><span class="line">        ci += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> ci &gt; <span class="number">10</span>:</span><br><span class="line">            always = <span class="literal">False</span></span><br><span class="line">f.close()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -242,12 +241,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/%E7%94%A8swift%E5%86%99%E7%9A%84%E6%9D%A1%E5%BD%A2%E7%A0%81%E7%94%9F%E6%88%90%E5%99%A8/" rel="prev" title="用swift写的条形码生成器">
-                  <i class="fa fa-chevron-left"></i> 用swift写的条形码生成器
+                  <i class="fa fa-angle-left"></i> 用swift写的条形码生成器
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/python-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%98%9F%E5%88%97%E7%88%AC%E8%99%AB/" rel="next" title="python-多线程队列爬虫">
-                  python-多线程队列爬虫 <i class="fa fa-chevron-right"></i>
+                  python-多线程队列爬虫 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -266,15 +265,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">杨培文</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">杨培文</span>
+  </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
@@ -297,6 +295,8 @@
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
+
+
 
 
 

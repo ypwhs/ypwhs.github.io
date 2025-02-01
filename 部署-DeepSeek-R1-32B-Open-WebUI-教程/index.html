@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xlk.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xlk.png">
+  <link rel="mask-icon" href="/images/xkl.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":["always"],"padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="DeepSeek R1 厉害在哪我觉得最主要的点在于，它具备思维的能力，是一个有智商的模型。 不同于 ChatGPT 的 gpt-3.5、gpt-4、gpt-4o 等模型，根据你的问题输出结果，即使说错了，也在错误的道路上狂奔。 R1 是能够思考，能够提出猜想，验证猜想，逐渐思考出正确答案的一个 LLM。这使得它的逻辑思维能力达到了一个新的高度。它的能力类似于 OpenAI 的 o1 模型，但是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="部署 DeepSeek R1 32B + Open WebUI 教程">
+<meta property="og:url" content="https://ypw.io/%E9%83%A8%E7%BD%B2-DeepSeek-R1-32B-Open-WebUI-%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:site_name" content="杨培文">
+<meta property="og:description" content="DeepSeek R1 厉害在哪我觉得最主要的点在于，它具备思维的能力，是一个有智商的模型。 不同于 ChatGPT 的 gpt-3.5、gpt-4、gpt-4o 等模型，根据你的问题输出结果，即使说错了，也在错误的道路上狂奔。 R1 是能够思考，能够提出猜想，验证猜想，逐渐思考出正确答案的一个 LLM。这使得它的逻辑思维能力达到了一个新的高度。它的能力类似于 OpenAI 的 o1 模型，但是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/ollama_install.png">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/ollama_pull.png">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/ollama_run.png">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/docker_proxy.png">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/docker_compose_up.png">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/openwebui_init.png">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/openwebui_init2.png">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/openwebui_deepseek.png">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/openwebui_settings.png">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/openwebui_web_search_on.png">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/openwebui_web_search_result.png">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/asitop.png">
+<meta property="og:image" content="https://ypw.io/deepseek_webui/nvitop.png">
+<meta property="article:published_time" content="2025-02-01T10:01:27.000Z">
+<meta property="article:modified_time" content="2025-02-01T10:09:43.884Z">
+<meta property="article:author" content="杨培文">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ypw.io/deepseek_webui/ollama_install.png">
+
+
+<link rel="canonical" href="https://ypw.io/%E9%83%A8%E7%BD%B2-DeepSeek-R1-32B-Open-WebUI-%E6%95%99%E7%A8%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ypw.io/%E9%83%A8%E7%BD%B2-DeepSeek-R1-32B-Open-WebUI-%E6%95%99%E7%A8%8B/","path":"部署-DeepSeek-R1-32B-Open-WebUI-教程/","title":"部署 DeepSeek R1 32B + Open WebUI 教程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>部署 DeepSeek R1 32B + Open WebUI 教程 | 杨培文</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111276663-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-111276663-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">杨培文</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Yang Peiwen</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DeepSeek-R1-%E5%8E%89%E5%AE%B3%E5%9C%A8%E5%93%AA"><span class="nav-number">1.</span> <span class="nav-text">DeepSeek R1 厉害在哪</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%87%AA%E5%B7%B1%E9%83%A8%E7%BD%B2"><span class="nav-number">2.</span> <span class="nav-text">为什么要自己部署</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E6%9C%8D%E5%8A%A1-Ollama"><span class="nav-number">3.</span> <span class="nav-text">部署模型推理服务 Ollama</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E5%AE%89%E8%A3%85-Ollama"><span class="nav-number">3.1.</span> <span class="nav-text">首先安装 Ollama</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%84%B6%E5%90%8E%E4%B8%8B%E8%BD%BD%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.2.</span> <span class="nav-text">然后下载模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.3.</span> <span class="nav-text">验证模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E6%9C%8D%E5%8A%A1-Open-WebUI"><span class="nav-number">4.</span> <span class="nav-text">部署前端服务 Open WebUI</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Docker"><span class="nav-number">4.1.</span> <span class="nav-text">安装 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%A0%E5%8F%AF%E8%83%BD%E9%9C%80%E8%A6%81%E9%85%8D%E7%BD%AE"><span class="nav-number">4.2.</span> <span class="nav-text">你可能需要配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-docker-compose-%E9%83%A8%E7%BD%B2"><span class="nav-number">4.3.</span> <span class="nav-text">使用 docker-compose 部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Open-WebUI"><span class="nav-number">4.4.</span> <span class="nav-text">配置 Open WebUI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%90%9C%E7%B4%A2"><span class="nav-number">4.5.</span> <span class="nav-text">网络搜索</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-number">5.</span> <span class="nav-text">性能分析</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨培文"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">杨培文</p>
+  <div class="site-description" itemprop="description">杨培文的 blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ypwhs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/ypwhs" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/yangpw" title="知乎 → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;yangpw" rel="noopener me" target="_blank"><i class="fa fa-book fa-fw"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/ypwhs" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;ypwhs" rel="noopener me" target="_blank"><i class="fa-brands fa-linkedin fa-fw"></i>Linkedin</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/%E9%83%A8%E7%BD%B2-DeepSeek-R1-32B-Open-WebUI-%E6%95%99%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="部署 DeepSeek R1 32B + Open WebUI 教程 | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          部署 DeepSeek R1 32B + Open WebUI 教程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-02-01 18:01:27 / 修改时间：18:09:43" itemprop="dateCreated datePublished" datetime="2025-02-01T18:01:27+08:00">2025-02-01</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="DeepSeek-R1-厉害在哪"><a href="#DeepSeek-R1-厉害在哪" class="headerlink" title="DeepSeek R1 厉害在哪"></a>DeepSeek R1 厉害在哪</h1><p>我觉得最主要的点在于，它具备思维的能力，是一个有智商的模型。</p>
+<p>不同于 ChatGPT 的 gpt-3.5、gpt-4、gpt-4o 等模型，根据你的问题输出结果，即使说错了，也在错误的道路上狂奔。</p>
+<p>R1 是能够思考，能够提出猜想，验证猜想，逐渐思考出正确答案的一个 LLM。这使得它的逻辑思维能力达到了一个新的高度。它的能力类似于 OpenAI 的 o1 模型，但是 o1 没有输出思维链，R1 会输出它的思维链，也就是思考的过程，所以我认为 R1 是目前开源的最强模型。</p>
+<h1 id="为什么要自己部署"><a href="#为什么要自己部署" class="headerlink" title="为什么要自己部署"></a>为什么要自己部署</h1><p>一般来说，大家部署 LLM 都有这些目的：</p>
+<ul>
+<li>探索，希望能够亲手试试最前沿的科技</li>
+<li>折腾，希望挑战自己，探索没做过的事情</li>
+<li>隐私，不希望自己的问答被发布到互联网上，成为 LLM 的燃料</li>
+<li>商业，公司不希望任何核心代码发布到互联网上，担心商业泄密</li>
+<li>稳定，目前 DeepSeek 的服务很不稳定，需要给自己留条后路</li>
+</ul>
+<p>对我来说，每一点都是我的原因。</p>
+<p>接下来让我们开始部署模型。</p>
+<h1 id="部署模型推理服务-Ollama"><a href="#部署模型推理服务-Ollama" class="headerlink" title="部署模型推理服务 Ollama"></a>部署模型推理服务 Ollama</h1><h2 id="首先安装-Ollama"><a href="#首先安装-Ollama" class="headerlink" title="首先安装 Ollama"></a>首先安装 Ollama</h2><p><a target="_blank" rel="noopener" href="https://ollama.com/">https://ollama.com/</a></p>
+<p><img src="/deepseek_webui/ollama_install.png"></p>
+<p>Windows、Linux、Mac 都支持，M 系列的芯片、英伟达系列的显卡的支持也都很到位，直接下载下来安装即可。</p>
+<h2 id="然后下载模型"><a href="#然后下载模型" class="headerlink" title="然后下载模型"></a>然后下载模型</h2><p>参考链接：<a target="_blank" rel="noopener" href="https://ollama.com/library/deepseek-r1:32b">https://ollama.com/library/deepseek-r1:32b</a></p>
+<p>使用下面的命令下载模型：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ollama pull deepseek-r1:32b</span><br><span class="line"></span><br><span class="line"><span class="comment"># ollama pull deepseek-r1:70b</span></span><br></pre></td></tr></table></figure>
+
+<p>显存超过 40GB，可以考虑 部署 70b 的模型，否则建议使用 32b 的模型。</p>
+<p>显存多少 GB 就部署大概多少 b 的模型，比如 24GB 部署 32b，16GB 部署 14b，8GB 部署 7b。如果出现 OOM，也就是爆显存了，就部署小一档的模型。</p>
+<p><img src="/deepseek_webui/ollama_pull.png"></p>
+<p>如果有大佬想部署 671b 的原版模型，建议配置是八卡 H200，能达到 3872 token&#x2F;s，显存是141GB * 8 &#x3D; 1128GB。参考链接：<a target="_blank" rel="noopener" href="https://blogs.nvidia.com/blog/deepseek-r1-nim-microservice/">https://blogs.nvidia.com/blog/deepseek-r1-nim-microservice/</a></p>
+<h2 id="验证模型"><a href="#验证模型" class="headerlink" title="验证模型"></a>验证模型</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ollama run deepseek-r1:32b</span><br><span class="line"></span><br><span class="line"><span class="comment"># 问它</span></span><br><span class="line">1+1=多少</span><br></pre></td></tr></table></figure>
+
+<p>输出 1+1&#x3D;2 就说明模型下载好了。</p>
+<p><img src="/deepseek_webui/ollama_run.png"></p>
+<h1 id="部署前端服务-Open-WebUI"><a href="#部署前端服务-Open-WebUI" class="headerlink" title="部署前端服务 Open WebUI"></a>部署前端服务 Open WebUI</h1><p>建议使用 Docker 部署，不需要配置环境，避免环境冲突的影响。</p>
+<blockquote>
+<p>若希望使用 Python 部署，参考官方文档：<a target="_blank" rel="noopener" href="https://docs.openwebui.com/#manual-installation">https://docs.openwebui.com/#manual-installation</a></p>
+</blockquote>
+<h2 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h2><p>直接在官网下载：</p>
+<p><a target="_blank" rel="noopener" href="https://www.docker.com/">https://www.docker.com/</a></p>
+<h2 id="你可能需要配置"><a href="#你可能需要配置" class="headerlink" title="你可能需要配置"></a>你可能需要配置</h2><p>你可能需要配置这个：<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/cli/proxy/">https://docs.docker.com/engine/cli/proxy/</a></p>
+<p><img src="/deepseek_webui/docker_proxy.png" alt="image|656x500"></p>
+<h2 id="使用-docker-compose-部署"><a href="#使用-docker-compose-部署" class="headerlink" title="使用 docker-compose 部署"></a>使用 docker-compose 部署</h2><p>首先将下面的文字保存为 docker-compose.yaml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.8&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">open-webui:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ghcr.io/open-webui/open-webui:main</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">open-webui</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3000:8080&quot;</span></span><br><span class="line">    <span class="attr">extra_hosts:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;host.docker.internal:host-gateway&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/backend/data</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ENABLE_OPENAI_API=False</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ENABLE_RAG_WEB_SEARCH=True</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RAG_WEB_SEARCH_ENGINE=&quot;duckduckgo&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RAG_WEB_SEARCH_RESULT_COUNT=3</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">RAG_WEB_SEARCH_CONCURRENT_REQUESTS=10</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br></pre></td></tr></table></figure>
+
+<p>在同级文件夹创建 data 目录，然后使用下面的命令启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up</span><br></pre></td></tr></table></figure>
+
+<p>第一次启动需要较长时间，大概 2 分钟。启动成功之后是这样显示的：</p>
+<p><img src="/deepseek_webui/docker_compose_up.png" alt="image|690x270"></p>
+<p>其他常见命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull ghcr.io/open-webui/open-webui:main  <span class="comment"># 手动下载镜像</span></span><br><span class="line">docker-compose up -d  <span class="comment"># 后台启动服务</span></span><br><span class="line">docker <span class="built_in">rm</span> -f open-webui  <span class="comment"># 删除正在运行的 open-webui</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="配置-Open-WebUI"><a href="#配置-Open-WebUI" class="headerlink" title="配置 Open WebUI"></a>配置 Open WebUI</h2><p>进入页面：<a target="_blank" rel="noopener" href="http://localhost:3000/">http://localhost:3000/</a></p>
+<p>第一次启动可以看到这个提示：</p>
+<p><img src="/deepseek_webui/openwebui_init.png"></p>
+<p>根据提示创建管理员账号：</p>
+<p><img src="/deepseek_webui/openwebui_init2.png"></p>
+<p>然后就可以开始使用了：</p>
+<p><img src="/deepseek_webui/openwebui_deepseek.png"></p>
+<h2 id="网络搜索"><a href="#网络搜索" class="headerlink" title="网络搜索"></a>网络搜索</h2><p>首先我们主要在管理员面板开启联网搜索，选择 duckduckgo 搜索引擎：<a target="_blank" rel="noopener" href="http://localhost:3000/admin/settings">http://localhost:3000/admin/settings</a></p>
+<p><img src="/deepseek_webui/openwebui_settings.png"></p>
+<p>然后记得点保存。参考文档：<a target="_blank" rel="noopener" href="https://docs.openwebui.com/tutorials/web_search">https://docs.openwebui.com/tutorials/web_search</a></p>
+<p>最后我们在聊天框中打开联网搜索的功能：</p>
+<p><img src="/deepseek_webui/openwebui_web_search_on.png"></p>
+<p>即可看到结合了搜索结果的回答：</p>
+<p><img src="/deepseek_webui/openwebui_web_search_result.png"></p>
+<h1 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h1><p>如果你用的是 Mac 推理，可以使用 <a target="_blank" rel="noopener" href="https://github.com/tlkh/asitop">asitop</a> 和 <a target="_blank" rel="noopener" href="https://bjango.com/mac/istatmenus/">iStat Menus</a> 查看性能：</p>
+<p><img src="/deepseek_webui/asitop.png"></p>
+<p>如果你使用的是 Windows 或者 Linux，用英伟达显卡推理，可以使用 <a target="_blank" rel="noopener" href="https://github.com/XuehaiPan/nvitop">nvitop</a> 查看性能：</p>
+<p><img src="/deepseek_webui/nvitop.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/HackChatGPT/" rel="prev" title="如何打破 ChatGPT 的思想钢印">
+                  <i class="fa fa-angle-left"></i> 如何打破 ChatGPT 的思想钢印
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/deepseek_webui/" rel="next" title="部署 DeepSeek R1 32B + Open WebUI 教程">
+                  部署 DeepSeek R1 32B + Open WebUI 教程 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">杨培文</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -14,9 +14,9 @@
 
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ypw.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":["always"],"padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="首先我们安装wiringPi 123456sudo apt-get install git-coregit clone git:&#x2F;&#x2F;git.drogon.net&#x2F;wiringPicd wiringPi.&#x2F;build 这样我们就安装成功了,如果失败请更新系统: 1234sudo apt-get updatesudo apt-get upgrade 然后我们可以开始使用C语言写一个简单的闪烁程序了:">
 <meta property="og:type" content="article">
@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -223,8 +223,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <p>首先我们安装wiringPi <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">sudo apt-get install git-core</span><br><span class="line">git <span class="built_in">clone</span> git://git.drogon.net/wiringPi</span><br><span class="line"><span class="built_in">cd</span> wiringPi</span><br><span class="line">./build</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+    <div class="post-body" itemprop="articleBody"><p>首先我们安装wiringPi <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">sudo apt-get install git-core</span><br><span class="line">git <span class="built_in">clone</span> git://git.drogon.net/wiringPi</span><br><span class="line"><span class="built_in">cd</span> wiringPi</span><br><span class="line">./build</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
 <p>这样我们就安装成功了,如果失败请更新系统: <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
 <p>然后我们可以开始使用C语言写一个简单的闪烁程序了:</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">nano blink.c</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -250,12 +249,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/%E5%9C%A8iOS%E4%B8%AD%E4%BD%BF%E7%94%A8RSA%E5%8A%A0%E5%AF%86/" rel="prev" title="在iOS中使用RSA加密">
-                  <i class="fa fa-chevron-left"></i> 在iOS中使用RSA加密
+                  <i class="fa fa-angle-left"></i> 在iOS中使用RSA加密
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/%E5%A6%82%E4%BD%95%E8%AE%A9%E8%A3%85%E4%BA%86Windows%E7%9A%84MacBook%E4%B8%8D%E5%8F%91%E7%83%AD/" rel="next" title="如何让装了Windows的MacBook不发热">
-                  如何让装了Windows的MacBook不发热 <i class="fa fa-chevron-right"></i>
+                  如何让装了Windows的MacBook不发热 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -274,15 +273,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">杨培文</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">杨培文</span>
+  </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
@@ -305,6 +303,8 @@
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
+
+
 
 
 
