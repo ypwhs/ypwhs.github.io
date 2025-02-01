@@ -126,7 +126,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">71</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -162,93 +162,6 @@
     </div>
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ypw.io/%E4%BD%BF%E7%94%A8NanoPi2%E7%9A%84%E4%B8%B2%E5%8F%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="杨培文">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="杨培文">
-      <meta itemprop="description" content="杨培文的 blog">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 杨培文">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/%E4%BD%BF%E7%94%A8NanoPi2%E7%9A%84%E4%B8%B2%E5%8F%A3/" class="post-title-link" itemprop="url">使用NanoPi2的串口</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2015-12-29 01:18:45" itemprop="dateCreated datePublished" datetime="2015-12-29T01:18:45+08:00">2015-12-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>今天我们目的是实现串口回环测试，意思就是自己给自己发，然后自己接收到自己发送的内容。</p>
-<p>首先呢，根据pinMap我们可以知道，8脚是UART3_TXD，10脚是UART3_RXD，所以我们需要将NanoPi2的8脚和10脚用杜邦线接起来。</p>
-<p>然后呢，我们连接NanoPi2，写一个程序循环读取串口数据，并打印到屏幕上。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;termios.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">    fd = open(<span class="string">&quot;/dev/ttyAMA2&quot;</span>, O_RDWR | O_NOCTTY | O_NDELAY);</span><br><span class="line">    <span class="keyword">if</span> (fd == <span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">&quot;Open Serial Port Error!\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">termios</span> <span class="title">options</span>;</span></span><br><span class="line">    tcgetattr(fd, &amp;options);</span><br><span class="line">    <span class="comment">//115200, 8N1</span></span><br><span class="line">    options.c_cflag = B115200 | CS8 | CLOCAL | CREAD;</span><br><span class="line">    options.c_iflag = IGNPAR;</span><br><span class="line">    options.c_oflag = <span class="number">0</span>;</span><br><span class="line">    options.c_lflag = <span class="number">0</span>;</span><br><span class="line">    options.c_cc[VTIME]=<span class="number">0</span>;</span><br><span class="line">    options.c_cc[VMIN]=<span class="number">1</span>;</span><br><span class="line">    tcflush(fd, TCIFLUSH);</span><br><span class="line">    tcsetattr(fd, TCSANOW, &amp;options);</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> rx_buffer[<span class="number">256</span>];</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="type">int</span> rx_length = read(fd, (<span class="type">void</span>*)rx_buffer, <span class="number">255</span>);</span><br><span class="line">        <span class="keyword">if</span> (rx_length &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//Bytes received</span></span><br><span class="line">            rx_buffer[rx_length] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%i bytes read : %s\n&quot;</span>, rx_length, rx_buffer);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nano read.c</span><br><span class="line">gcc read.c -o <span class="built_in">read</span></span><br><span class="line">./read</span><br></pre></td></tr></table></figure>
-<p>然后我们向串口写入数据：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> hello &gt; /dev/ttyAMA2</span><br><span class="line"><span class="built_in">echo</span> <span class="built_in">test</span> &gt; /dev/ttyAMA2</span><br><span class="line"><span class="built_in">echo</span> hahaha &gt; /dev/ttyAMA2</span><br></pre></td></tr></table></figure>
-<p><a href="/images/Snip20151229_71.png"><img
-src="/images/Snip20151229_71.png" /></a></p>
-<p>read程序就会输出刚才发送的字符，带换行。</p>
-<p><a href="/images/Snip20151229_70.png"><img
-src="/images/Snip20151229_70.png" /></a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -1092,6 +1005,85 @@ target="_blank" rel="noopener" href="https://github.com/WRTnode/wrtnode2r_stm32/
 <p>下面的链接是spi-bridge的源码，有兴趣的同学可以自行研究：</p>
 <p><a
 target="_blank" rel="noopener" href="https://github.com/WRTnode/openwrt-packages/blob/master/wrtnode/spi-bridge/src/main.c">https://github.com/WRTnode/openwrt-packages/blob/master/wrtnode/spi-bridge/src/main.c</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ypw.io/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="杨培文">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨培文">
+      <meta itemprop="description" content="杨培文的 blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 杨培文">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">docker常用命令</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-11-18 17:04:48" itemprop="dateCreated datePublished" datetime="2015-11-18T17:04:48+08:00">2015-11-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-08-06 23:59:15" itemprop="dateModified" datetime="2019-08-06T23:59:15+08:00">2019-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>创建一个 docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu:14.04</span><br></pre></td></tr></table></figure> 启动一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -t -i --cpuset-cpus=0-7 wrtnode-2r-sdk /bin/bash</span><br></pre></td></tr></table></figure>
+恢复运行中的docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker attach wrtnode-2r-sdk</span><br></pre></td></tr></table></figure> 保存一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker commit 7d mycaffe</span><br></pre></td></tr></table></figure>
+导出一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker export 4bf6cd922cfd &gt; wrtnode-2r-sdk.tar</span><br></pre></td></tr></table></figure> 导入一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat wrtnode-2r-sdk.tar | docker import - wrtnode-2r-sdk:latest</span><br></pre></td></tr></table></figure>
+删除一个docker： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f wrtnode-2r-sdk</span><br></pre></td></tr></table></figure> 修改DNS： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;nameserver 8.8.8.8&quot; &gt; /etc/resolv.conf</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
