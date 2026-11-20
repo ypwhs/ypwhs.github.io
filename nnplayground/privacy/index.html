@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="神经网络（Neural Network Playground）隐私政策：应用无需注册或登录，不收集个人数据，数据集生成、训练与导出均在设备本地完成，核心功能无需联网。中英双语。">
+<title>隐私政策 - 神经网络</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f4f5f7;
+    --card: #ffffff;
+    --text: #1c1e21;
+    --muted: #5b6169;
+    --line: #e3e6ea;
+    --link: #0a5bd3;
+    --code-bg: #eef1f5;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 32px 20px 56px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 28px 40px;
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+  }
+  header { padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+  h1 {
+    margin: 0 0 .4em;
+    font-size: 1.75rem;
+    line-height: 1.3;
+    letter-spacing: .01em;
+  }
+  .updated {
+    margin: 0 0 1em;
+    color: var(--muted);
+    font-size: .95rem;
+  }
+  .scope { margin: 0; }
+  section { padding-top: 8px; }
+  section + section { border-top: 1px solid var(--line); margin-top: 28px; }
+  h2 {
+    margin: 1.4em 0 .8em;
+    font-size: 1.3rem;
+    line-height: 1.4;
+  }
+  h3 {
+    margin: 1.6em 0 .5em;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  p { margin: 0 0 1em; }
+  ul { margin: 0 0 1em; padding-left: 1.4em; }
+  li { margin: .35em 0; }
+  a { color: var(--link); text-decoration: none; }
+  a:hover, a:focus { text-decoration: underline; }
+  code {
+    padding: .1em .35em;
+    background: var(--code-bg);
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: .9em;
+    overflow-wrap: anywhere;
+  }
+  footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: .85rem;
+  }
+  @media (max-width: 480px) {
+    body { padding: 14px 10px 32px; font-size: 16px; }
+    main { padding: 20px 16px 26px; border-radius: 10px; }
+    h1 { font-size: 1.45rem; }
+    h2 { font-size: 1.2rem; }
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101214;
+      --card: #1b1e22;
+      --text: #e8eaed;
+      --muted: #a6adb6;
+      --line: #2d3238;
+      --link: #7ab5ff;
+      --code-bg: #262b31;
+    }
+    main { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>隐私政策 / Privacy Policy</h1>
+    <p class="updated">更新日期 / Last updated：<time datetime="2026-11-20">2026-11-20</time></p>
+    <p class="scope">本政策适用于杨培文（Peiwen Yang）开发的“神经网络”（Neural Network Playground，Bundle ID：<code>com.yangpeiwen.NNPlayground2</code>）。</p>
+  </header>
+
+  <section lang="zh-CN">
+    <h2>中文</h2>
+
+    <h3>1. 应用不收集个人数据</h3>
+    <p>本应用无需注册或登录，不收集姓名、邮箱、电话号码、位置、设备标识符或使用记录。应用内没有广告、分析或追踪 SDK，没有内购或订阅。</p>
+
+    <h3>2. 计算与数据处理</h3>
+    <p>数据集生成、神经网络训练、热力图渲染和图片导出均在设备本地进行。应用不会将训练数据、网络参数或生成图片上传到服务器，核心功能无需联网。</p>
+
+    <h3>3. 保存到相册</h3>
+    <p>仅当你主动长按热力图并确认保存时，应用才会请求“添加到相册”权限，将生成的 512×512 图片写入系统相册。应用不会读取相册内容或上传图片。</p>
+    <p>你可以拒绝权限，继续使用训练与可视化功能；也可在系统设置中管理此权限。已经保存的图片由你在系统“照片”中管理，删除应用不会自动删除这些图片。</p>
+
+    <h3>4. 外部网页</h3>
+    <p>参数面板中的信息按钮通过系统 Safari 视图打开使用说明网站。你主动访问的外部网站可能根据各自政策处理必要的连接信息、访问日志或 Cookie。本应用不会向该网站传送训练数据或导出的图片。外部网页的数据处理不等同于本应用进行后台追踪。</p>
+
+    <h3>5. 数据共享、存储与删除</h3>
+    <p>本应用不建立用户账户，不收集用户数据，因此不存在由本应用在服务器端存储、出售或共享的用户训练数据，也没有账户删除流程。你可以卸载应用来清除其本地容器中的数据；保存到系统相册的图片须自行删除。</p>
+
+    <h3>6. 儿童隐私</h3>
+    <p>本应用不通过应用功能收集任何用户的个人信息，包括儿童的个人信息。</p>
+
+    <h3>7. 主动联系技术支持</h3>
+    <p>如果你通过电子邮件联系开发者，你主动提供的邮箱地址、问题描述及附件会用于回复和处理该次请求。请勿发送密码、私钥、相册中的私人照片或其他不必要的敏感信息。这类主动联系与应用自动收集数据不同。</p>
+
+    <h3>8. 政策更新</h3>
+    <p>若功能或数据处理方式改变，我们会更新本页面和更新日期，并按适用要求告知用户。</p>
+
+    <h3>9. 联系与技术支持</h3>
+    <ul>
+      <li>开发者：杨培文</li>
+      <li>技术支持及隐私问题：<a href="mailto:915505626@qq.com">915505626@qq.com</a></li>
+      <li>使用说明：<a href="https://ypw.gitbook.io/nnplayground/">https://ypw.gitbook.io/nnplayground/</a></li>
+      <li>开源项目：<a href="https://github.com/ypwhs/NNPlayground">https://github.com/ypwhs/NNPlayground</a></li>
+    </ul>
+  </section>
+
+  <section lang="en">
+    <h2>English</h2>
+
+    <h3>1. No personal data collection by the App</h3>
+    <p>The App does not require registration or sign-in and does not collect names, email addresses, phone numbers, location, device identifiers, or usage history. It contains no advertising, analytics, or tracking SDKs, in-app purchases, or subscriptions.</p>
+
+    <h3>2. On-device computation</h3>
+    <p>Dataset generation, neural-network training, heatmap rendering, and image export take place on your device. The App does not upload training data, network parameters, or generated images to a server. Its core features work offline.</p>
+
+    <h3>3. Saving images to Photos</h3>
+    <p>Only when you long-press the heatmap and confirm saving does the App request add-only access to Photos and save a generated 512×512 image. The App does not read your photo library or upload images. The confirmation sheet currently uses the Chinese labels “保存到相册” (Save to Photos) and “确定” (Confirm).</p>
+    <p>You may refuse permission and continue using training and visualization. You can manage permission in system settings. Saved images remain under your control in Photos and are not automatically removed when you uninstall the App.</p>
+
+    <h3>4. External websites</h3>
+    <p>The information button in the settings panel opens the help website in a system Safari view. Websites you choose to visit may process connection information, access logs, or cookies under their own policies. The App does not send them training data or exported images. Such website processing is distinct from background tracking by the App.</p>
+
+    <h3>5. Sharing, retention, and deletion</h3>
+    <p>The App creates no user accounts and collects no user data. It therefore has no server-side store of users' training data to sell, share, or delete, and no account-deletion process. Uninstalling the App removes its local container. Images previously saved to Photos must be deleted separately.</p>
+
+    <h3>6. Children's privacy</h3>
+    <p>The App does not collect personal information through its features from any user, including children.</p>
+
+    <h3>7. Contacting support</h3>
+    <p>If you email the developer, the address, issue description, and attachments you choose to provide are used to respond to and handle your request. Do not send passwords, private keys, private photos, or other unnecessary sensitive information. This voluntary contact is distinct from automatic collection by the App.</p>
+
+    <h3>8. Policy changes</h3>
+    <p>If features or data practices change, we will update this page and its date and notify users as required.</p>
+
+    <h3>9. Contact and technical support</h3>
+    <ul>
+      <li>Developer: Peiwen Yang</li>
+      <li>Technical support and privacy questions: <a href="mailto:915505626@qq.com">915505626@qq.com</a></li>
+      <li>Help: <a href="https://ypw.gitbook.io/nnplayground/">https://ypw.gitbook.io/nnplayground/</a></li>
+      <li>Source: <a href="https://github.com/ypwhs/NNPlayground">https://github.com/ypwhs/NNPlayground</a></li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>
