@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="神经网络（Neural Network Playground）技术支持：应用信息、常见问题解答（开始训练、暂停与 10× 加速、保存图片、相册权限、离线使用、界面语言、问题反馈）与联系方式。中英双语。">
+<title>技术支持 - 神经网络</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f4f5f7;
+    --card: #ffffff;
+    --text: #1c1e21;
+    --muted: #5b6169;
+    --line: #e3e6ea;
+    --link: #0a5bd3;
+    --code-bg: #eef1f5;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 32px 20px 56px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 28px 40px;
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+  }
+  header { padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+  h1 {
+    margin: 0 0 .4em;
+    font-size: 1.75rem;
+    line-height: 1.3;
+    letter-spacing: .01em;
+  }
+  .updated {
+    margin: 0 0 1em;
+    color: var(--muted);
+    font-size: .95rem;
+  }
+  .scope { margin: 0; }
+  section { padding-top: 8px; }
+  section + section { border-top: 1px solid var(--line); margin-top: 28px; }
+  h2 {
+    margin: 1.4em 0 .8em;
+    font-size: 1.3rem;
+    line-height: 1.4;
+  }
+  h3 {
+    margin: 1.6em 0 .5em;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  h4 {
+    margin: 1.5em 0 .35em;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  p { margin: 0 0 1em; }
+  ul { margin: 0 0 1em; padding-left: 1.4em; }
+  li { margin: .35em 0; }
+  a { color: var(--link); text-decoration: none; }
+  a:hover, a:focus { text-decoration: underline; }
+  code {
+    padding: .1em .35em;
+    background: var(--code-bg);
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: .9em;
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 480px) {
+    body { padding: 14px 10px 32px; font-size: 16px; }
+    main { padding: 20px 16px 26px; border-radius: 10px; }
+    h1 { font-size: 1.45rem; }
+    h2 { font-size: 1.2rem; }
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101214;
+      --card: #1b1e22;
+      --text: #e8eaed;
+      --muted: #a6adb6;
+      --line: #2d3238;
+      --link: #7ab5ff;
+      --code-bg: #262b31;
+    }
+    main { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>技术支持 / Support</h1>
+    <p class="updated">更新日期 / Last updated：<time datetime="2026-11-20">2026-11-20</time></p>
+    <p class="scope">本页面为「神经网络」（Neural Network Playground，Bundle ID：<code>com.yangpeiwen.NNPlayground2</code>）提供技术支持与常见问题解答。隐私相关信息请参阅<a href="https://ypwhs.github.io/nnplayground/privacy/">隐私政策</a>。</p>
+  </header>
+
+  <section lang="zh-CN">
+    <h2>中文</h2>
+
+    <h3>应用信息</h3>
+    <ul>
+      <li>应用名称：神经网络 / Neural Network Playground</li>
+      <li>Bundle ID：<code>com.yangpeiwen.NNPlayground2</code></li>
+      <li>最低系统：iOS 17.0，支持 iPhone 与 iPad</li>
+      <li>屏幕方向：手机和 iPad 以横屏使用；在 iOS 27 及以上、兼容的 iPhone Duo 展开内屏（phone regular/regular 场景）额外支持竖屏</li>
+      <li>运行方式：数据集生成、训练、热力图渲染与图片导出全部在设备本地完成，核心功能无需联网</li>
+      <li>账号与付费：无需注册或登录；无广告、无内购、无订阅</li>
+      <li>照片权限：仅请求「添加照片」权限，只在你长按热力图并确认保存 512×512 图片时请求，不会读取相册内容</li>
+      <li>界面操作：左侧图标按钮自上而下为重置、播放/暂停、单步、加速、配置；「配置」打开参数面板，其中的信息按钮会用系统 Safari 打开在线使用说明</li>
+    </ul>
+
+    <h3>常见问题</h3>
+
+    <h4>1. 如何开始训练？</h4>
+    <p>应用启动后会显示默认的网络与热力图。点击左侧的播放按钮（深蓝色圆形内的播放三角）即可开始训练，热力图、误差曲线与训练次数会实时更新；再次点击同一按钮变为暂停。若只想观察单步效果，可点击「单步」按钮，每点击一次执行一轮训练。</p>
+
+    <h4>2. 如何暂停训练或开启 10× 加速？</h4>
+    <p>播放按钮用于开始与暂停训练。「加速」按钮用于在 1× 与 10× 之间切换：开启后按钮旁显示「10x」标记，每轮训练处理的样本更多、训练速度更快；再次点击恢复 1×。「单步」按钮每点击一次执行一轮训练，适合逐次观察损失与热力图变化。</p>
+
+    <h4>3. 如何保存热力图图片？</h4>
+    <p>在热力图上长按约 0.5 秒，会弹出「保存到相册」菜单：点「确定」后应用会生成 512×512 的图片并写入系统相册，生成期间显示「生成图像中」，成功时提示「成功保存到相册」；点「取消」则不保存。首次保存时系统会请求照片「仅添加」权限。</p>
+
+    <h4>4. 相册权限被拒绝怎么办？</h4>
+    <p>拒绝权限不影响训练与可视化功能。可前往 iOS「设置」→「隐私与安全性」→「照片」→「神经网络」，选择「添加照片」；也可在「设置」→「神经网络」→「照片」中修改。修改后回到应用，重新长按热力图保存即可。应用只写入你确认保存的图片，不会读取相册内容。</p>
+
+    <h4>5. 没有网络可以使用吗？</h4>
+    <p>可以。数据集生成、神经网络训练、热力图渲染与图片导出全部在设备本地完成，核心功能完全离线可用。只有点击参数面板中的信息按钮、用系统 Safari 打开在线使用说明时才需要网络。</p>
+
+    <h4>6. 如何切换界面语言？</h4>
+    <p>应用界面提供简体中文与英文，语言跟随 iOS 系统设置：可在「设置」→「通用」→「语言与地区」中更改系统语言，也可在「设置」→「神经网络」→「语言」中单独设置本应用语言。应用内没有独立的语言切换按钮。目前保存图片相关的菜单与提示固定为中文（保存到相册 / 取消 / 确定）。</p>
+
+    <h4>7. 如何反馈问题或建议？</h4>
+    <p>请发送邮件至<a href="mailto:915505626@qq.com">915505626@qq.com</a>，并尽量说明设备型号、iOS 版本、应用版本、问题现象与复现步骤；必要时可附上截图。请勿发送密码、私钥或相册中的私人照片等敏感信息。</p>
+
+    <h3>联系与链接</h3>
+    <ul>
+      <li>技术支持（唯一联系方式，电子邮件）：<a href="mailto:915505626@qq.com">915505626@qq.com</a></li>
+      <li>使用说明：<a href="https://ypw.gitbook.io/nnplayground/">https://ypw.gitbook.io/nnplayground/</a></li>
+      <li>隐私政策：<a href="https://ypwhs.github.io/nnplayground/privacy/">https://ypwhs.github.io/nnplayground/privacy/</a></li>
+      <li>开源项目：<a href="https://github.com/ypwhs/NNPlayground">https://github.com/ypwhs/NNPlayground</a></li>
+    </ul>
+  </section>
+
+  <section lang="en">
+    <h2>English</h2>
+
+    <h3>App information</h3>
+    <ul>
+      <li>App name: Neural Network Playground / 神经网络</li>
+      <li>Bundle ID: <code>com.yangpeiwen.NNPlayground2</code></li>
+      <li>Minimum OS: iOS 17.0; supports iPhone and iPad</li>
+      <li>Orientation: landscape on iPhone and iPad; on iOS 27 and later, portrait is additionally supported on compatible unfolded inner screens such as iPhone Duo (phone regular/regular scenes)</li>
+      <li>Computation: dataset generation, training, heatmap rendering, and image export all take place on your device; core features work offline</li>
+      <li>Accounts and payments: no registration or sign-in; no ads, in-app purchases, or subscriptions</li>
+      <li>Photos permission: add-only access, requested only when you long-press the heatmap and confirm saving a 512×512 image; the App does not read your photo library</li>
+      <li>Controls: the icon buttons on the left, from top to bottom, are Reset, Play/Pause, Step, Accelerate, and Configure. Configure opens the settings panel; its info button opens the online help in a system Safari view.</li>
+    </ul>
+
+    <h3>Frequently asked questions</h3>
+
+    <h4>1. How do I start training?</h4>
+    <p>After launch the App shows the default network and heatmap. Tap the play button (a play triangle in a dark blue circle) on the left to start training; the heatmap, loss curve, and iteration count update continuously. Tap the same button again to pause. To advance one iteration at a time, tap the Step button.</p>
+
+    <h4>2. How do I pause training or enable 10× acceleration?</h4>
+    <p>The play button starts and pauses training. The Accelerate button toggles between 1× and 10×: when enabled, a “10x” label appears next to the button, each training round processes more samples, and training runs faster; tap again to return to 1×. The Step button runs exactly one training round per tap, which is useful for watching the loss and heatmap change step by step.</p>
+
+    <h4>3. How do I save the heatmap image?</h4>
+    <p>Long-press the heatmap for about 0.5 seconds to show the save menu. Tap “Confirm” (确定) and the App generates a 512×512 image and writes it to your photo library; “Generating image” (生成图像中) appears while it is generated and “Saved to Photos” (成功保存到相册) appears on success. Tap “Cancel” (取消) to skip saving. The first save asks for add-only Photos access. The menu title and these prompts currently use Chinese labels: 保存到相册 (Save to Photos), 取消 (Cancel), 确定 (Confirm).</p>
+
+    <h4>4. What if Photos permission was denied?</h4>
+    <p>Denying permission does not affect training or visualization. Go to iOS Settings → Privacy &amp; Security → Photos → this App and choose “Add Photos Only”; you can also change it in Settings → this App → Photos. Then return to the App and long-press the heatmap to save again. The App only writes the images you confirm saving and does not read your photo library.</p>
+
+    <h4>5. Can I use the App without a network connection?</h4>
+    <p>Yes. Dataset generation, neural-network training, heatmap rendering, and image export are all performed on your device, and core features work fully offline. A network connection is needed only when you tap the info button in the settings panel, which opens the online help in a system Safari view.</p>
+
+    <h4>6. How do I change the interface language?</h4>
+    <p>The App's interface is available in Simplified Chinese and English and follows the iOS system language. You can change the system language in Settings → General → Language &amp; Region, or set the language for this App alone in Settings → this App → Language. There is no separate in-app language switch. The menu and prompts related to saving images currently use Chinese labels only (保存到相册 / 取消 / 确定).</p>
+
+    <h4>7. How do I report a problem or send feedback?</h4>
+    <p>Email <a href="mailto:915505626@qq.com">915505626@qq.com</a> with your device model, iOS version, App version, a description of the issue, and steps to reproduce; screenshots are helpful. Do not send passwords, private keys, private photos, or other sensitive information.</p>
+
+    <h3>Contact and links</h3>
+    <ul>
+      <li>Technical support (email is the only contact method): <a href="mailto:915505626@qq.com">915505626@qq.com</a></li>
+      <li>Help: <a href="https://ypw.gitbook.io/nnplayground/">https://ypw.gitbook.io/nnplayground/</a></li>
+      <li>Privacy policy: <a href="https://ypwhs.github.io/nnplayground/privacy/">https://ypwhs.github.io/nnplayground/privacy/</a></li>
+      <li>Source: <a href="https://github.com/ypwhs/NNPlayground">https://github.com/ypwhs/NNPlayground</a></li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>
